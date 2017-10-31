@@ -1,0 +1,28 @@
+<div class="row">
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">Portal Test Info</h3>
+            </div>
+            <div class="panel-body">
+                <p>
+                   <?php if ($this->newSession)
+                   { 
+                   	echo "New Session<br>";
+                   }
+                   else 
+                   {
+                   	echo "Existing Session<br>";
+                   }
+                   echo "User ID: " . $this->userId;
+                   echo "<br>Session Level: " . $this->sessionLevel;
+                   echo "<br>Active Time: " . date("Y-m-d H:i:s", $this->activeTime); ?>
+                </p>
+
+                
+            </div>
+        </div>
+    </div>
+
+ </div>
