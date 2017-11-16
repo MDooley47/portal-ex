@@ -103,6 +103,7 @@ header section #account-action {
     overflow: hidden;
     font-size: 9pt;
     color: #000000;
+    margin-top: 10px;
 }
 .app-tile:hover, .app-tile a:hover {
     text-decoration: none;
