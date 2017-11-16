@@ -107,11 +107,20 @@ header section #account-action {
     display: block;
 }
 .app-tile img {
-    height: 80px;
-    width: 80px;
+    margin-top: 5px;
+    height: 90px;
+    width: 90px;
 }
 .app-tile .app-name {
-    margin-top: 2px;
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 12pt;
+    background-color: rgba(255,255,255,.8);
+    bottom: 0;
+    margin-top: -12pt;
     color: #000000;
     text-decoration: none;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
 }
