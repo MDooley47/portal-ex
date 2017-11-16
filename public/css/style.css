@@ -52,7 +52,28 @@ header section #account-action {
     margin-right: 5px;
     font-size: 1.25em;
 }
+.navbar {
+    background-color: inherit;
     background-image: none;
     box-shadow: none;
     border: none;
+    color: inherit;
+    height: 30px;
+    min-height: 30px;
+    padding: 0px;
+}
+.navbar .navbar-brand {
+    color: inherit;
+    margin-right: 10px;
+}
+.navbar-collapse.collapse {
+    height: 30px !important;
+}
+.navbar a, .nav .active a, .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover {
+    padding: 0px;
+    padding-top: 5px;
+    background-color: inherit;
+    background-image: none;
+    box-shadow: none;
+}
 }
