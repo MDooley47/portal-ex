@@ -13,22 +13,22 @@ use Zend\Session\Container;
 
 class IndexController extends AbstractActionController
 {
-    public function sessionActive(Container $sessionContainer)
+    public function sessionActive()
     {
     	// tests whether a session is valid/active or not
     	// 10/20/2017 SI
     	
-    	if (empty($sessionContainer))
+    	session_start();
+    	if (isset($_SESSION['activeTime']) && isset($_SESSION['sessionLevel']) && isset($_SESSION['userId']))
     	{
-    		return (false);
-    	}
-    	
-    	if (($sessionContainer->activeTime > (time() - 3600)) && 
-    			$sessionContainer->sessionLevel > 0 &&
-    			$sessionContainer->userId > 0)
-    	{
-    		// valid
-    		return (true);
+    		// variables are present in the session, so test them
+    		if (($_SESSION['activeTime'] > (time() - 3600)) &&
+    				$_SESSION['sessionLevel'] > 0 &&
+    				$_SESSION['userId'] > 0)
+    		{
+    			// valid
+    			return (true);
+    		}
     	}
     	
     	return (false);
@@ -37,31 +37,47 @@ class IndexController extends AbstractActionController
 	public function indexAction()
     {
     	$newSession = false;
-    	try 
-    	{
-    		$sessionContainer = new Container('pexSession');
-    	}
-    	catch (\Exception $ex)
-    	{
-    		echo "<br>Session Exception: " . $ex->getMessage();
-    		echo "<br>_SESSION: ";
-    		var_dump($_SESSION);
-    		exit();
-    	}
+    	
+//     	try 
+//     	{
+//     		$sessionContainer = new Container('pexSession');
+//     	}
+//     	catch (\Exception $ex)
+//     	{
+//     		echo "<br>Session Exception: " . $ex->getMessage();
+//     		$tmpdir = scandir("/tmp");
+//     		echo "<br>tmp dir: ";
+//     		foreach ($tmpdir as $l)
+//     		{
+//     			echo "<br>" . $l;
+//     		}
+//     		echo "<br>_SESSION: ";
+//     		var_dump($_SESSION);
+//     		exit();
+//     	}
     	
     	// test for active session
-    	if (!$this->sessionActive($sessionContainer))
+    	if (!$this->sessionActive())
     	{
-    		$sessionContainer->userId = 1;
-    		$sessionContainer->sessionLevel = 10;
-    		$sessionContainer->activeTime = time();
+    		// new session
     		$newSession = true;
+    		$_SESSION['activeTime'] = time();
+    		$_SESSION['sessionLevel'] = 10;
+    		$_SESSION['userId'] = 1;
     	}
     	
+//     	if (!$this->sessionActive($sessionContainer))
+//     	{
+//     		$sessionContainer->userId = 1;
+//     		$sessionContainer->sessionLevel = 10;
+//     		$sessionContainer->activeTime = time();
+//     		$newSession = true;
+//     	}
+    	
     	return new ViewModel([
-    			'userId' => $sessionContainer->userId,
-    			'sessionLevel' => $sessionContainer->sessionLevel,
-    			'activeTime' => $sessionContainer->activeTime,
+    			'userId' => $_SESSION['userId'],
+    			'sessionLevel' => $_SESSION['sessionLevel'],
+    			'activeTime' => $_SESSION['activeTime'],
     			'newSession' => $newSession,
     	]);
     }
