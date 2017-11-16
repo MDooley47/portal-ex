@@ -1,3 +1,7 @@
+body {
+    background-color: #cccccc;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
 .zf-green {
     color: #68b604;
 }
