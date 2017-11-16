@@ -35,16 +35,25 @@ header {
     background-color: #0000ff;
     color: #ffffff;
 }
+header a, header a:hover {
+    color: inherit;
+}
 header section {
     height: 60px;
     border-bottom: 1px solid #ffffff;
 }
-header section #logo {
+header section #brand #logo {
     background-color: #ffffff;
-    height: 55px;
-    width: 55px;
+    min-height: 55px;
+    max-width: 55px;
     margin-top: 2px;
     margin-left: 2px;
+}
+header section #brand #brandName {
+    color: #inherit;
+    margin-top: 15px;
+    margin-left: 5px;
+    font-size: 1.5em;
 }
 header section #account-action {
     color: #inherit;
@@ -76,6 +85,9 @@ header section #account-action {
     background-image: none;
     box-shadow: none;
 }
+.navbar a:hover, .navbar-inverse .navbar-nav>.active>a:hover {
+    text-decoration: underline;
+}
 /** Application Grid **/
 .app-tile {
     background-color: #ffffff;
@@ -86,6 +98,13 @@ header section #account-action {
     border-radius: 15px;
     overflow: hidden;
     font-size: 9pt;
+    color: #000000;
+}
+.app-tile:hover, .app-tile a:hover {
+    text-decoration: none;
+}
+.app-tile a, .app-tile .app-name {
+    display: block;
 }
 .app-tile img {
     height: 80px;
@@ -93,4 +112,6 @@ header section #account-action {
 }
 .app-tile .app-name {
     margin-top: 2px;
+    color: #000000;
+    text-decoration: none;
 }
