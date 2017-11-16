@@ -27,13 +27,27 @@ div.container a.navbar-brand > img {
     margin-top: -2px;
 }
 /** Header **/
+header {
+    background-color: #0000ff;
+    color: #ffffff;
+}
 header section {
     height: 60px;
-    background-color: #0000ff;
     border-bottom: 1px solid #ffffff;
 }
-.navbar {
+header section #logo {
     background-color: #ffffff;
+    height: 55px;
+    width: 55px;
+    margin-top: 2px;
+    margin-left: 2px;
+}
+header section #account-action {
+    color: #inherit;
+    margin-top: 17px;
+    margin-right: 5px;
+    font-size: 1.25em;
+}
     background-image: none;
     box-shadow: none;
     border: none;
