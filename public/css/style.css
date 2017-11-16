@@ -31,7 +31,12 @@ div.container a.navbar-brand > img {
     margin-right: 4px;
     margin-top: -2px;
 }
-
+/** Header **/
+header section {
+    height: 60px;
+    background-color: #0000ff;
+    border-bottom: 1px solid #ffffff;
+}
 .navbar {
     background-color: #ffffff;
     background-image: none;
