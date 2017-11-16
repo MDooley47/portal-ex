@@ -61,7 +61,7 @@ header section #account-action {
     margin-right: 5px;
     font-size: 1.25em;
 }
-.navbar {
+.navbar-inverse {
     background-color: inherit;
     background-image: none;
     box-shadow: none;
