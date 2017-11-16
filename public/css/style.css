@@ -78,15 +78,19 @@ header section #account-action {
 .navbar-collapse.collapse {
     height: 30px !important;
 }
-.navbar a, .nav .active a, .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover {
+.navbar a, .nav .active a, .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover {
     padding: 0px;
     padding-top: 5px;
     background-color: inherit;
     background-image: none;
     box-shadow: none;
+    color: inherit;
 }
-.navbar a:hover, .navbar-inverse .navbar-nav>.active>a:hover {
+.navbar a:hover, .nav a:hover, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>li>a:hover {
     text-decoration: underline;
+}
+.nav a {
+    margin-right: 10px;
 }
 /** Application Grid **/
 .app-tile {
