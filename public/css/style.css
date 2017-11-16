@@ -76,4 +76,21 @@ header section #account-action {
     background-image: none;
     box-shadow: none;
 }
+/** Application Grid **/
+.app-tile {
+    background-color: #ffffff;
+    height: 100px;
+    width: 100px;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 15px;
+    overflow: hidden;
+    font-size: 9pt;
+}
+.app-tile img {
+    height: 80px;
+    width: 80px;
+}
+.app-tile .app-name {
+    margin-top: 2px;
 }
