@@ -70,13 +70,26 @@ header section #account-action {
     height: 30px;
     min-height: 30px;
     padding: 0px;
+    margin-bottom: 10px;
 }
 .navbar .navbar-brand {
     color: inherit;
     margin-right: 10px;
 }
-.navbar-collapse.collapse {
-    height: 30px !important;
+.navbar .container, .navbar .container .navbar-header, .navbar .navbar-brand {
+    height: 30px;
+}
+.navbar .navbar-toggle, .navbar .navbar-toggle:focus, .navbar .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    height: 20px;
+    padding: 4px 5px;
+    border-color: #ffffff;
+    background-color: inherit;
+    border: none;
+}
+.navbar-toggle .icon-bar+.icon-bar {
+    margin-top: 3px;
 }
 .navbar a, .nav .active a, .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover {
     padding: 0px;
@@ -88,6 +101,11 @@ header section #account-action {
 }
 .navbar a:hover, .nav a:hover, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>li>a:hover {
     text-decoration: underline;
+}
+.navbar-collapse.collapse.in, .navbar-collapse.collapsing {
+    margin-top: -20px;
+    background-color: #0000ff;
+    border-color: #ffffff;
 }
 .nav a {
     margin-right: 10px;
