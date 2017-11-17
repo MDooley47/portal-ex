@@ -61,14 +61,16 @@ header section #account-action {
     margin-right: 5px;
     font-size: 1.25em;
 }
+
+
+
+/** Navbar **/
 .navbar-inverse {
     background-color: inherit;
     background-image: none;
     box-shadow: none;
     border: none;
     color: inherit;
-    height: 30px;
-    min-height: 30px;
     padding: 0px;
     margin-bottom: 10px;
 }
@@ -77,30 +79,23 @@ header section #account-action {
     margin-right: 10px;
 }
 .navbar .container, .navbar .container .navbar-header, .navbar .navbar-brand {
-    height: 30px;
 }
 .navbar .navbar-toggle, .navbar .navbar-toggle:focus, .navbar .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
-    margin-top: 5px;
-    margin-bottom: 0px;
-    height: 20px;
-    padding: 4px 5px;
     border-color: #ffffff;
     background-color: inherit;
     border: none;
 }
-.navbar-toggle .icon-bar+.icon-bar {
-    margin-top: 3px;
-}
 .navbar a, .nav .active a, .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover {
-    padding: 0px;
-    padding-top: 5px;
     background-color: inherit;
     background-image: none;
     box-shadow: none;
     color: inherit;
+    margin-right: 0px;
 }
 .navbar a:hover, .nav a:hover, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>li>a:hover {
+    filter: brightness(150%);
     text-decoration: underline;
+    background-color: #2222ff;
 }
 .navbar-collapse.collapse.in, .navbar-collapse.collapsing {
     margin-top: -20px;
@@ -110,6 +105,9 @@ header section #account-action {
 .nav a {
     margin-right: 10px;
 }
+
+
+
 /** Application Grid **/
 .app-tile {
     background-color: #ffffff;
