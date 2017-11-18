@@ -4,6 +4,7 @@ FROM php:7.0-apache
 RUN apt-get update \
     && apt-get install -y \
  		git \
+        wget \
  		zlib1g-dev \
  		libgmp-dev \
         libicu-dev
@@ -25,8 +26,6 @@ WORKDIR /var/www/
 COPY . /var/www/
 
 # Install composer, run it, and remove it
-RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');" \
-    && php composer-setup.php \
-    && php -r "unlink('composer-setup.php');" \
-    && php ./composer.phar install --no-dev --no-scripts \
-    && rm composer.phar
+RUN chmod +x ./composerInstallDependencies.sh \
+    && ./composerInstallDependencies.sh \
+    && rm ./composerInstallDependencies.sh
