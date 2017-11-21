@@ -7,12 +7,14 @@ RUN apt-get update \
         wget \
  		zlib1g-dev \
  		libgmp-dev \
-        libicu-dev
+        libicu-dev \
+        libpq-dev
 
 # Install php extensions from docker-php-ext-install
 RUN docker-php-ext-install zip \
     && docker-php-ext-install gmp \
-    && docker-php-ext-install intl
+    && docker-php-ext-install intl \
+    && docker-php-ext-install pdo pdo_pgsql
 
 # Changes apache public directory to /var/www/public and removes /var/www/html
 RUN a2enmod rewrite \
