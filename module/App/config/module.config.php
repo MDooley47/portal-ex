@@ -6,7 +6,7 @@ return [
     'router' => [
         'app' => [
             'type' => Segment::class,
-            'options' => '/app/[/:action[/:id]]',
+            'options' => '/app[/:action[/:id]]',
             'constraints' => [
                 'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                 'id' => '[0-9]+'
