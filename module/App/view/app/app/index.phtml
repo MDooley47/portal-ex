@@ -1,0 +1,29 @@
+<?php
+
+$title = "All Apps";
+$this->headTitle($title);
+
+?>
+
+<h1><?= $this->escapeHTML($title) ?></h1>
+<p>
+    <a href="<?= $this->url('app', ['action' => 'add']) ?>">Add new app</a>
+</p>
+
+<table class="table">
+    <tr>
+    <th>Name</th>
+    <th>URL</th>
+    <th></th>
+</tr>
+<?php foreach ($apps as $app) : ?>
+    <tr>
+        <td><?= $this->escapeHtml($app->name) ?></td>
+        <td><?= $this->escapeHtml($app->url) ?></td>
+        <td>
+            <a href="<?= $this->url('app', ['action' => 'edit', 'id' => $app->id]) ?>">Edit</a>
+            <a href="<?= $this->url('app', ['action' => 'delete', 'id' => $app->id]) ?>">Delete</a>
+        </td>
+    </tr>
+<?php endforeach; ?>
+</table>
