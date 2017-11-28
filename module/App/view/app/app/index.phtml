@@ -1,11 +1,12 @@
 <?php
 
 $title = "All Apps";
+$escaper = new Zend\Escaper\Escaper('utf-8');
 $this->headTitle($title);
 
 ?>
 
-<h1><?= $this->escapeHTML($title) ?></h1>
+<h1><?= $escaper->escapeHTML($title) ?></h1>
 <p>
     <a href="<?= $this->url('app', ['action' => 'add']) ?>">Add new app</a>
 </p>
@@ -18,8 +19,8 @@ $this->headTitle($title);
 </tr>
 <?php foreach ($apps as $app) : ?>
     <tr>
-        <td><?= $this->escapeHtml($app->name) ?></td>
-        <td><?= $this->escapeHtml($app->url) ?></td>
+        <td><?= $escaper->escapeHtml($app->name) ?></td>
+        <td><?= $escaper->escapeHtml($app->url) ?></td>
         <td>
             <a href="<?= $this->url('app', ['action' => 'edit', 'id' => $app->id]) ?>">Edit</a>
             <a href="<?= $this->url('app', ['action' => 'delete', 'id' => $app->id]) ?>">Delete</a>
