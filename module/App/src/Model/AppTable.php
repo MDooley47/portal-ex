@@ -3,15 +3,14 @@
 namespace App\Model;
 
 use RuntimeException;
-use Zend\Db\TableGatewayInterface;
 
 class AppTable
 {
     private $tableGateway;
 
-    public function __construct(TableGatewayInterface $tableGateway)
+    public function __construct(\Zend\Db\TableGateway\TableGateway $tableGateway)
     {
-        $this->tableGateway $tableGateway;
+        $this->tableGateway = $tableGateway;
     }
 
     public function fetchAll()
@@ -38,9 +37,9 @@ class AppTable
     public function saveApp(App $app)
     {
         $data = [
-            'name' => $app->name;
-            'url' => $app->url;
-            'iconPath' => $app->iconPath;
+            'name' => $app->name,
+            'url' => $app->url,
+            'iconPath' => $app->iconPath,
         ];
 
         $id = (int) $app->id;
