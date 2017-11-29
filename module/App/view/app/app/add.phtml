@@ -1,0 +1,36 @@
+<?php
+
+$escaper = new Zend\Escaper\Escaper('utf-8');
+$title = 'Add new App';
+$this->headTitle($title);
+
+?>
+<h1><?= $escaper->escapeHtml($title) ?></h1>
+<?php
+$form->setAttribute('action', $this->url('app', ['action' => 'add']));
+$form->prepare();
+
+echo $this->form()->openTag($form);
+echo $this->formHidden($form->get('id'));
+echo $this->formRow($form->get('name'));
+?>
+    <br>
+<?php
+echo $this->formRow($form->get('url'));
+?>
+    <br>
+<?php
+    $form->prepare(); // The correct enctype is set here
+    $fileElement = $form->get('iconPath');
+?>
+
+    <div class="form-element">
+        <?= $this->formLabel($fileElement) ?>
+        <?= $this->formFile($fileElement) ?>
+        <?= $this->formElementErrors($fileElement) ?>
+    </div>
+
+    <br>
+<?php
+echo $this->formSubmit($form->get('submit'));
+echo $this->form()->closeTag();
