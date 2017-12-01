@@ -4,27 +4,70 @@ $title = "All Apps";
 $escaper = new Zend\Escaper\Escaper('utf-8');
 $this->headTitle($title);
 
+$i = 0;
+$data = [];
+foreach ($apps as $app) {
+    $data[$i++] = $app;
+}
+
 ?>
 
 <h1><?= $escaper->escapeHTML($title) ?></h1>
-<p>
-    <a href="<?= $this->url('app', ['action' => 'add']) ?>">Add new app</a>
-</p>
 
+<?php
+    $i = 0;
+    $opened = false;
+    foreach ($data as $app) :
+        $i++;
+        if (($i-1 % 6) == 0 && !$opened) :
+?>
+    <div class="row">
+<?php
+        endif;
+?>
+        <div class="col-xs-6 col-sm-3 col-md-2">
+            <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->id) ?>">
+                <a href="<?= $escaper->escapeHtml($app->url) ?>" target="_blank">
+                    <img src="<?= $escaper->escapeHtml($app->iconPath) ?>" alt="">
+                    <span class="app-name"><?= $escaper->escapeHtml($app->name) ?></span>
+                </a>
+            </div>
+        </div>
+<?php
+        if (($i % 6) == 0 && $opened) :
+?>
+    </div>
+<?php
+        else :
+            $opened = true;
+        endif;
+    endforeach;
+?>
+<hr>
+<span class="text-center">Below is a view of what is in the db</span>
+<hr>
 <table class="table">
     <tr>
+    <th>ID</th>
     <th>Name</th>
     <th>URL</th>
-    <th></th>
+    <th>iconPath</th>
+    <th>Actions</th>
 </tr>
-<?php foreach ($apps as $app) : ?>
+<?php foreach ($data as $app) : ?>
     <tr>
+        <td><?= $escaper->escapeHtml($app->id) ?></td>
         <td><?= $escaper->escapeHtml($app->name) ?></td>
         <td><?= $escaper->escapeHtml($app->url) ?></td>
+        <td><?= $escaper->escapeHtml($app->iconPath) ?></td>
         <td>
             <a href="<?= $this->url('app', ['action' => 'edit', 'id' => $app->id]) ?>">Edit</a>
+            |
             <a href="<?= $this->url('app', ['action' => 'delete', 'id' => $app->id]) ?>">Delete</a>
         </td>
     </tr>
-<?php endforeach; ?>
+<?php endforeach;?>
 </table>
+<p>
+    <a href="<?= $this->url('app', ['action' => 'add']) ?>">Add new app</a>
+</p>
