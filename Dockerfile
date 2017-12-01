@@ -10,6 +10,10 @@ RUN apt-get update \
         libicu-dev \
         libpq-dev
 
+# Install cli client for PostgreSQL
+# psql -h HOST DBNAME UNAME
+# RUN apt-get install -y postgresql-client
+
 # Install php extensions from docker-php-ext-install
 RUN docker-php-ext-install zip \
     && docker-php-ext-install gmp \
