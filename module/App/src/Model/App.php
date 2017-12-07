@@ -17,6 +17,7 @@ class App
     public $name;
     public $url;
     private $inputFilter;
+    public $iconPath;
 
     public function exchangeArray(array $data)
     {
