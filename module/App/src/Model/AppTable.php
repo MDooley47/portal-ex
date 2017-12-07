@@ -20,7 +20,7 @@ class AppTable
 
     public function getApp($id)
     {
-        $id = (int) $id;
+        $id = $id;
         $rowset = $this->tableGateway->select(['id' => $id]);
         $row = $rowset->current();
         if (! $row)
