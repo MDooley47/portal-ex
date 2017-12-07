@@ -27,35 +27,47 @@ class AppController extends AbstractActionController
 
     public function addAction()
     {
-        $form = new AppForm();
-        $form->get('submit')->setValue('Add');
 
-        $request = $this->getRequest();
-
-        if (! $request->isPost()) {
-            return ['form' => $form];
-        }
-
-        $app = new App();
-        $form->setInputFilter($app->getInputFilter());
-        $form->setData($this->getRequest()->getPost());
-
-        $icon = $request->getFiles()->toArray();
-
-        print_r($icon["iconPath"]);
-
-        if (! $form->isValid()) {
-            return ['form' => $form];
-        }
-
-        $app->exchangeArray($form->getData());
-        $this->table->saveApp($app);
-        return $this->redirect()->toRoute('app');
     }
 
     public function editAction()
     {
 
+    }
+
+    public function iconAction()
+    {
+        $id = $this->params()->fromRoute('id', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('app', array(
+                'action' => 'index'
+            ));
+       }
+
+       try {
+             $app = $this->table->getApp($id);
+         }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('app', array(
+                'action' => 'index'
+            ));
+        }
+
+        if (!file_exists($app->iconPath)) {
+            return $this->redirect()->toRoute('app', array(
+                'action' => 'index'
+            ));
+        }
+
+        $response = $this->getResponse();
+
+        $response
+            ->getHeaders()
+            ->addHeaderLine('Content-Type', 'image/' . pathinfo($app->iconPath, PATHINFO_EXTENSION))
+            ->addHeaderLine('Content-Disposition', 'inline; filename="' . pathinfo($app->iconPath, PATHINFO_BASENAME) . '"')
+            ->addHeaderLine("X-Sendfile", $app->iconPath);
+
+        return $response;
     }
 
     public function openAction()
