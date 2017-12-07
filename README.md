@@ -1,6 +1,6 @@
 # portal-ex
 
-# Volumes
+## Volumes
 Create a volume. For this README it will be called called `portal-ex-data`.
 ```
 docker volume create portal-ex-data
