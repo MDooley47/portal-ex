@@ -16,5 +16,4 @@ Use the following commands to deploy this container.
 ```
 docker build -t portal-ex .
 docker run -d --mount source=portal-ex-data,target=/volumes/storage/ --name portal-ex -p 8080:80 portal-ex
-
 ```
