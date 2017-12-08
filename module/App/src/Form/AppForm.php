@@ -17,12 +17,38 @@ class AppForm extends Form
 
     private function addElements()
     {
-        $this=>add([
-            'name' => 'name';
+        $this->add([
+            'name' => 'id',
+            'type' => 'hidden',
+        ]);
+
+        $this->add([
+            'name' => 'name',
             'options' => [
                 'label' => 'App Name',
             ],
             'type' => 'text',
         ]);
+        $this->add([
+            'name' => 'url',
+            'options' => [
+                'label' => 'App URL',
+            ],
+            'type' => 'url',
+        ]);
+
+        /*
+        $icon = new Element\File('image-file');
+        $icon->setLabel('App Icon');
+        $icon->setAttribute('id', 'icon')
+             ->setAttribute('name', 'icon');
+        */
+
+        $this->add(
+            (new Element\File('image-file'))
+                ->setLabel('App Icon')
+                ->setAttribute('id', 'icon')
+                ->setAttribute('name', 'icon')
+        );
     }
 }
