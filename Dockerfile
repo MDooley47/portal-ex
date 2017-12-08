@@ -41,3 +41,4 @@ COPY . /var/www/
 RUN chmod +x /var/www/docker-scripts/*.sh   # make them executable
     RUN ./docker-scripts/composerInstallDependencies.sh  # Install composer, run it, and remove it
     RUN ./docker-scripts/move-confs.sh   # Install composer  run it, and remove it
+    RUN ./docker-scripts/permissionFixing.sh # Fix permissions
