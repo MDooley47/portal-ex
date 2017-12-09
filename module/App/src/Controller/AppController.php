@@ -40,7 +40,7 @@ class AppController extends AbstractActionController
 
             $app = new App();
 
-            $form->setInputFilter($app->getInputFilter(true));
+            $form->setInputFilter($app->getInputFilter());
             $form->setData($post);
 
             if ($form->isValid())
