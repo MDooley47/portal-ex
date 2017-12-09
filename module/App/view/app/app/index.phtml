@@ -19,7 +19,7 @@ foreach ($apps as $app) {
     $opened = false;
     foreach ($data as $app) :
         $i++;
-        if (($i-1 % 6) == 0 && !$opened) :
+        if ((($i-1) % 6) == 0 && !$opened) :
 ?>
     <div class="row">
 <?php
@@ -34,7 +34,8 @@ foreach ($apps as $app) {
             </div>
         </div>
 <?php
-        if (($i % 6) == 0 && $opened) :
+        if ((($i) % 6) == 0 && $opened) :
+            $opened = false;
 ?>
     </div>
 <?php
@@ -42,6 +43,10 @@ foreach ($apps as $app) {
             $opened = true;
         endif;
     endforeach;
+    if ($opened = true)
+    {
+        echo "</div>";
+    }
 ?>
 <hr>
 <span class="text-center">Below is a view of what is in the db</span>
