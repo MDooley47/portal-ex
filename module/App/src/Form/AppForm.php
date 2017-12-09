@@ -37,13 +37,6 @@ class AppForm extends Form
             'type' => 'url',
         ]);
 
-        /*
-        $icon = new Element\File('image-file');
-        $icon->setLabel('App Icon');
-        $icon->setAttribute('id', 'icon')
-             ->setAttribute('name', 'icon');
-        */
-
         $this->add(
             (new Element\File('image-file'))
                 ->setLabel('App Icon')
