@@ -46,8 +46,7 @@ class App
         {
             $tmpFilter = (new InputFilter())
                 ->merge((new AppNameFilter())->init())
-                ->merge((new AppURLFilter())->init())
-                ->merge((new AppIconFilter())->init());
+                ->merge((new AppURLFilter())->init());
         }
 
         if (($hasPath) && (! $tmpFilter->has('iconPath')))
