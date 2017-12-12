@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use Zend\Mvc\Controller\AbstractActionController;
+use Zend\Validator\File\IsImage;
 use Zend\View\Model\ViewModel;
 use App\Model\App;
 use App\Model\AppTable;
@@ -46,6 +47,10 @@ class AppController extends AbstractActionController
             if ($form->isValid())
             {
                 $data = $form->getData();
+
+                if (! (new IsImage())->isValid($data['icon']['tmp_name'])) {
+                    return $this->redirect()->toRoute('app', ['action' => 'add']);
+                }
 
                 $newName = "/volumes/storage/images/" .
                     pathinfo($data['icon']['tmp_name'], PATHINFO_BASENAME) .
