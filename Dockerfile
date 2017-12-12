@@ -38,7 +38,11 @@ WORKDIR /var/www/
 COPY . /var/www/
 
 # Run docker-scripts
-RUN chmod +x /var/www/docker-scripts/*.sh   # make them executable
-    RUN ./docker-scripts/composerInstallDependencies.sh  # Install composer, run it, and remove it
-    RUN ./docker-scripts/move-confs.sh   # Install composer  run it, and remove it
-    RUN ./docker-scripts/permissionFixing.sh # Fix permissions
+    # make them executable
+        RUN chmod +x /var/www/docker-scripts/*.sh
+    # Install composer, run it, and remove it
+        RUN ./docker-scripts/composerInstallDependencies.sh
+    # Install composer  run it, and remove it
+        RUN ./docker-scripts/move-confs.sh
+    # Fix permissions // Should only have run once. WILL NOT RUN WITH DOCKER-COMPOSE
+    #    RUN ./docker-scripts/permissionFixing.sh
