@@ -1,7 +1,37 @@
-zf:
-  build: .
-  dockerfile: Dockerfile
-  ports:
-   - "8080:80"
-  volumes:
-   - .:/var/www
+version: '3.1'
+
+services:
+    db:
+        image: postgres:10.1
+        environment:
+            POSTGRES_PASSWORD: asdfgh
+        ports:
+            - "5432:5432"
+            # Exposes the PostgreSQL port (5432) so that
+            # you may connect to it from the host machine.
+            # See github.com/MDooley47/pgweb
+    zf:
+        depends_on:
+          - db
+        build: .
+        ports:
+            - "8080:80"
+        volumes:
+            - .:/var/www
+            - /var/www/vendor
+            - data:/volumes/storage
+        links:
+            - db
+    migration:
+        build: .
+        command: ["./docker-scripts/wait-for-postgres.sh", "db", "php", "data/load_db.php"]
+        volumes:
+            - .:/var/www
+            - /var/www/vendor
+        depends_on:
+            - db
+            - zf
+volumes:
+    data:
+        external:
+            name: portal-ex-data

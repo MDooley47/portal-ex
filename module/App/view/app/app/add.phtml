@@ -1,0 +1,30 @@
+<?php
+    $fileElement = $form->get('icon');
+
+    $escaper = new Zend\Escaper\Escaper('utf-8');
+    $this->headTitle($title = 'Add new App');
+
+?>
+
+<h1><?= $escaper->escapeHTML($title); ?></h1>
+
+<?php
+    $form->setAttribute('action', $this->url('app', ['action' => 'add']));
+    $form->prepare();
+?>
+    <?= $this->form()->openTag($form) ?>
+    <?= $this->formHidden($this->form->get('id')); ?>
+    <?= $this->formRow($this->form->get('name')); ?>
+    <br>
+    <?= $this->formRow($this->form->get('url')); ?>
+
+
+<div class="form-element">
+    <?= $this->formLabel($fileElement) ?>
+    <?= $this->formFile($fileElement) ?>
+    <?= $this->formElementErrors($fileElement) ?>
+</div>
+
+<button>Submit</button>
+
+<?= $this->form()->closeTag(); ?>

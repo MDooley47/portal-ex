@@ -1,8 +1,7 @@
 body {
-    padding-top: 60px;
-    padding-bottom: 40px;
+    background-color: #cccccc;
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
 }
-
 .zf-green {
     color: #68b604;
 }
@@ -30,4 +29,119 @@ div.container a.navbar-brand > img {
     display: inline;
     margin-right: 4px;
     margin-top: -2px;
+}
+/** Header **/
+header {
+    background-color: #0000ff;
+    color: #ffffff;
+}
+header a, header a:hover {
+    color: inherit;
+}
+header section {
+    height: 60px;
+    border-bottom: 1px solid #ffffff;
+}
+header section #brand #logo {
+    background-color: #ffffff;
+    min-height: 55px;
+    max-width: 55px;
+    margin-top: 2px;
+    margin-left: 2px;
+}
+header section #brand #brandName {
+    color: #inherit;
+    margin-top: 15px;
+    margin-left: 5px;
+    font-size: 1.5em;
+}
+header section #account-action {
+    color: #inherit;
+    margin-top: 17px;
+    margin-right: 5px;
+    font-size: 1.25em;
+}
+
+
+
+/** Navbar **/
+.navbar-inverse {
+    background-color: inherit;
+    background-image: none;
+    box-shadow: none;
+    border: none;
+    color: inherit;
+    padding: 0px;
+    margin-bottom: 10px;
+}
+.navbar .navbar-brand {
+    color: inherit;
+    margin-right: 10px;
+}
+.navbar .container, .navbar .container .navbar-header, .navbar .navbar-brand {
+}
+.navbar .navbar-toggle, .navbar .navbar-toggle:focus, .navbar .navbar-toggle:hover, .navbar-inverse .navbar-toggle:focus, .navbar-inverse .navbar-toggle:hover {
+    border-color: #ffffff;
+    background-color: inherit;
+    border: none;
+}
+.navbar a, .nav .active a, .navbar-inverse .navbar-brand, .navbar-inverse .navbar-nav>li>a, .navbar-inverse .navbar-nav>.active>a, .navbar-inverse .navbar-nav>.active>a:hover {
+    background-color: inherit;
+    background-image: none;
+    box-shadow: none;
+    color: inherit;
+    margin-right: 0px;
+}
+.navbar a:hover, .nav a:hover, .navbar-inverse .navbar-nav>.active>a:hover, .navbar-inverse .navbar-nav>li>a:hover {
+    filter: brightness(150%);
+    text-decoration: underline;
+    background-color: #2222ff;
+}
+.navbar-collapse.collapse.in, .navbar-collapse.collapsing {
+    margin-top: -20px;
+    background-color: #0000ff;
+    border-color: #ffffff;
+}
+.nav a {
+    margin-right: 10px;
+}
+
+
+
+/** Application Grid **/
+.app-tile {
+    background-color: #ffffff;
+    height: 100px;
+    width: 100px;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 15px;
+    overflow: hidden;
+    font-size: 9pt;
+    color: #000000;
+    margin-top: 10px;
+}
+.app-tile:hover, .app-tile a:hover {
+    text-decoration: none;
+}
+.app-tile a, .app-tile .app-name {
+    display: block;
+}
+.app-tile img {
+    margin-top: 5px;
+    height: 90px;
+    width: 90px;
+}
+.app-tile .app-name {
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 12pt;
+    background-color: rgba(255,255,255,.8);
+    bottom: 0;
+    margin-top: -12pt;
+    color: #000000;
+    text-decoration: none;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
 }

@@ -24,26 +24,43 @@
         ?>
     </head>
     <body>
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-            <div class="container">
-                <div class="navbar-header">
-                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                        <span class="icon-bar"></span>
-                    </button>
-                    <a class="navbar-brand" href="<?= $this->url('home') ?>">App Launch Portal</a>
+        <header>
+            <section>
+                <div id="brand">
+                    <a href="http://esucc.org" target="_blank">
+                        <span id="logo" class="pull-left">
+                            55px x 55px
+                        </span>
+                        <span id="brandName" class="pull-left">
+                            Sample Brand
+                        </span>
+                    </a>
                 </div>
-                <div class="collapse navbar-collapse">
-                    <ul class="nav navbar-nav">
-                        <li class="active"><a href="<?= $this->url('home') ?>">Home</a></li>
-                    </ul>
+                <div id="account-action" class="pull-right">
+                    <a href="#">Sign In</a>
                 </div>
-            </div>
-        </nav>
+            </section>
+            <nav class="navbar navbar-inverse navbar-top" role="navigation">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" href="<?= $this->url('home') ?>">App Launch Portal</a>
+                    </div>
+                    <div class="collapse navbar-collapse">
+                        <ul class="nav navbar-nav">
+                            <li class="active"><a href="<?= $this->url('home') ?>">Home</a></li>
+                            <li><a href="#admin">Admin</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </header>
         <div class="container">
             <?= $this->content ?>
-            <hr>
         </div>
         <?= $this->inlineScript() ?>
     </body>

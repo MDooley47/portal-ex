@@ -20,11 +20,13 @@
 		"zendframework/zend-mvc-form" : "^1.0",
 		"zendframework/zend-log" : "^2.9",
 		"zendframework/zend-session" : "^2.7.1",
-		"esucc/simplesamlphp" : "dev-develop"
+		"zendframework/zend-escaper": "^2.5",
+        "esucc/simplesamlphp" : "dev-develop"
 	},
 	"autoload" : {
 		"psr-4" : {
-			"Application\\" : "module/Application/src/"
+			"Application\\" : "module/Application/src/",
+            "App\\" : "module/App/src/"
 		}
 	},
 	"autoload-dev" : {
