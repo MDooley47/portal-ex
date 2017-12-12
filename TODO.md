@@ -5,11 +5,12 @@ This is a TODO list for portal-ex.
 - [ ] Create App Module
     - [x] Add indexAction()
         - URL/app will display all the apps on an app launcher grid.
-    - [ ] Add addAction()
+    - [x] Add addAction()
     - [x] Add iconAction()
         - URL/app/icon/:id will display the icon for the app using XSendFile.
     - [ ] Add editAction()
     - [ ] Add deleteAction()
+    - [ ] Add Documentation/Comments
 
 ## Documentation
 
