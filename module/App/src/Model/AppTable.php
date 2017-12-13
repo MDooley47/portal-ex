@@ -58,11 +58,12 @@ class AppTable
             ));
         }
 
-        $this->tableGateway->update($data,['id' => $id]);
+        $this->tableGateway->update($data,['id' => (int) $id]);
     }
 
-    public function deleteAlbum($id)
+    public function deleteApp($id)
     {
+        unlink($this->getApp($id)->iconPath);
         $this->tableGateway->delete(['id' => (int) $id]);
     }
 }

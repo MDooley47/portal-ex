@@ -20,9 +20,7 @@ foreach ($apps as $app) {
     foreach ($data as $app) :
         $i++;
         if ((($i-1) % 6) == 0 && !$opened) :
-?>
-    <div class="row">
-<?php
+            echo "<div class='row'>";
         endif;
 ?>
         <div class="col-xs-6 col-sm-3 col-md-2">
@@ -36,14 +34,12 @@ foreach ($apps as $app) {
 <?php
         if ((($i) % 6) == 0 && $opened) :
             $opened = false;
-?>
-    </div>
-<?php
+            echo "</div>";
         else :
             $opened = true;
         endif;
     endforeach;
-    if ($opened = true)
+    if ($opened)
     {
         echo "</div>";
     }
@@ -68,7 +64,7 @@ foreach ($apps as $app) {
         <td>
             <a href="<?= $this->url('app', ['action' => 'edit', 'id' => $app->id]) ?>">Edit</a>
             |
-            <a href="<?= $this->url('app', ['action' => 'delete', 'id' => $app->id]) ?>">Delete</a>
+            <a class="post" href="<?= $this->url('app', ['action' => 'delete', 'id' => $app->id]) ?>">Delete</a>
         </td>
     </tr>
 <?php endforeach;?>

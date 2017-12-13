@@ -2,12 +2,12 @@
 
 namespace App\Controller;
 
+use App\Form\AppForm;
+use App\Model\App;
+use App\Model\AppTable;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Validator\File\IsImage;
 use Zend\View\Model\ViewModel;
-use App\Model\App;
-use App\Model\AppTable;
-use App\Form\AppForm;
 
 
 class AppController extends AbstractActionController
@@ -87,24 +87,24 @@ class AppController extends AbstractActionController
     {
         $id = $this->params()->fromRoute('id', 0);
         if (!$id) {
-            return $this->redirect()->toRoute('app', array(
-                'action' => 'index'
-            ));
+            return $this->redirect()->toRoute('app', [
+                'action' => 'index',
+            ]);
        }
 
        try {
              $app = $this->table->getApp($id);
          }
         catch (\Exception $ex) {
-            return $this->redirect()->toRoute('app', array(
-                'action' => 'index'
-            ));
+            return $this->redirect()->toRoute('app', [
+                'action' => 'index',
+            ]);
         }
 
         if (!file_exists($app->iconPath)) {
-            return $this->redirect()->toRoute('app', array(
-                'action' => 'index'
-            ));
+            return $this->redirect()->toRoute('app', [
+                'action' => 'index',
+            ]);
         }
 
         $response = $this->getResponse();
@@ -126,5 +126,17 @@ class AppController extends AbstractActionController
     public function deleteAction()
     {
 
+        $request = $this->getRequest();
+        if ($request->isPost()) {
+            $id = $request->getPost('id');
+
+            $this->table->deleteApp($id);
+
+            return $this->redirect()->toRoute('app');
+        }
+
+        return $this->redirect()->toRoute('app', [
+            'action' => 'index',
+        ]);
     }
 }
