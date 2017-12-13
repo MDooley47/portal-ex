@@ -26,6 +26,13 @@ class App
     public $iconPath;
     protected $inputFilter;
 
+    /**
+     * Sets App's values
+     *
+     * Takes in dictionary and set instance variables.
+     *
+     * @return App $this
+     */
     public function exchangeArray(array $data)
     {
         $this->id = !empty($data['id']) ? $data['id'] : null;
@@ -36,6 +43,17 @@ class App
         return $this;
     }
 
+    /**
+     * Gets App's input filter
+     *
+     * Returns the app's inputFilter.
+     * Creates the inputFilter if it does not exist.
+     * Adds/Removes the iconPath filter depending upon
+     * the passed in boolean value.
+     *
+     * @param Boolean $hasPath
+     * @return App $this
+     */
     public function getInputFilter($hasPath = false)
     {
         // Uses tmpFilter Variable for if setInputFilter is ever allowed
@@ -66,6 +84,15 @@ class App
         return $tmpFilter;
     }
 
+    /**
+     * Sets App's inputFilter
+     *
+     * Throws error. App's inputFilter cannot be modifed
+     * by an outside enity.
+     *
+     * @return App $this
+     * @throws DomainException
+     */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
         throw new DomainException(sprintf(

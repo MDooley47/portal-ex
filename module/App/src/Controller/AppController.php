@@ -14,11 +14,22 @@ class AppController extends AbstractActionController
 {
     private $table;
 
+    /**
+     * Constructs AppController
+     *
+     * @param AppTable $table
+     * @return void
+     */
     public function __construct(AppTable $table)
     {
         $this->table = $table;
     }
 
+    /**
+     * Displays the index page for App
+     *
+     * @return ViewModel
+     */
     public function indexAction()
     {
         return new ViewModel([
@@ -26,6 +37,16 @@ class AppController extends AbstractActionController
         ]);
     }
 
+    /**
+     * Adds App
+     *
+     * On a get request, addAction() will display
+     * a form for adding a new App.
+     * On a post request, addAction() will validate
+     * form data and add the app to do the database.
+     *
+     * @return ViewModel
+     */
     public function addAction()
     {
         $form = new AppForm('app');
@@ -75,14 +96,28 @@ class AppController extends AbstractActionController
 
         }
 
-        return ['form' => $form];
+        return new ViewModel([
+            'form' => $form,
+        ]);
     }
 
+    /**
+     * Edits App
+     *
+     * @return Viewmodel
+     */
     public function editAction()
     {
 
     }
 
+    /**
+     * Displays Icon
+     *
+     * Sends the App's Icon via XSendFile.
+     *
+     * @return Response
+     */
     public function iconAction()
     {
         $id = $this->params()->fromRoute('id', 0);
@@ -118,11 +153,26 @@ class AppController extends AbstractActionController
         return $response;
     }
 
+    /**
+     * Opens App
+     *
+     * Redirects to the url of the app.
+     *
+     * @return Redirect
+     */
     public function openAction()
     {
 
     }
 
+    /**
+     * Deletes App
+     *
+     * Removes the app from the database
+     * and removes the app's icon.
+     *
+     * @return Redirect
+     */
     public function deleteAction()
     {
 
