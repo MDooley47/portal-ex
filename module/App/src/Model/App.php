@@ -63,13 +63,13 @@ class App
         if (! $this->inputFilter)
         {
             $tmpFilter = (new InputFilter())
-                ->merge((new AppNameFilter())->init())
-                ->merge((new AppURLFilter())->init());
+                ->merge((new AppNameFilter()))
+                ->merge((new AppURLFilter()));
         }
 
         if (($options['hasPath']) && (! $tmpFilter->has('iconPath')))
         {
-            $tmpFilter->merge((new AppIconPathFilter())->init());
+            $tmpFilter->merge((new AppIconPathFilter()));
         }
         else if ((! $options['hasPath']) && ($tmpFilter->has('iconPath')))
         {
