@@ -62,27 +62,20 @@ class AppController extends AbstractActionController
 
             $app = new App();
 
-            $form->setInputFilter($app->getInputFilter());
+            $form->setInputFilter($app->getInputFilter(['hasIcon' => true]));
             $form->setData($post);
 
             if ($form->isValid())
             {
                 $data = $form->getData();
 
-                if (! (new IsImage())->isValid($data['icon']['tmp_name'])) {
-                    return $this->redirect()->toRoute('app', ['action' => 'add']);
-                }
-
-                $newName = "/volumes/storage/images/" .
-                    pathinfo($data['icon']['tmp_name'], PATHINFO_BASENAME) .
-                    "." .
-                    pathinfo($data['icon']['name'], PATHINFO_EXTENSION);
-
-                rename($data['icon']['tmp_name'], $newName);
-
-                $data['iconPath'] = $newName;
+                $data['iconPath'] = $data['icon']['tmp_name'];
                 $form->setData($data);
 
+                // Removes icon from the form to prevent Zend
+                // from thinking there was an illegal file
+                // upload.
+                $form->remove('icon');
             }
 
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
