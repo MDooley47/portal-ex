@@ -101,8 +101,65 @@ class AppController extends AbstractActionController
      */
     public function editAction()
     {
+        // get provided id
+        $id = (int) $this->params()->fromRoute('id', 0);
 
+        // redirect to /app/add if there was no id provided.
+        if (!$id) {
+            return $this->redirect()->toRoute('app', ['action' => 'add']);
+        }
+
+        // Try to get an app with the provided id. If there is
+        // no app, redirect to /app
+        try {
+              $app = $this->table->getApp($id);
+         }
+         catch (\Exception $ex) {
+             return $this->redirect()->toRoute('app');
+         }
+
+        $form = new AppForm();
+        $form->bind($app);
+        $form->get('submit')->setAttribute('value', 'Edit');
+
+        $request = $this->getRequest();
+        $viewData = ['id' => $id, 'form' => $form];
+
+        if ($request->isPost()) {
+            $post = array_merge_recursive(
+                $request->getPost()->toArray(),
+                $request->getFiles()->toArray()
+            );
+
+            $form->setInputFilter($app->getInputFilter(['hasIcon' => true]));
+            $form->setData($post);
+
+            if ($form->isValid())
+            {
+                $data = $form->getData();
+
+                $data['iconPath'] = $data['icon']['tmp_name'];
+                $form->setData($data);
+
+                // Removes icon from the form to prevent Zend
+                // from thinking there was an illegal file
+                // upload.
+                $form->remove('icon');
+            }
+
+            $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
+            if ($form->isValid())
+            {
+                $app->exchangeArray($form->getData());
+                $this->table->saveApp($app);
+
+                return $this->redirect()->toRoute('app');
+            }
+        }
+
+        return $viewData;
     }
+
 
     /**
      * Displays Icon
