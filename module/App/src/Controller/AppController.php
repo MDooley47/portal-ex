@@ -158,7 +158,25 @@ class AppController extends AbstractActionController
      */
     public function openAction()
     {
+        // get provided id
+        $id = (int) $this->params()->fromRoute('id', 0);
 
+        // redirect to /app if there was no id provided.
+        if (!$id) {
+            return $this->redirect()->toRoute('app');
+       }
+
+       // Try to get an app with the provided id. If there is
+       // no app redirect to /app
+       try {
+             $app = $this->table->getApp($id);
+        }
+        catch (\Exception $ex) {
+            return $this->redirect()->toRoute('app');
+        }
+
+        // redirect to app.url
+        return $this->redirect()->toUrl($app->url);
     }
 
     /**
@@ -171,18 +189,19 @@ class AppController extends AbstractActionController
      */
     public function deleteAction()
     {
-
         $request = $this->getRequest();
+
+        // if it is a post request, the app will be deleted
+        // after delete redirect to /app
         if ($request->isPost()) {
-            $id = $request->getPost('id');
+            $id = (int) $request->getPost('id');
 
             $this->table->deleteApp($id);
 
             return $this->redirect()->toRoute('app');
         }
 
-        return $this->redirect()->toRoute('app', [
-            'action' => 'index',
-        ]);
+        // if it is not a post request, redirect to /app
+        return $this->redirect()->toRoute('app');
     }
 }
