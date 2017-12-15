@@ -50,6 +50,8 @@ class App
      * Creates the inputFilter if it does not exist.
      * Adds/Removes the iconPath filter depending upon
      * the passed in boolean value $options['hasPath'].
+     * Adds/Removes the icon filter depending upon
+     * the passed in boolean value $options['hasIcon'].
      *
      * @param Array $options
      * @return App $this
@@ -74,6 +76,15 @@ class App
         else if ((! $options['hasPath']) && ($tmpFilter->has('iconPath')))
         {
             $tmpFilter->remove("iconPath");
+        }
+
+        if (($options['hasIcon']) && (! $tmpFilter->has('icon')))
+        {
+            $tmpFilter->merge(new AppIconFilter());
+        }
+        else if ((! $options['hasIcon']) && ($tmpFilter->has('icon')))
+        {
+            $tmpFilter->remove("icon");
         }
 
         if (! $this->inputFilter)
