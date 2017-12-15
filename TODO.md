@@ -11,6 +11,7 @@ This is a TODO list for portal-ex.
     - [ ] Add editAction()
     - [ ] Add deleteAction()
     - [ ] Add Documentation/Comments
+    - [ ] Add randomized slug support
 
 ## Documentation
 
