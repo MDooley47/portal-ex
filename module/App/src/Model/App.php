@@ -43,6 +43,15 @@ class App
         return $this;
     }
 
+    public function getArrayCopy()
+    {
+        return [
+            'id' => $this->id,
+            'name' => $this->name,
+            'url' => $this->url,
+            'iconPath' => $this->iconPath,
+        ];
+    }
     /**
      * Gets App's input filter
      *
