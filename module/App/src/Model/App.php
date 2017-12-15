@@ -49,12 +49,12 @@ class App
      * Returns the app's inputFilter.
      * Creates the inputFilter if it does not exist.
      * Adds/Removes the iconPath filter depending upon
-     * the passed in boolean value.
+     * the passed in boolean value $options['hasPath'].
      *
-     * @param Boolean $hasPath
+     * @param Array $options
      * @return App $this
      */
-    public function getInputFilter($hasPath = false)
+    public function getInputFilter($options = [])
     {
         // Uses tmpFilter Variable for if setInputFilter is ever allowed
 
@@ -67,11 +67,11 @@ class App
                 ->merge((new AppURLFilter())->init());
         }
 
-        if (($hasPath) && (! $tmpFilter->has('iconPath')))
+        if (($options['hasPath']) && (! $tmpFilter->has('iconPath')))
         {
             $tmpFilter->merge((new AppIconPathFilter())->init());
         }
-        else if ((! $hasPath) && ($tmpFilter->has('iconPath')))
+        else if ((! $options['hasPath']) && ($tmpFilter->has('iconPath')))
         {
             $tmpFilter->remove("iconPath");
         }
