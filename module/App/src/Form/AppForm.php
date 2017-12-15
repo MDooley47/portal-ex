@@ -29,6 +29,7 @@ class AppForm extends Form
             ],
             'type' => 'text',
         ]);
+
         $this->add([
             'name' => 'url',
             'options' => [
@@ -37,11 +38,20 @@ class AppForm extends Form
             'type' => 'url',
         ]);
 
-        $this->add(
-            (new Element\File('image-file'))
-                ->setLabel('App Icon')
-                ->setAttribute('id', 'icon')
-                ->setAttribute('name', 'icon')
-        );
+        $this->add([
+            'name' => 'icon',
+            'type' => 'file',
+            'options' => [
+                'label' => 'App Icon',
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'submit',
+            'type' => 'submit',
+            'attributes' => [
+               'value' => 'Submit',
+            ],
+        ]);
     }
 }
