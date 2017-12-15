@@ -85,7 +85,7 @@ class AppController extends AbstractActionController
 
             }
 
-            $form->setInputFilter($app->getInputFilter(true));
+            $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
             if ($form->isValid())
             {
                 $app->exchangeArray($form->getData());
