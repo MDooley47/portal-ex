@@ -113,28 +113,31 @@ class AppController extends AbstractActionController
      */
     public function iconAction()
     {
-        $id = $this->params()->fromRoute('id', 0);
+        // get provided id
+        $id = (int) $this->params()->fromRoute('id', 0);
+
+        // redirect to /app if there was no id provided.
         if (!$id) {
-            return $this->redirect()->toRoute('app', [
-                'action' => 'index',
-            ]);
+            return $this->redirect()->toRoute('app');
        }
 
+       // Try to get an app with the provided id. If there is
+       // no app, redirect to /app
        try {
              $app = $this->table->getApp($id);
-         }
+        }
         catch (\Exception $ex) {
-            return $this->redirect()->toRoute('app', [
-                'action' => 'index',
-            ]);
+            return $this->redirect()->toRoute('app');
         }
 
+        // Check that there is a phone at app.iconPath. If
+        // there is no file, redirect to /app
         if (!file_exists($app->iconPath)) {
-            return $this->redirect()->toRoute('app', [
-                'action' => 'index',
-            ]);
+            return $this->redirect()->toRoute('app');
         }
 
+        // return a response with using X-Sendfile to
+        // send the file to the user.
         $response = $this->getResponse();
 
         $response
