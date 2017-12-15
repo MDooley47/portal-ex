@@ -9,7 +9,7 @@
 <h1><?= $escaper->escapeHTML($title); ?></h1>
 
 <?php
-    $form->setAttribute('action', $this->url('app', ['action' => 'add']));
+    $form->setAttribute('action', $this->url('app', ['action' => 'edit', 'id' => $id]));
     $form->prepare();
 ?>
     <?= $this->form()->openTag($form) ?>
