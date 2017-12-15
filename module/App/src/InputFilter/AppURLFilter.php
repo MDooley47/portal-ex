@@ -7,7 +7,7 @@ use Zend\InputFilter\InputFilter;
 class AppURLFilter extends InputFilter
 {
 
-    public function init()
+    public function __construct()
     {
         $this->add([
             'name' => 'url',
