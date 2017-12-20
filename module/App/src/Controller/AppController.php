@@ -102,30 +102,36 @@ class AppController extends AbstractActionController
     public function editAction()
     {
         // get provided id
-        $id = (int) $this->params()->fromRoute('id', 0);
+        $id = $this->params()->fromRoute('id', 0);
 
         // redirect to /app/add if there was no id provided.
-        if (!$id) {
+        if (! $id)
+        {
+            var_dump($id);
+            die();
             return $this->redirect()->toRoute('app', ['action' => 'add']);
         }
 
         // Try to get an app with the provided id. If there is
         // no app, redirect to /app
-        try {
+        try
+        {
               $app = $this->table->getApp($id);
          }
-         catch (\Exception $ex) {
+         catch (Exception $ex)
+         {
              return $this->redirect()->toRoute('app');
          }
 
         $form = new AppForm();
-        $form->bind($app);
+        $form->setData($app->getArrayCopy());
         $form->get('submit')->setAttribute('value', 'Edit');
 
         $request = $this->getRequest();
-        $viewData = ['id' => $id, 'form' => $form];
+        $viewData = ['slug' => $id, 'version' => $app->version, 'form' => $form];
 
-        if ($request->isPost()) {
+        if ($request->isPost())
+        {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -145,6 +151,13 @@ class AppController extends AbstractActionController
                 // from thinking there was an illegal file
                 // upload.
                 $form->remove('icon');
+            }
+            else if ($form->setInputFilter($app->getInputFilter())
+                    && $form->isValid())
+            {
+                $data = $form->getData();
+                $data['iconPath'] = $app->iconPath;
+                $form->setData($data);
             }
 
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
@@ -171,25 +184,29 @@ class AppController extends AbstractActionController
     public function iconAction()
     {
         // get provided id
-        $id = (int) $this->params()->fromRoute('id', 0);
+        $id = $this->params()->fromRoute('id', 0);
 
         // redirect to /app if there was no id provided.
-        if (!$id) {
+        if (! $id)
+        {
             return $this->redirect()->toRoute('app');
-       }
+        }
 
-       // Try to get an app with the provided id. If there is
-       // no app, redirect to /app
-       try {
+        // Try to get an app with the provided id. If there is
+        // no app, redirect to /app
+        try
+        {
              $app = $this->table->getApp($id);
         }
-        catch (\Exception $ex) {
+        catch (Exception $ex)
+        {
             return $this->redirect()->toRoute('app');
         }
 
         // Check that there is a phone at app.iconPath. If
         // there is no file, redirect to /app
-        if (!file_exists($app->iconPath)) {
+        if (!file_exists($app->iconPath))
+        {
             return $this->redirect()->toRoute('app');
         }
 
@@ -216,19 +233,22 @@ class AppController extends AbstractActionController
     public function openAction()
     {
         // get provided id
-        $id = (int) $this->params()->fromRoute('id', 0);
+        $id = $this->params()->fromRoute('id', 0);
 
         // redirect to /app if there was no id provided.
-        if (!$id) {
+        if (!$id)
+        {
             return $this->redirect()->toRoute('app');
-       }
+        }
 
-       // Try to get an app with the provided id. If there is
-       // no app redirect to /app
-       try {
+        // Try to get an app with the provided id. If there is
+        // no app redirect to /app
+        try
+        {
              $app = $this->table->getApp($id);
         }
-        catch (\Exception $ex) {
+        catch (Exception $ex)
+        {
             return $this->redirect()->toRoute('app');
         }
 
@@ -250,8 +270,9 @@ class AppController extends AbstractActionController
 
         // if it is a post request, the app will be deleted
         // after delete redirect to /app
-        if ($request->isPost()) {
-            $id = (int) $request->getPost('id');
+        if ($request->isPost())
+        {
+            $id = $request->getPost('id');
 
             $this->table->deleteApp($id);
 
