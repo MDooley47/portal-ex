@@ -18,16 +18,22 @@ class AppTable
         return $this->tableGateway->select();
     }
 
-    public function getApp($id)
+    public function getApp($id, $options = ['type' => 'slug'])
     {
-        $id = $id;
-        $rowset = $this->tableGateway->select(['id' => $id]);
+        if ($options['type'] == 'slug')
+        {
+            $rowset = $this->tableGateway->select(['slug' => $id]);
+        }
+        else if ($options['type' == 'id'])
+        {
+            $rowset = $this->tableGateway->select(['id' => $id]);
+        }
         $row = $rowset->current();
         if (! $row)
         {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d',
-                $id
+                'Could not Find Row with identifier %d of type %s',
+                $id, $options['type']
             ));
         }
 
