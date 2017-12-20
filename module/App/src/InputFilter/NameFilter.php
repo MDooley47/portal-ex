@@ -4,17 +4,20 @@ namespace App\InputFilter;
 
 use Zend\InputFilter\InputFilter;
 
-class AppURLFilter extends InputFilter
+class NameFilter extends InputFilter
 {
 
     public function __construct()
     {
         $this->add([
-            'name' => 'url',
+            'name' => 'name',
             'required' => true,
             'validators' => [
                 [
-                    'name' => 'Uri',
+                    'name' => 'StringLength',
+                    'options' => [
+                        'min' => 3
+                    ],
                 ],
             ],
         ]);

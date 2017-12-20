@@ -4,19 +4,19 @@ namespace App\InputFilter;
 
 use Zend\InputFilter\InputFilter;
 
-class AppNameFilter extends InputFilter
+class IconPathFilter extends InputFilter
 {
 
     public function __construct()
     {
         $this->add([
-            'name' => 'name',
+            'name' => 'iconPath',
             'required' => true,
             'validators' => [
                 [
-                    'name' => 'StringLength',
+                    'name' => 'stringLength',
                     'options' => [
-                        'min' => 3
+                        'min' => 22
                     ],
                 ],
             ],

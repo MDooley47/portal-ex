@@ -6,7 +6,7 @@ use Zend\InputFilter\FileInput;
 use Zend\InputFilter\InputFilter;
 use Zend\Validator\File\IsImage;
 
-class AppIconFilter extends InputFilter
+class IconFilter extends InputFilter
 {
 
     public function __construct()
