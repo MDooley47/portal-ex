@@ -81,7 +81,9 @@ class AppController extends AbstractActionController
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
             if ($form->isValid())
             {
-                $app->exchangeArray($form->getData());
+                $data = $form->getData();
+                App::sanitizeGuarded($data);
+                $app->exchangeArray($data);
                 $this->table->saveApp($app);
 
                 return $this->redirect()->toRoute('app', ['action' => 'add']);
@@ -102,13 +104,11 @@ class AppController extends AbstractActionController
     public function editAction()
     {
         // get provided id
-        $id = $this->params()->fromRoute('id', 0);
+        $slug = $this->params()->fromRoute('id', 0);
 
         // redirect to /app/add if there was no id provided.
-        if (! $id)
+        if (! $slug)
         {
-            var_dump($id);
-            die();
             return $this->redirect()->toRoute('app', ['action' => 'add']);
         }
 
@@ -116,7 +116,7 @@ class AppController extends AbstractActionController
         // no app, redirect to /app
         try
         {
-              $app = $this->table->getApp($id);
+              $app = $this->table->getApp($slug);
          }
          catch (Exception $ex)
          {
@@ -128,7 +128,7 @@ class AppController extends AbstractActionController
         $form->get('submit')->setAttribute('value', 'Edit');
 
         $request = $this->getRequest();
-        $viewData = ['slug' => $id, 'version' => $app->version, 'form' => $form];
+        $viewData = ['slug' => $slug, 'version' => $app->version, 'form' => $form];
 
         if ($request->isPost())
         {
@@ -163,7 +163,7 @@ class AppController extends AbstractActionController
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
             if ($form->isValid())
             {
-                $app->exchangeArray($form->getData());
+                $app->exchangeArray($form->getData(), ['slug' => $slug]);
                 $this->table->saveApp($app);
 
                 return $this->redirect()->toRoute('app');
