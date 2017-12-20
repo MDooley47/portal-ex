@@ -58,28 +58,40 @@ class AppTable
             'iconPath' => $app->iconPath,
         ];
 
-        $id = (int) $app->id;
+        $slug = $app->slug;
 
-        if ($id === 0)
+        if ($slug == NULL)
         {
+            do
+            {
+                $data['slug'] = App::generateSlug();
+            }
+            while ($this->appExists($data['slug']));
             $this->tableGateway->insert($data);
             return;
         }
 
-        if (! $this->getApp($id))
+        if ($dbApp = $this->getApp($slug))
+        {
+            if ($data['iconPath'] != $dbApp->iconPath)
+            {
+                if (file_exists($file = $dbApp->iconPath)) unlink($file);
+            }
+            $data['version'] = 1 + (int) $dbApp->version;
+            $this->tableGateway->update($data,['slug' => $slug]);
+        }
+        else
         {
             throw new RuntimeException(springf(
                 'Cannot update app with identifier %d; does not exist',
                 $id
             ));
         }
-
-        $this->tableGateway->update($data,['id' => (int) $id]);
     }
 
     public function deleteApp($id)
     {
-        unlink($this->getApp($id)->iconPath);
-        $this->tableGateway->delete(['id' => (int) $id]);
+        if (file_exists($file = $this->getApp($id)->iconPath)) unlink($file);
+        $this->tableGateway->delete(['slug' => $id]);
     }
 }
