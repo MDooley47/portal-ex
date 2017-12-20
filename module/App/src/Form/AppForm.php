@@ -18,7 +18,7 @@ class AppForm extends Form
     private function addElements()
     {
         $this->add([
-            'name' => 'id',
+            'name' => 'slug',
             'type' => 'hidden',
         ]);
 
