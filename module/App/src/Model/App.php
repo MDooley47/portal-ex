@@ -29,20 +29,28 @@ class App
     protected $inputFilter;
 
     /**
+     * Values users cannot change.
+     */
+    protected static $guarded = [
+        'id',
+        'slug',
+        'version',
+    ];
+
+    /**
      * Sets App's values
      *
      * Takes in dictionary and set instance variables.
      *
+     * @param array $data
      * @return App $this
      */
     public function exchangeArray(array $data)
     {
-        $this->id = !empty($data['id']) ? $data['id'] : null;
-        $this->slug = !empty($data['slug']) ? $data['slug'] : null;
-        $this->name = !empty($data['name']) ? $data['name'] : null;
-        $this->url = !empty($data['url']) ? $data['url'] : null;
-        $this->iconPath = !empty($data['iconPath']) ? $data['iconPath'] : null;
-        $this->version = !empty($data['version']) ? (int) $data['version'] : 0;
+        foreach ($data as $key => $value)
+        {
+            $this->{$key} = !empty($value) ? $value : (int) null;
+        }
 
         return $this;
     }
@@ -107,6 +115,17 @@ class App
         $ranString = "";
         for ($i = 0; $i < $len; $i++) $ranString .= $charset[mt_rand(0, strlen($charset) - 1)];
         return $ranString;
+    }
+
+    public static function sanitizeGuarded(&$data)
+    {
+        foreach ($data as $key=>&$value)
+        {
+            if (in_array($key, self::$guarded))
+            {
+                $value = null;
+            }
+        }
     }
 
     /**
