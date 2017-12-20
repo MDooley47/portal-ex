@@ -9,11 +9,11 @@
 <h1><?= $escaper->escapeHTML($title); ?></h1>
 
 <?php
-    $form->setAttribute('action', $this->url('app', ['action' => 'edit', 'id' => $id]));
+    $form->setAttribute('action', $this->url('app', ['action' => 'edit', 'id' => $slug]));
     $form->prepare();
 ?>
     <?= $this->form()->openTag($form) ?>
-    <?= $this->formHidden($this->form->get('id')); ?>
+    <?= $this->formHidden($this->form->get('slug')); ?>
     <?= $this->formRow($this->form->get('name')); ?>
     <br>
     <?= $this->formRow($this->form->get('url')); ?>
@@ -21,6 +21,8 @@
 
 <div class="form-element">
     <?= $this->formLabel($fileElement) ?>
+    <img src="<?= $this->url('app', ['action' => 'icon', 'id' => $slug]) .
+    "?v=" . $version ?>" alt="" class="app-image">
     <?= $this->formFile($fileElement) ?>
     <?= $this->formElementErrors($fileElement) ?>
 </div>

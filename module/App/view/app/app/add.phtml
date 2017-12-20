@@ -13,7 +13,7 @@
     $form->prepare();
 ?>
     <?= $this->form()->openTag($form) ?>
-    <?= $this->formHidden($this->form->get('id')); ?>
+    <?= $this->formHidden($this->form->get('slug')); ?>
     <?= $this->formRow($this->form->get('name')); ?>
     <br>
     <?= $this->formRow($this->form->get('url')); ?>
