@@ -21,9 +21,11 @@ use Zend\Validator\StringLength;
 class App
 {
     public $id;
+    public $slug;
     public $name;
     public $url;
     public $iconPath;
+    public $version;
     protected $inputFilter;
 
     /**
@@ -36,9 +38,11 @@ class App
     public function exchangeArray(array $data)
     {
         $this->id = !empty($data['id']) ? $data['id'] : null;
+        $this->slug = !empty($data['slug']) ? $data['slug'] : null;
         $this->name = !empty($data['name']) ? $data['name'] : null;
         $this->url = !empty($data['url']) ? $data['url'] : null;
         $this->iconPath = !empty($data['iconPath']) ? $data['iconPath'] : null;
+        $this->version = !empty($data['version']) ? (int) $data['version'] : 0;
 
         return $this;
     }
@@ -47,11 +51,14 @@ class App
     {
         return [
             'id' => $this->id,
+            'slug' => $this->slug,
             'name' => $this->name,
             'url' => $this->url,
             'iconPath' => $this->iconPath,
+            'version' => $this->version,
         ];
     }
+
     /**
      * Gets App's input filter
      *
@@ -67,20 +74,13 @@ class App
      */
     public function getInputFilter($options = [])
     {
-        // Uses tmpFilter Variable for if setInputFilter is ever allowed
-
-        $tmpFilter = $this->inputFilter;
-
-        if (! $this->inputFilter)
-        {
-            $tmpFilter = (new InputFilter())
-                ->merge((new AppNameFilter()))
-                ->merge((new AppURLFilter()));
-        }
+        $tmpFilter = (new InputFilter())
+            ->merge(new AppNameFilter())
+            ->merge(new AppURLFilter());
 
         if (($options['hasPath']) && (! $tmpFilter->has('iconPath')))
         {
-            $tmpFilter->merge((new AppIconPathFilter()));
+            $tmpFilter->merge(new AppIconPathFilter());
         }
         else if ((! $options['hasPath']) && ($tmpFilter->has('iconPath')))
         {
@@ -96,12 +96,17 @@ class App
             $tmpFilter->remove("icon");
         }
 
-        if (! $this->inputFilter)
-        {
-            $this->inputFilter = $tmpFilter;
-        }
+        $this->inputFilter = $tmpFilter;
 
         return $tmpFilter;
+    }
+
+    public static function generateSlug($len = 6,
+        $charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
+    {
+        $ranString = "";
+        for ($i = 0; $i < $len; $i++) $ranString .= $charset[mt_rand(0, strlen($charset) - 1)];
+        return $ranString;
     }
 
     /**
