@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
-use App\InputFilter\AppNameFilter;
-use App\InputFilter\AppURLFilter;
-use App\InputFilter\AppIconFilter;
-use App\InputFilter\AppIconPathFilter;
+use App\InputFilter\NameFilter;
+use App\InputFilter\URLFilter;
+use App\InputFilter\IconFilter;
+use App\InputFilter\IconPathFilter;
 
 use DomainException;
 
@@ -75,12 +75,12 @@ class App
     public function getInputFilter($options = [])
     {
         $tmpFilter = (new InputFilter())
-            ->merge(new AppNameFilter())
-            ->merge(new AppURLFilter());
+            ->merge(new NameFilter())
+            ->merge(new URLFilter());
 
         if (($options['hasPath']) && (! $tmpFilter->has('iconPath')))
         {
-            $tmpFilter->merge(new AppIconPathFilter());
+            $tmpFilter->merge(new IconPathFilter());
         }
         else if ((! $options['hasPath']) && ($tmpFilter->has('iconPath')))
         {
@@ -89,7 +89,7 @@ class App
 
         if (($options['hasIcon']) && (! $tmpFilter->has('icon')))
         {
-            $tmpFilter->merge(new AppIconFilter());
+            $tmpFilter->merge(new IconFilter());
         }
         else if ((! $options['hasIcon']) && ($tmpFilter->has('icon')))
         {
