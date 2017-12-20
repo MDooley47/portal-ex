@@ -127,7 +127,7 @@ header section #account-action {
 .app-tile a, .app-tile .app-name {
     display: block;
 }
-.app-tile img {
+.app-tile img, .app-image {
     margin-top: 5px;
     height: 90px;
     width: 90px;
