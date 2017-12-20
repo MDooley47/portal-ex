@@ -28,7 +28,7 @@ class Module implements ConfigProviderInterface
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\App());
-                    return new TableGateway('app', $dbAdapter, null, $resultSetPrototype);
+                    return new TableGateway('apps', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
         ];
