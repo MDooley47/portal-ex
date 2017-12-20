@@ -3,6 +3,7 @@
 namespace App\Model;
 
 use RuntimeException;
+use Zend\Validator\Db\RecordExists;
 
 class AppTable
 {
@@ -38,6 +39,15 @@ class AppTable
         }
 
         return $row;
+    }
+
+    public function appExists($id, $options = ['type' => 'slug'])
+    {
+        return (new RecordExists([
+            'table' => $this->tableGateway->getTable(),
+            'field' => $options['type'],
+            'adapter' => $this->tableGateway->getAdapter(),
+        ]))->isValid($id);
     }
 
     public function saveApp(App $app)
