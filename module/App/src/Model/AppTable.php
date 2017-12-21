@@ -3,13 +3,14 @@
 namespace App\Model;
 
 use RuntimeException;
+use Zend\Db\TableGateway\TableGateway;
 use Zend\Validator\Db\RecordExists;
 
 class AppTable
 {
     private $tableGateway;
 
-    public function __construct(\Zend\Db\TableGateway\TableGateway $tableGateway)
+    public function __construct(TableGateway $tableGateway)
     {
         $this->tableGateway = $tableGateway;
     }
