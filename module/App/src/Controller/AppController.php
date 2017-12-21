@@ -15,7 +15,8 @@ class AppController extends AbstractActionController
     private $table;
 
     /**
-     * Constructs AppController
+     * Constructs AppController.
+     * Sets $this->table to the paramater.
      *
      * @param AppTable $table
      * @return void
@@ -45,7 +46,7 @@ class AppController extends AbstractActionController
      * On a post request, addAction() will validate
      * form data and add the app to do the database.
      *
-     * @return ViewModel
+     * @return ViewModel|Redirect
      */
     public function addAction()
     {
@@ -59,12 +60,12 @@ class AppController extends AbstractActionController
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
             );
+            $form->setData($post);
 
             $app = new App();
 
+            // Checks if the form data is valid with the icon (image file)
             $form->setInputFilter($app->getInputFilter(['hasIcon' => true]));
-            $form->setData($post);
-
             if ($form->isValid())
             {
                 $data = $form->getData();
@@ -78,11 +79,12 @@ class AppController extends AbstractActionController
                 $form->remove('icon');
             }
 
+            // Checks if the form data is valid with the iconPath
+            // (path to image file)
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
             if ($form->isValid())
             {
-                $data = $form->getData();
-                App::sanitizeGuarded($data);
+                App::sanitizeGuarded($data = $form->getData());
                 $app->exchangeArray($data);
                 $this->table->saveApp($app);
 
@@ -91,6 +93,7 @@ class AppController extends AbstractActionController
 
         }
 
+        // if not post request, return with viewModel
         return new ViewModel([
             'form' => $form,
         ]);
@@ -99,7 +102,7 @@ class AppController extends AbstractActionController
     /**
      * Edits App
      *
-     * @return Viewmodel
+     * @return ViewModel|Redirect
      */
     public function editAction()
     {
@@ -128,7 +131,11 @@ class AppController extends AbstractActionController
         $form->get('submit')->setAttribute('value', 'Edit');
 
         $request = $this->getRequest();
-        $viewData = ['slug' => $slug, 'version' => $app->version, 'form' => $form];
+        $viewData = [
+            'slug' => $slug,
+            'version' => $app->version,
+            'form' => $form,
+        ];
 
         if ($request->isPost())
         {
@@ -175,13 +182,12 @@ class AppController extends AbstractActionController
         return $viewData;
     }
 
-
     /**
      * Displays Icon
      *
      * Sends the App's Icon via XSendFile.
      *
-     * @return Response
+     * @return Response|Redirect
      */
     public function iconAction()
     {
@@ -214,15 +220,13 @@ class AppController extends AbstractActionController
 
         // return a response with using X-Sendfile to
         // send the file to the user.
-        $response = $this->getResponse();
-
-        $response
+        return ($this->getResponse())
             ->getHeaders()
-            ->addHeaderLine('Content-Type', 'image/' . pathinfo($app->iconPath, PATHINFO_EXTENSION))
-            ->addHeaderLine('Content-Disposition', 'inline; filename="' . pathinfo($app->iconPath, PATHINFO_BASENAME) . '"')
+            ->addHeaderLine('Content-Type', 'image/'
+                . pathinfo($app->iconPath, PATHINFO_EXTENSION))
+            ->addHeaderLine('Content-Disposition', 'inline; filename="'
+                . pathinfo($app->iconPath, PATHINFO_BASENAME) . '"')
             ->addHeaderLine("X-Sendfile", $app->iconPath);
-
-        return $response;
     }
 
     /**
@@ -270,7 +274,7 @@ class AppController extends AbstractActionController
     {
         $request = $this->getRequest();
 
-        // if it is a post request, the app will be deleted
+        // iff it is a post request, the app will be deleted
         // after delete redirect to /app
         if ($request->isPost())
         {
