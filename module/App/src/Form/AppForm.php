@@ -7,6 +7,15 @@ use Zend\Form\Form;
 
 class AppForm extends Form
 {
+    /**
+     * Constructs AppForm.
+     * * Calls the parent (Zend\Form\Form) constructor
+     * * Calls $this->addElements
+     *
+     * @param String $name
+     * @param dictionary $options
+     * @return void
+     */
     public function __construct($name = "app", $options = [])
     {
         parent::__construct($name, $options);
@@ -14,6 +23,11 @@ class AppForm extends Form
         $this->addElements();
     }
 
+    /**
+     * Adds Elements to the form.
+     *
+     * @return void
+     */
     private function addElements()
     {
         $this->add([
@@ -23,18 +37,18 @@ class AppForm extends Form
 
         $this->add([
             'name' => 'name',
+            'type' => 'text',
             'options' => [
                 'label' => 'App Name',
             ],
-            'type' => 'text',
         ]);
 
         $this->add([
             'name' => 'url',
+            'type' => 'url',
             'options' => [
                 'label' => 'App URL',
             ],
-            'type' => 'url',
         ]);
 
         $this->add([
