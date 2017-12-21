@@ -9,7 +9,6 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Validator\File\IsImage;
 use Zend\View\Model\ViewModel;
 
-
 class AppController extends AbstractActionController
 {
     private $table;
