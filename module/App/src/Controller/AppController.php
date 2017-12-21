@@ -163,7 +163,9 @@ class AppController extends AbstractActionController
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
             if ($form->isValid())
             {
-                $app->exchangeArray($form->getData(), ['slug' => $slug]);
+                App::sanitizeGuarded($data = $form->getData());
+                $data['slug'] = $slug;
+                $app->exchangeArray($data);
                 $this->table->saveApp($app);
 
                 return $this->redirect()->toRoute('app');
