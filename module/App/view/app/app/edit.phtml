@@ -9,7 +9,7 @@
 <h1><?= $escaper->escapeHTML($title); ?></h1>
 
 <?php
-    $form->setAttribute('action', $this->url('app', ['action' => 'edit', 'id' => $slug]));
+    $form->setAttribute('action', $this->url('app', ['action' => 'edit', 'slug' => $slug]));
     $form->prepare();
 ?>
     <?= $this->form()->openTag($form) ?>
@@ -21,7 +21,7 @@
 
 <div class="form-element">
     <?= $this->formLabel($fileElement) ?>
-    <img src="<?= $this->url('app', ['action' => 'icon', 'id' => $slug]) .
+    <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $slug]) .
     "?v=" . $version ?>" alt="" class="app-image">
     <?= $this->formFile($fileElement) ?>
     <?= $this->formElementErrors($fileElement) ?>

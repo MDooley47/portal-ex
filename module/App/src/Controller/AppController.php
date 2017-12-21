@@ -103,16 +103,16 @@ class AppController extends AbstractActionController
      */
     public function editAction()
     {
-        // get provided id
-        $slug = $this->params()->fromRoute('id', 0);
+        // get provided slug
+        $slug = $this->params()->fromRoute('slug', 0);
 
-        // redirect to /app/add if there was no id provided.
+        // redirect to /app/add if there was no slug provided.
         if (! $slug)
         {
             return $this->redirect()->toRoute('app', ['action' => 'add']);
         }
 
-        // Try to get an app with the provided id. If there is
+        // Try to get an app with the provided slug. If there is
         // no app, redirect to /app
         try
         {
@@ -185,20 +185,20 @@ class AppController extends AbstractActionController
      */
     public function iconAction()
     {
-        // get provided id
-        $id = $this->params()->fromRoute('id', 0);
+        // get provided slug
+        $slug = $this->params()->fromRoute('slug', 0);
 
-        // redirect to /app if there was no id provided.
-        if (! $id)
+        // redirect to /app if there was no slug provided.
+        if (! $slug)
         {
             return $this->redirect()->toRoute('app');
         }
 
-        // Try to get an app with the provided id. If there is
+        // Try to get an app with the provided slug. If there is
         // no app, redirect to /app
         try
         {
-             $app = $this->table->getApp($id);
+             $app = $this->table->getApp($slug);
         }
         catch (Exception $ex)
         {
@@ -234,20 +234,20 @@ class AppController extends AbstractActionController
      */
     public function openAction()
     {
-        // get provided id
-        $id = $this->params()->fromRoute('id', 0);
+        // get provided slug
+        $slug = $this->params()->fromRoute('slug', 0);
 
-        // redirect to /app if there was no id provided.
-        if (!$id)
+        // redirect to /app if there was no slug provided.
+        if (! $slug)
         {
             return $this->redirect()->toRoute('app');
         }
 
-        // Try to get an app with the provided id. If there is
+        // Try to get an app with the provided slug. If there is
         // no app redirect to /app
         try
         {
-             $app = $this->table->getApp($id);
+             $app = $this->table->getApp($slug);
         }
         catch (Exception $ex)
         {
@@ -274,9 +274,9 @@ class AppController extends AbstractActionController
         // after delete redirect to /app
         if ($request->isPost())
         {
-            $id = $request->getPost('id');
+            $slug = $request->getPost('slug');
 
-            $this->table->deleteApp($id);
+            $this->table->deleteApp($slug);
 
             return $this->redirect()->toRoute('app');
         }

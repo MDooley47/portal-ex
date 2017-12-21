@@ -25,8 +25,8 @@ foreach ($apps as $app) {
 ?>
         <div class="col-xs-6 col-sm-3 col-md-2">
             <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
-                <a href="<?= $this->url('app', ['action' => 'open', 'id' => $app->slug]) ?>" target="_blank">
-                    <img src="<?= $this->url('app', ['action' => 'icon', 'id' => $app->slug]) .
+                <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
+                    <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
                     "?v=" . (int) $app->version ?>" alt="">
                     <span class="app-name"><?= $escaper->escapeHtml($app->name) ?></span>
                 </a>
@@ -67,9 +67,9 @@ foreach ($apps as $app) {
         <td><?= $escaper->escapeHtml($app->url) ?></td>
         <td><?= $escaper->escapeHtml($app->iconPath) ?></td>
         <td>
-            <a href="<?= $this->url('app', ['action' => 'edit', 'id' => $app->slug]) ?>">Edit</a>
+            <a href="<?= $this->url('app', ['action' => 'edit', 'slug' => $app->slug]) ?>">Edit</a>
             |
-            <a class="post" href="<?= $this->url('app', ['action' => 'delete', 'id' => $app->slug]) ?>">Delete</a>
+            <a class="post" href="<?= $this->url('app', ['action' => 'delete', 'slug' => $app->slug]) ?>">Delete</a>
         </td>
     </tr>
 <?php endforeach;?>
