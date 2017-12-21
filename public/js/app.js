@@ -5,7 +5,7 @@ $(document).ready(function() {
 /**
  * Sends post request before following links
  * with the class .post
- * Sends id assuming /action[/:id]
+ * Sends slug to action assuming /action[/:slug]
  *
  * @return void
  */
