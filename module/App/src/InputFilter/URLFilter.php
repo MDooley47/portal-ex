@@ -6,7 +6,11 @@ use Zend\InputFilter\InputFilter;
 
 class URLFilter extends InputFilter
 {
-
+    /**
+     * Constructs URLFilter
+     *
+     * @return URLFilter $this
+     */
     public function __construct()
     {
         $this->add([

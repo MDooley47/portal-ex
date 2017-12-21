@@ -6,7 +6,11 @@ use Zend\InputFilter\InputFilter;
 
 class NameFilter extends InputFilter
 {
-
+    /**
+     * Constructs NameFilter
+     *
+     * @return NameFilter $this
+     */
     public function __construct()
     {
         $this->add([

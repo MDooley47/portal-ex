@@ -6,7 +6,11 @@ use Zend\InputFilter\InputFilter;
 
 class IconPathFilter extends InputFilter
 {
-
+    /**
+     * Constructs IconPathFilter
+     *
+     * @return IconPathFilter $this
+     */
     public function __construct()
     {
         $this->add([

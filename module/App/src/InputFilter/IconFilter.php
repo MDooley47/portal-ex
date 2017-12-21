@@ -8,7 +8,11 @@ use Zend\Validator\File\IsImage;
 
 class IconFilter extends InputFilter
 {
-
+    /**
+     * Constructs IconFilter
+     *
+     * @return IconFilter $this
+     */
     public function __construct()
     {
         $this->add([
@@ -36,6 +40,8 @@ class IconFilter extends InputFilter
                 ],
             ],
         ]);
+
+        return $this;
     }
 }
 
