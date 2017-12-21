@@ -119,13 +119,15 @@ class App
 
     public static function sanitizeGuarded(&$data)
     {
-        foreach ($data as $key=>&$value)
+        foreach ($data as $key => &$value)
         {
             if (in_array($key, self::$guarded))
             {
                 $value = null;
             }
         }
+
+        return $data;
     }
 
     /**
