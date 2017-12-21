@@ -11,6 +11,9 @@ use Zend\View\Model\ViewModel;
 
 class AppController extends AbstractActionController
 {
+    /**
+     * AppTable to be used to interface with the tableGateway/database
+     */
     private $table;
 
     /**
