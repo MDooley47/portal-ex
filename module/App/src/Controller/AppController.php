@@ -86,7 +86,8 @@ class AppController extends AbstractActionController
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
             if ($form->isValid())
             {
-                App::sanitizeGuarded($data = $form->getData());
+                $data = $form->getData();
+                App::sanitizeGuarded($data);
                 $app->exchangeArray($data);
                 $this->table->saveApp($app);
 
@@ -172,7 +173,8 @@ class AppController extends AbstractActionController
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
             if ($form->isValid())
             {
-                App::sanitizeGuarded($data = $form->getData());
+                $data = $form->getData();
+                App::sanitizeGuarded($data);
                 $data['slug'] = $slug;
                 $app->exchangeArray($data);
                 $this->table->saveApp($app);
