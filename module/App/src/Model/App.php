@@ -20,16 +20,37 @@ use Zend\Validator\StringLength;
 
 class App
 {
+    /**
+     * Int for App's id found in the db.
+     */
     public $id;
+    /**
+     * String for App's slug found in the db.
+     */
     public $slug;
+    /**
+     * String for App's name.
+     */
     public $name;
+    /**
+     * String for App's destination url.
+     */
     public $url;
+    /**
+     * String for App's iconPath on the local filesystem.
+     */
     public $iconPath;
+    /**
+     * Int for the App's version. Mainly used for cache breaking.
+     */
     public $version;
+    /**
+     * InputFilter for App's inputFilter.
+     */
     protected $inputFilter;
 
     /**
-     * Values users cannot change.
+     * Static variable containing values users cannot change.
      */
     protected static $guarded = [
         'id',
@@ -42,7 +63,7 @@ class App
      *
      * Takes in dictionary and set instance variables.
      *
-     * @param array $data
+     * @param dictionary $data
      * @return App $this
      */
     public function exchangeArray(array $data)
@@ -55,6 +76,11 @@ class App
         return $this;
     }
 
+    /**
+     * Get app values as array
+     *
+     * @return array
+     */
     public function getArrayCopy()
     {
         return [
@@ -109,6 +135,14 @@ class App
         return $tmpFilter;
     }
 
+    /**
+     * Static function for generating a random slug.
+     *
+     * @param int $len Length of the desired slug. Default Value is 6.
+     * @param String $charset Set of characters to choose from. Default value
+     * is alphanumeric.
+     * @return String $ranString
+     */
     public static function generateSlug($len = 6,
         $charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789")
     {
@@ -117,6 +151,14 @@ class App
         return $ranString;
     }
 
+    /**
+     * Static function for sanitizing an array.
+     *
+     * Takes in dictionary and removes keys found in $this->guarded.
+     *
+     * @param dictionary &$data
+     * @return dictionary $data
+     */
     public static function sanitizeGuarded(&$data)
     {
         foreach ($data as $key => $value)
