@@ -11,10 +11,10 @@ return [
             'app' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/app[/:action[/:id]]',
+                    'route' => '/app[/:action[/:slug]]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
+                        'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
                         'controller' => Controller\AppController::class,
@@ -24,7 +24,6 @@ return [
             ],
         ],
     ],
-
 
     'view_manager' => [
         'template_path_stack' => [

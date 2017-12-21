@@ -1,0 +1,32 @@
+<?php
+    $fileElement = $form->get('icon');
+
+    $escaper = new Zend\Escaper\Escaper('utf-8');
+    $this->headTitle($title = 'Edit App');
+
+?>
+
+<h1><?= $escaper->escapeHTML($title); ?></h1>
+
+<?php
+    $form->setAttribute('action', $this->url('app', ['action' => 'edit', 'slug' => $slug]));
+    $form->prepare();
+?>
+    <?= $this->form()->openTag($form) ?>
+    <?= $this->formHidden($this->form->get('slug')); ?>
+    <?= $this->formRow($this->form->get('name')); ?>
+    <br>
+    <?= $this->formRow($this->form->get('url')); ?>
+
+
+<div class="form-element">
+    <?= $this->formLabel($fileElement) ?>
+    <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $slug]) .
+    "?v=" . $version ?>" alt="" class="app-image">
+    <?= $this->formFile($fileElement) ?>
+    <?= $this->formElementErrors($fileElement) ?>
+</div>
+
+<?= $this->formRow($this->form->get('submit')); ?>
+
+<?= $this->form()->closeTag(); ?>

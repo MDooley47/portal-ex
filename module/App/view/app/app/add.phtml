@@ -13,7 +13,6 @@
     $form->prepare();
 ?>
     <?= $this->form()->openTag($form) ?>
-    <?= $this->formHidden($this->form->get('id')); ?>
     <?= $this->formRow($this->form->get('name')); ?>
     <br>
     <?= $this->formRow($this->form->get('url')); ?>
@@ -25,6 +24,6 @@
     <?= $this->formElementErrors($fileElement) ?>
 </div>
 
-<button>Submit</button>
+<?= $this->formRow($this->form->get('submit')); ?>
 
 <?= $this->form()->closeTag(); ?>

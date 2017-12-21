@@ -20,15 +20,14 @@ foreach ($apps as $app) {
     foreach ($data as $app) :
         $i++;
         if ((($i-1) % 6) == 0 && !$opened) :
-?>
-    <div class="row">
-<?php
+            echo "<div class='row'>";
         endif;
 ?>
         <div class="col-xs-6 col-sm-3 col-md-2">
-            <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->id) ?>">
-                <a href="<?= $escaper->escapeHtml($app->url) ?>" target="_blank">
-                    <img src="<?= $this->url('app', ['action' => 'icon', 'id' => $app->id]) ?>" alt="">
+            <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
+                <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
+                    <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
+                    "?v=" . (int) $app->version ?>" alt="">
                     <span class="app-name"><?= $escaper->escapeHtml($app->name) ?></span>
                 </a>
             </div>
@@ -36,14 +35,12 @@ foreach ($apps as $app) {
 <?php
         if ((($i) % 6) == 0 && $opened) :
             $opened = false;
-?>
-    </div>
-<?php
+            echo "</div>";
         else :
             $opened = true;
         endif;
     endforeach;
-    if ($opened = true)
+    if ($opened)
     {
         echo "</div>";
     }
@@ -54,6 +51,8 @@ foreach ($apps as $app) {
 <table class="table">
     <tr>
     <th>ID</th>
+    <th>Version</th>
+    <th>Slug</th>
     <th>Name</th>
     <th>URL</th>
     <th>iconPath</th>
@@ -62,13 +61,15 @@ foreach ($apps as $app) {
 <?php foreach ($data as $app) : ?>
     <tr>
         <td><?= $escaper->escapeHtml($app->id) ?></td>
+        <td><?= $escaper->escapeHtml($app->version) ?></td>
+        <td><?= $escaper->escapeHtml($app->slug) ?></td>
         <td><?= $escaper->escapeHtml($app->name) ?></td>
         <td><?= $escaper->escapeHtml($app->url) ?></td>
         <td><?= $escaper->escapeHtml($app->iconPath) ?></td>
         <td>
-            <a href="<?= $this->url('app', ['action' => 'edit', 'id' => $app->id]) ?>">Edit</a>
+            <a href="<?= $this->url('app', ['action' => 'edit', 'slug' => $app->slug]) ?>">Edit</a>
             |
-            <a href="<?= $this->url('app', ['action' => 'delete', 'id' => $app->id]) ?>">Delete</a>
+            <a class="post" href="<?= $this->url('app', ['action' => 'delete', 'slug' => $app->slug]) ?>">Delete</a>
         </td>
     </tr>
 <?php endforeach;?>

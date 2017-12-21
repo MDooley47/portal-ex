@@ -5,9 +5,17 @@ namespace App\Form;
 use Zend\Form\Element;
 use Zend\Form\Form;
 
-
 class AppForm extends Form
 {
+    /**
+     * Constructs AppForm.
+     * * Calls the parent (Zend\Form\Form) constructor
+     * * Calls $this->addElements
+     *
+     * @param String $name
+     * @param dictionary $options
+     * @return void
+     */
     public function __construct($name = "app", $options = [])
     {
         parent::__construct($name, $options);
@@ -15,33 +23,48 @@ class AppForm extends Form
         $this->addElements();
     }
 
+    /**
+     * Adds Elements to the form.
+     *
+     * @return void
+     */
     private function addElements()
     {
         $this->add([
-            'name' => 'id',
+            'name' => 'slug',
             'type' => 'hidden',
         ]);
 
         $this->add([
             'name' => 'name',
+            'type' => 'text',
             'options' => [
                 'label' => 'App Name',
             ],
-            'type' => 'text',
         ]);
+
         $this->add([
             'name' => 'url',
+            'type' => 'url',
             'options' => [
                 'label' => 'App URL',
             ],
-            'type' => 'url',
         ]);
 
-        $this->add(
-            (new Element\File('image-file'))
-                ->setLabel('App Icon')
-                ->setAttribute('id', 'icon')
-                ->setAttribute('name', 'icon')
-        );
+        $this->add([
+            'name' => 'icon',
+            'type' => 'file',
+            'options' => [
+                'label' => 'App Icon',
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'submit',
+            'type' => 'submit',
+            'attributes' => [
+               'value' => 'Submit',
+            ],
+        ]);
     }
 }
