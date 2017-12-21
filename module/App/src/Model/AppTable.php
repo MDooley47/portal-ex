@@ -8,18 +8,42 @@ use Zend\Validator\Db\RecordExists;
 
 class AppTable
 {
+    /**
+     * TableGateway.
+     */
     private $tableGateway;
 
+    /**
+     * Constructs AppTable
+     *
+     * Sets $this->tableGateway to passed in tableGateway.
+     *
+     * @param TableGateway $tableGateway
+     * @return void
+     */
     public function __construct(TableGateway $tableGateway)
     {
         $this->tableGateway = $tableGateway;
     }
 
+    /**
+     * Selects all Apps from the database.
+     *
+     * @return App[]
+     */
     public function fetchAll()
     {
         return $this->tableGateway->select();
     }
 
+    /**
+     * Selects an App from the database
+     *
+     * @param mixed $id The identifier.
+     * @param dictionary $options Contains 'type' which defines what type of
+     * identifier $id is. Default value is 'type' => 'slug'.
+     * @return App
+     */
     public function getApp($id, $options = ['type' => 'slug'])
     {
         if ($options['type'] == 'slug')
@@ -42,6 +66,14 @@ class AppTable
         return $row;
     }
 
+    /**
+     * Checks if an app exists in the database.
+     *
+     * @param mixed $id The identifier.
+     * @param dictionary $options Contains 'type' which defines what type of
+     * identifier $id is. Default value is 'type' => 'slug'.
+     * @return boolean If value exists
+     */
     public function appExists($id, $options = ['type' => 'slug'])
     {
         return (new RecordExists([
@@ -51,6 +83,15 @@ class AppTable
         ]))->isValid($id);
     }
 
+    /**
+     * Saves an App to the database.
+     *
+     * If $app->slug is not null then attempts to update an app with that slug
+     *
+     * @param App $app
+     * @return void
+     * @throws RuntimeException App does not exist
+     */
     public function saveApp(App $app)
     {
         $data = [
@@ -90,9 +131,15 @@ class AppTable
         }
     }
 
-    public function deleteApp($id)
+    /**
+     * Deletes App and deletes the App's icon.
+     *
+     * @param String $slug App's slug.
+     * @return void
+     */
+    public function deleteApp($slug)
     {
-        if (file_exists($file = $this->getApp($id)->iconPath)) unlink($file);
-        $this->tableGateway->delete(['slug' => $id]);
+        if (file_exists($file = $this->getApp($slug)->iconPath)) unlink($file);
+        $this->tableGateway->delete(['slug' => $slug]);
     }
 }
