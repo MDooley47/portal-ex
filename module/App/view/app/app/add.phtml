@@ -10,6 +10,7 @@
 
 <?php
     $form->setAttribute('action', $this->url('app', ['action' => 'add']));
+    $form->setAttribute('enctype', 'multipart/form-data');
     $form->prepare();
 ?>
     <?= $this->form()->openTag($form) ?>
