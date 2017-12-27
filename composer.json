@@ -21,7 +21,8 @@
 		"zendframework/zend-log" : "^2.9",
 		"zendframework/zend-session" : "^2.7.1",
 		"zendframework/zend-escaper": "^2.5",
-        "esucc/simplesamlphp" : "dev-develop"
+        "esucc/simplesamlphp" : "dev-develop",
+        "vlucas/phpdotenv" : "^2.4"
 	},
 	"autoload" : {
 		"psr-4" : {

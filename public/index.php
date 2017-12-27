@@ -2,6 +2,7 @@
 
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
+use Dotenv\Dotenv;
 
 /**
  * This makes our life easier when dealing with paths. Everything is relative
@@ -10,6 +11,14 @@ use Zend\Stdlib\ArrayUtils;
 chdir(dirname(__DIR__));
 
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__DIR__) . ''));
+
+
+/**
+ * Run composer autoload.
+ * Loads .env file
+ */
+require __DIR__ . '/../vendor/autoload.php';
+(new Dotenv(__DIR__ . "/../"))->load();
 
 // Decline static file requests back to the PHP built-in webserver
 if (php_sapi_name() === 'cli-server') {
