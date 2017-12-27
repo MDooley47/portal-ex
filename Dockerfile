@@ -43,6 +43,6 @@ COPY . /var/www/
     # Install composer, run it, and remove it
         RUN ./docker-scripts/composerInstallDependencies.sh
     # Install composer  run it, and remove it
-        RUN ./docker-scripts/move-confs.sh
+        RUN ./docker-scripts/move-config-files.sh
     # Fix permissions // Should only have run once. WILL NOT RUN WITH DOCKER-COMPOSE
     #    RUN ./docker-scripts/permissionFixing.sh
