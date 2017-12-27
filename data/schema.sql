@@ -1,4 +1,4 @@
-CREATE TABLE apps (id SERIAL PRIMARY KEY, slug varchar(255) NOT NULL UNIQUE, name varchar(255) NOT NULL, url varchar(255) NOT NULL, "iconPath" varchar(255) NOT NULL, version INT NOT NULL DEFAULT 0);
+CREATE TABLE apps (id SERIAL PRIMARY KEY, slug text NOT NULL UNIQUE, name text NOT NULL, url text NOT NULL, "iconPath" text NOT NULL, version INT NOT NULL DEFAULT 0);
 
 
 INSERT INTO apps (name, slug, url, "iconPath") VALUES ('Google Drive', 'orG332', 'https://accounts.google.com/ServiceLogin?service=wise&ltmpl=drive', '/volumes/storage/images/google_drive.png');
