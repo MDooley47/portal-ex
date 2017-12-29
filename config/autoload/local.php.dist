@@ -13,7 +13,7 @@
 
 return [
     'db' => [
-        'username' => 'postgres',
-        'password' => 'asdfgh'
+        'username' => getenv('db_username'),
+        'password' => getenv('db_password')
     ]
 ];

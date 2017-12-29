@@ -39,6 +39,10 @@ COPY . /var/www/
 
 # Arguments for changing environmental variables
 ARG app_name
+ARG db_host
+ARG db_name
+ARG db_username
+ARG db_password
 ARG storage_path
 
 # Run docker-scripts
@@ -49,6 +53,12 @@ ARG storage_path
     # Install composer  run it, and remove it
         RUN ./docker-scripts/move-config-files.sh
     # Updates ./.env
-        RUN ./docker-scripts/update-env.sh app_name "$app_name" storage_path "$storage_path"
+        RUN ./docker-scripts/update-env.sh \
+            app_name "$app_name" \
+            db_host "$db_host" \
+            db_name "$db_name" \
+            db_username "$db_username" \
+            db_password "$db_password" \
+            storage_path "$storage_path"
     # Fix permissions // Should only have run once. WILL NOT RUN WITH DOCKER-COMPOSE
     #    RUN ./docker-scripts/permissionFixing.sh
