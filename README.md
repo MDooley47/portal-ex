@@ -8,7 +8,7 @@ change on build. To use a build argument, use the `--build-arg` flag like so.
 ```
 docker build -t portal-ex --build-arg app_name="App Portal"
 ```
-If you wish to add your own environmental variable as a build argument you must edit the docker file. Find the section labeled `Arguments for changing environmental variables` and add an argument on a new line.
+If you wish to add your own environmental variable as a build argument you must edit `Dockerfile`. Find the section labeled `Arguments for changing environmental variables` and add an argument on a new line.
 ```
 ARG new_argument
 ```
