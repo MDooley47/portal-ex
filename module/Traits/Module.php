@@ -4,6 +4,9 @@ namespace Traits;
 
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 
+/**
+ * Empty module for easy managment of traits.
+ */
 class Module implements ConfigProviderInterface
 {
     /**
