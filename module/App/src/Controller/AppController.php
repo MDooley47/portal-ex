@@ -72,7 +72,7 @@ class AppController extends AbstractActionController
             {
                 $data = $form->getData();
 
-                $data['iconPath'] = $data['icon']['tmp_name'];
+                $data['iconPath'] = removeBasePath($data['icon']['tmp_name']);
                 $form->setData($data);
 
                 // Removes icon from the form to prevent Zend
@@ -154,7 +154,7 @@ class AppController extends AbstractActionController
             {
                 $data = $form->getData();
 
-                $data['iconPath'] = $data['icon']['tmp_name'];
+                $data['iconPath'] = removeBasePath($data['icon']['tmp_name']);
                 $form->setData($data);
 
                 // Removes icon from the form to prevent Zend
@@ -217,7 +217,7 @@ class AppController extends AbstractActionController
 
         // Check that there is a phone at app.iconPath. If
         // there is no file, redirect to /app
-        if (!file_exists($app->iconPath))
+        if (!file_exists(addBasePath($app->iconPath)))
         {
             return $this->redirect()->toRoute('app');
         }
@@ -229,8 +229,9 @@ class AppController extends AbstractActionController
             ->addHeaderLine('Content-Type', 'image/'
                 . pathinfo($app->iconPath, PATHINFO_EXTENSION))
             ->addHeaderLine('Content-Disposition', 'inline; filename="'
-                . pathinfo($app->iconPath, PATHINFO_BASENAME) . '"')
-            ->addHeaderLine("X-Sendfile", $app->iconPath);
+                . $app->slug . "."
+                . pathinfo($app->iconPath, PATHINFO_EXTENSION) . '"')
+            ->addHeaderLine("X-Sendfile", addBasePath($app->iconPath));
     }
 
     /**

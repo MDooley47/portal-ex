@@ -117,7 +117,7 @@ class AppTable
         {
             if ($data['iconPath'] != $dbApp->iconPath)
             {
-                if (file_exists($file = $dbApp->iconPath)) unlink($file);
+                if (file_exists(addBasePath($file = $dbApp->iconPath))) unlink($file);
             }
             $data['version'] = 1 + (int) $dbApp->version;
             $this->tableGateway->update($data,['slug' => $slug]);

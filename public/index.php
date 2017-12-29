@@ -20,6 +20,32 @@ defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__DIR
 require __DIR__ . '/../vendor/autoload.php';
 (new Dotenv(__DIR__ . "/../"))->load();
 
+/**
+ * Global function for removing the base path.
+ *
+ * Takes in a path and removes realpath(getenv('storage_path')).
+ *
+ * @param String $data
+ * @return String
+ */
+function removeBasePath($data)
+{
+    return str_replace(realpath(getenv('storage_path')), '', $data);
+}
+
+/**
+ * Global function for adding the base path.
+ *
+ * Takes in a path and prepends realpath(getenv('storage_path')).
+ *
+ * @param String $data
+ * @return String
+ */
+function addBasePath($data)
+{
+    return realpath(getenv('storage_path')) . $data;
+}
+
 // Decline static file requests back to the PHP built-in webserver
 if (php_sapi_name() === 'cli-server') {
     $path = realpath(__DIR__ . parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH));

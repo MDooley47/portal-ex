@@ -37,6 +37,9 @@ WORKDIR /var/www/
 # Copy code into container
 COPY . /var/www/
 
+# Arguments for changing environmental variables
+ARG storage_path
+
 # Run docker-scripts
     # make them executable
         RUN chmod +x /var/www/docker-scripts/*.sh
@@ -44,5 +47,7 @@ COPY . /var/www/
         RUN ./docker-scripts/composerInstallDependencies.sh
     # Install composer  run it, and remove it
         RUN ./docker-scripts/move-config-files.sh
+    # Updates ./.env
+        RUN ./docker-scripts/update-env.sh storage_path "$storage_path"
     # Fix permissions // Should only have run once. WILL NOT RUN WITH DOCKER-COMPOSE
     #    RUN ./docker-scripts/permissionFixing.sh
