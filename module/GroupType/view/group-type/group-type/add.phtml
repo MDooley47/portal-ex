@@ -1,0 +1,22 @@
+<?php
+    $escaper = new Zend\Escaper\Escaper('utf-8');
+    $this->headTitle($title = 'Add New GroupType');
+
+?>
+
+<h1><?= $escaper->escapeHTML($title); ?></h1>
+
+<?php
+    $form->setAttribute('action', $this->url('user', ['action' => 'add']));
+    $form->setAttribute('enctype', 'multipart/form-data');
+    $form->prepare();
+?>
+    <?= $this->form()->openTag($form) ?>
+    <?= $this->formRow($this->form->get('name')); ?>
+    <br>
+    <?= $this->formRow($this->form->get('description')); ?>
+
+
+<?= $this->formRow($this->form->get('submit')); ?>
+
+<?= $this->form()->closeTag(); ?>

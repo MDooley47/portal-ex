@@ -3,6 +3,7 @@
 $tables = [
     "apps",
     "users",
+    "groupTypes",
 ];
 
 $db = new PDO('pgsql:host=db', 'postgres', 'asdfgh');

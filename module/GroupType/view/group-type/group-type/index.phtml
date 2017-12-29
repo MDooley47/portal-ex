@@ -1,0 +1,44 @@
+<?php
+
+$title = "All GroupTypes";
+$escaper = new Zend\Escaper\Escaper('utf-8');
+$this->headTitle($title);
+
+$i = 0;
+$data = [];
+foreach ($grouptypes as $groupType) {
+    $data[$i++] = $groupType;
+}
+
+?>
+
+<h1><?= $escaper->escapeHTML($title) ?></h1>
+
+<hr>
+<span class="text-center">Below is a view of what is in the db</span>
+<hr>
+<table class="table">
+    <tr>
+    <th>ID</th>
+    <th>Slug</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Actions</th>
+</tr>
+<?php foreach ($data as $groupType) : ?>
+    <tr>
+        <td><?= $escaper->escapeHtml($groupType->id) ?></td>
+        <td><?= $escaper->escapeHtml($groupType->slug) ?></td>
+        <td><?= $escaper->escapeHtml($groupType->name) ?></td>
+        <td><?= $escaper->escapeHtml($groupType->description) ?></td>
+        <td>
+            <a href="<?= $this->url('grouptype', ['action' => 'edit', 'slug' => $groupType->slug]) ?>">Edit</a>
+            |
+            <a class="post" href="<?= $this->url('grouptype', ['action' => 'delete', 'slug' => $groupType->slug]) ?>">Delete</a>
+        </td>
+    </tr>
+<?php endforeach;?>
+</table>
+<p>
+    <a href="<?= $this->url('grouptype', ['action' => 'add']) ?>">Add new user</a>
+</p>

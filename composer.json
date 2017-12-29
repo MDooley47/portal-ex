@@ -29,6 +29,7 @@
             "Application\\" : "module/Application/src/",
             "App\\" : "module/App/src/",
             "User\\" : "module/User/src/",
+            "GroupType\\" : "module/GroupType/src/",
             "Traits\\" : "module/Traits/"
         }
     },

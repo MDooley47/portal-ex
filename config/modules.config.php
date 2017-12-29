@@ -25,4 +25,5 @@ return [
     'App',
     'User',
     'Traits',
+    'GroupType',
 ];
