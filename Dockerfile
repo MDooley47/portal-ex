@@ -1,16 +1,16 @@
 FROM php:7.0-apache
 
 # Install dependencies from apt
-RUN apt-get update \
-    && apt-get install -y \
- 		git \
-        wget \
-        postgresql-client \
- 		zlib1g-dev \
- 		libgmp-dev \
-        libicu-dev \
-        libpq-dev \
-        apache2-dev
+RUN apt-get update
+RUN apt-get install -y \
+    git \
+    wget \
+    postgresql-client \
+    zlib1g-dev \
+    libgmp-dev \
+    libicu-dev \
+    libpq-dev \
+    apache2-dev
 
 # Install php extensions from docker-php-ext-install
 RUN docker-php-ext-install zip \
