@@ -11,7 +11,7 @@ return [
             'app' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/app[/:action[/:slug]]',
+                    'route' => '/app[/:action[/:slug]][/]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
