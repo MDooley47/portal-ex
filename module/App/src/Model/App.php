@@ -11,6 +11,7 @@ use DomainException;
 
 use Traits\Models\HasSlug;
 use Traits\Models\HasGuarded;
+use Traits\Models\ExchangeArray;
 
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
@@ -23,7 +24,7 @@ use Zend\Validator\StringLength;
 
 class App
 {
-    use HasSlug, HasGuarded;
+    use HasSlug, HasGuarded, ExchangeArray;
     /**
      * Int for App's id found in the db.
      */
@@ -57,24 +58,6 @@ class App
         'slug',
         'version',
     ];
-
-    /**
-     * Sets App's values
-     *
-     * Takes in dictionary and set instance variables.
-     *
-     * @param dictionary $data
-     * @return App $this
-     */
-    public function exchangeArray(array $data)
-    {
-        foreach ($data as $key => $value)
-        {
-            $this->{$key} = !empty($value) ? $value : (int) null;
-        }
-
-        return $this;
-    }
 
     /**
      * Get app values as array
