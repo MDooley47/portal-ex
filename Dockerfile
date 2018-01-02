@@ -43,6 +43,8 @@ ARG db_host
 ARG db_name
 ARG db_username
 ARG db_password
+ARG setup_database
+ARG setup_permissions
 ARG storage_path
 
 # Run docker-scripts
@@ -59,6 +61,8 @@ ARG storage_path
             db_name "$db_name" \
             db_username "$db_username" \
             db_password "$db_password" \
+            setup_database "$setup_database" \
+            setup_permissions "$setup_permissions" \
             storage_path "$storage_path"
     # Fix permissions // Should only have run once. WILL NOT RUN WITH DOCKER-COMPOSE
     #    RUN ./docker-scripts/permissionFixing.sh
