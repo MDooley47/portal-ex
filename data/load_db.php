@@ -3,8 +3,10 @@
 $tables = [
     "apps",
     "users",
-    "groupTypes",
+    "groupTypes", # Needs to seed
 ];
+
+$baseDir = __DIR__ . "/schemas";
 
 $db = new PDO('pgsql:host=db', 'postgres', 'asdfgh');
 
@@ -17,13 +19,13 @@ foreach ($tables as $table)
     try
     {
 
-        $fh = fopen(__DIR__ . "/{$table}Schema.sql", 'r');
+        $fh = fopen($baseDir . "/{$table}_schema.sql", 'r');
         while ($line = fread($fh, 4096))
         {
             $db->exec($line);
         }
         fclose($fh);
-        echo "Loaded {$table}Schema.sql\n";
+        echo "Loaded {$table}_schema.sql\n";
     }
     catch (PDOException $e)
     {
