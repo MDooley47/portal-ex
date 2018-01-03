@@ -1,0 +1,22 @@
+<?php
+    $escaper = new Zend\Escaper\Escaper('utf-8');
+    $this->headTitle($title = 'Edit Privilege');
+
+?>
+
+<h1><?= $escaper->escapeHTML($title); ?></h1>
+
+<?php
+    $form->setAttribute('action', $this->url('user', ['action' => 'edit', 'slug' => $slug]));
+    $form->setAttribute('enctype', 'multipart/form-data');
+    $form->prepare();
+?>
+    <?= $this->form()->openTag($form) ?>
+    <?= $this->formHidden($this->form->get('slug')); ?>
+    <?= $this->formRow($this->form->get('name')); ?>
+    <br>
+    <?= $this->formRow($this->form->get('description')); ?>
+
+<?= $this->formRow($this->form->get('submit')); ?>
+
+<?= $this->form()->closeTag(); ?>

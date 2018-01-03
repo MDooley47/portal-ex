@@ -1,0 +1,44 @@
+<?php
+
+$title = "All Owners";
+$escaper = new Zend\Escaper\Escaper('utf-8');
+$this->headTitle($title);
+
+$i = 0;
+$data = [];
+foreach ($owners as $owner) {
+    $data[$i++] = $owner;
+}
+
+?>
+
+<h1><?= $escaper->escapeHTML($title) ?></h1>
+
+<hr>
+<span class="text-center">Below is a view of what is in the db</span>
+<hr>
+<table class="table">
+    <tr>
+    <th>ID</th>
+    <th>Slug</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Actions</th>
+</tr>
+<?php foreach ($data as $owner) : ?>
+    <tr>
+        <td><?= $escaper->escapeHtml($owner->id) ?></td>
+        <td><?= $escaper->escapeHtml($owner->slug) ?></td>
+        <td><?= $escaper->escapeHtml($owner->name) ?></td>
+        <td><?= $escaper->escapeHtml($owner->description) ?></td>
+        <td>
+            <a href="<?= $this->url('owner', ['action' => 'edit', 'slug' => $owner->slug]) ?>">Edit</a>
+            |
+            <a class="post" href="<?= $this->url('owner', ['action' => 'delete', 'slug' => $owner->slug]) ?>">Delete</a>
+        </td>
+    </tr>
+<?php endforeach;?>
+</table>
+<p>
+    <a href="<?= $this->url('owner', ['action' => 'add']) ?>">Add new owner</a>
+</p>
