@@ -7,7 +7,7 @@
 <h1><?= $escaper->escapeHTML($title); ?></h1>
 
 <?php
-    $form->setAttribute('action', $this->url('user', ['action' => 'edit', 'slug' => $slug]));
+    $form->setAttribute('action', $this->url('setting', ['action' => 'edit', 'slug' => $slug]));
     $form->setAttribute('enctype', 'multipart/form-data');
     $form->prepare();
 ?>

@@ -32,13 +32,13 @@ foreach ($settings as $setting) {
         <td><?= $escaper->escapeHtml($setting->name) ?></td>
         <td><?= $escaper->escapeHtml($setting->description) ?></td>
         <td>
-            <a href="<?= $this->url('settings', ['action' => 'edit', 'slug' => $setting->slug]) ?>">Edit</a>
+            <a href="<?= $this->url('setting', ['action' => 'edit', 'slug' => $setting->slug]) ?>">Edit</a>
             |
-            <a class="post" href="<?= $this->url('settings', ['action' => 'delete', 'slug' => $setting->slug]) ?>">Delete</a>
+            <a class="post" href="<?= $this->url('setting', ['action' => 'delete', 'slug' => $setting->slug]) ?>">Delete</a>
         </td>
     </tr>
 <?php endforeach;?>
 </table>
 <p>
-    <a href="<?= $this->url('settings', ['action' => 'add']) ?>">Add new settings</a>
+    <a href="<?= $this->url('setting', ['action' => 'add']) ?>">Add new settings</a>
 </p>
