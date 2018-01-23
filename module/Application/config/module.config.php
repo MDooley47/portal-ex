@@ -19,17 +19,7 @@ return [
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
-                    ],
-                ],
-            ],
-            'application' => [
-                'type'    => Segment::class,
-                'options' => [
-                    'route'    => '/application[/:action]',
-                    'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\ApplicationController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -38,7 +28,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            Controller\ApplicationController::class => Controller\ApplicationControllerFactory::class,
         ],
     ],
     'view_manager' => [
