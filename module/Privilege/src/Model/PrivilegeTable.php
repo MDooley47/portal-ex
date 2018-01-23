@@ -1,12 +1,12 @@
 <?php
 
-namespace Owner\Model;
+namespace Privilege\Model;
 
 use RuntimeException;
 use Zend\Db\TableGateway\TableGateway;
 use Zend\Validator\Db\RecordExists;
 
-class OwnerTable
+class PrivilegeTable
 {
     /**
      * TableGateway.
@@ -14,7 +14,7 @@ class OwnerTable
     private $tableGateway;
 
     /**
-     * Constructs OwnerTable
+     * Constructs PrivilegeTable
      *
      * Sets $this->tableGateway to passed in tableGateway.
      *
@@ -27,9 +27,9 @@ class OwnerTable
     }
 
     /**
-     * Selects all Owners from the database.
+     * Selects all Privileges from the database.
      *
-     * @return Owner[]
+     * @return Privilege[]
      */
     public function fetchAll()
     {
@@ -37,14 +37,14 @@ class OwnerTable
     }
 
     /**
-     * Selects an Owner from the database
+     * Selects an Privilege from the database
      *
      * @param mixed $id The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
      * identifier $id is. Default value is 'type' => 'id'.
-     * @return Owner
+     * @return Privilege
      */
-    public function getOwner($id, $options = ['type' => 'slug'])
+    public function getPrivilege($id, $options = ['type' => 'slug'])
     {
         if ($options['type'] == 'slug')
         {
@@ -67,14 +67,14 @@ class OwnerTable
     }
 
     /**
-     * Checks if an owner exists in the database.
+     * Checks if an privilege exists in the database.
      *
      * @param mixed $id The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
      * identifier $id is. Default value is 'type' => 'id'.
      * @return boolean If value exists
      */
-    public function ownerExists($id, $options = ['type' => 'id'])
+    public function privilegeExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
             'table' => $this->tableGateway->getTable(),
@@ -84,54 +84,54 @@ class OwnerTable
     }
 
     /**
-     * Saves an Owner to the database.
+     * Saves an Privilege to the database.
      *
-     * If $owner->slug is not null then attempts to update an owner with that slug
+     * If $privilege->slug is not null then attempts to update an privilege with that slug
      *
-     * @param Owner $owner
+     * @param Privilege $privilege
      * @return void
-     * @throws RuntimeException Owner does not exist
+     * @throws RuntimeException Privilege does not exist
      */
-    public function saveOwner(Owner $owner)
+    public function savePrivilege(Privilege $privilege)
     {
         $data = [
-            'name' => $owner->name,
-            'email' => $owner->email
+            'name' => $privilege->name,
+            'email' => $privilege->email
         ];
 
-        $slug = $owner->slug;
+        $slug = $privilege->slug;
 
         if ($slug == NULL)
         {
             do
             {
-                $data['slug'] = Owner::generateSlug();
+                $data['slug'] = Privilege::generateSlug();
             }
-            while ($this->ownerExists($data['slug'], ['type' => 'slug']));
+            while ($this->privilegeExists($data['slug'], ['type' => 'slug']));
             $this->tableGateway->insert($data);
             return;
         }
 
-        if ($dbOwner = $this->getOwner($slug))
+        if ($dbPrivilege = $this->getPrivilege($slug))
         {
             $this->tableGateway->update($data, ['slug' => $slug]);
         }
         else
         {
             throw new RuntimeException(springf(
-                'Cannot update owner with identifier %d; does not exist',
+                'Cannot update privilege with identifier %d; does not exist',
                 $id
             ));
         }
     }
 
     /**
-     * Deletes Owner and deletes the Owner's icon.
+     * Deletes Privilege and deletes the Privilege's icon.
      *
-     * @param String $slug Owner's slug.
+     * @param String $slug Privilege's slug.
      * @return void
      */
-    public function deleteOwner($slug)
+    public function deletePrivilege($slug)
     {
         $this->tableGateway->delete(['slug' => $slug]);
     }

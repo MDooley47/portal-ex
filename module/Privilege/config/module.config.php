@@ -1,6 +1,6 @@
 <?php
 
-namespace Owner;
+namespace Privilege;
 
 use Zend\Router\Http\Segment;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -8,16 +8,16 @@ use Zend\ServiceManager\Factory\InvokableFactory;
 return [
     'router' => [
         'routes' => [
-            'owner' => [
+            'privilege' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/owner[/:action[/:slug]][/]',
+                    'route' => '/privilege[/:action[/:slug]][/]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
-                        'controller' => Controller\OwnerController::class,
+                        'controller' => Controller\PrivilegeController::class,
                         'action'     => 'index',
                     ],
                 ],
@@ -27,7 +27,7 @@ return [
 
     'view_manager' => [
         'template_path_stack' => [
-            'owner' => __DIR__ . '/../view',
+            'privilege' => __DIR__ . '/../view',
         ],
     ],
 ];
