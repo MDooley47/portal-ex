@@ -2,8 +2,19 @@
 
 $tables = [
     "apps",
-    "users",
+    "attributes",
+    "groups",
+    "groupApps",
     "groupTypes", # Needs to seed
+    "ipAddresses",
+    "ownerTabs",
+    "privileges",
+    "settings",
+    "tabApps",
+    "tabs",
+    "userGroups",
+    "userPrivileges",
+    "users",
 ];
 
 $baseDir = __DIR__ . "/schemas";
