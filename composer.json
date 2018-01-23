@@ -26,11 +26,17 @@
     },
     "autoload" : {
         "psr-4" : {
-            "Application\\" : "module/Application/src/",
             "App\\" : "module/App/src/",
-            "User\\" : "module/User/src/",
+            "Application\\" : "module/Application/src/",
+            "Attribute\\" : "module/Attribute/src/",
+            "Group\\" : "module/Group/src/",
             "GroupType\\" : "module/GroupType/src/",
-            "Traits\\" : "module/Traits/"
+            "IpAddress\\" : "module/IpAddress/src/",
+            "Privilege\\" : "module/Privilege/src/",
+            "Setting\\" : "module/Setting/src/",
+            "Tab\\" : "module/Tab/src/",
+            "Traits\\" : "module/Traits/",
+            "User\\" : "module/User/src/"
         }
     },
     "autoload-dev" : {
