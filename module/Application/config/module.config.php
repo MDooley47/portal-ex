@@ -28,7 +28,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\ApplicationController::class => Controller\ApplicationControllerFactory::class,
+            Controller\ApplicationController::class => Controller\HasTablesFactory::class,
         ],
     ],
     'view_manager' => [

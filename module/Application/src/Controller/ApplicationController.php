@@ -7,8 +7,8 @@
 
 namespace Application\Controller;
 
-use App\Model\AppTable;
 use SessionManager\Session;
+use Traits\Models\HasTables;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -16,8 +16,11 @@ use Zend\Session\Container;
 
 class ApplicationController extends AbstractActionController
 {
+    use HasTables;
 
+    public function __construct($tables)
     {
+        $this->addTableArray($tables);
     }
 
     public function indexAction()
@@ -31,6 +34,7 @@ class ApplicationController extends AbstractActionController
         }
 
         return new ViewModel([
+            'apps' => $this->tables["app"]->fetchAll(),
         ]);
     }
 }
