@@ -33,6 +33,7 @@
             "GroupType\\" : "module/GroupType/src/",
             "IpAddress\\" : "module/IpAddress/src/",
             "Privilege\\" : "module/Privilege/src/",
+            "SessionManager\\" : "module/SessionManager/",
             "Setting\\" : "module/Setting/src/",
             "Tab\\" : "module/Tab/src/",
             "Traits\\" : "module/Traits/",

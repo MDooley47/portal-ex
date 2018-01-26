@@ -29,6 +29,7 @@ return [
     'GroupType',
     'IpAddress',
     'Privilege',
+    'SessionManager',
     'Setting',
     'Tab',
     'Traits',
