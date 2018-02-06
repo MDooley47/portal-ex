@@ -13,7 +13,7 @@ function setupPostLinks() {
     $('.post').click(function(e) {
         href = $(this).attr('href');
         hrefArr = href.split('/');
-        slug = hrefArr[hrefArr.length - 1];
+        slug = hrefArr[hrefArr.length - 2];
         action = href.substring(0, href.length - (slug.length + 1));
 
         $.post(action, { 'slug': slug });
