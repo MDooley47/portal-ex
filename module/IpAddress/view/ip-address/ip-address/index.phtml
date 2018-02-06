@@ -1,0 +1,44 @@
+<?php
+
+$title = "All IpAddresses";
+$escaper = new Zend\Escaper\Escaper('utf-8');
+$this->headTitle($title);
+
+$i = 0;
+$data = [];
+foreach ($ipAddresses as $ipAddress) {
+    $data[$i++] = $ipAddress;
+}
+
+?>
+
+<h1><?= $escaper->escapeHTML($title) ?></h1>
+
+<hr>
+<span class="text-center">Below is a view of what is in the db</span>
+<hr>
+<table class="table">
+    <tr>
+    <th>ID</th>
+    <th>Slug</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Actions</th>
+</tr>
+<?php foreach ($data as $ipAddress) : ?>
+    <tr>
+        <td><?= $escaper->escapeHtml($ipAddress->id) ?></td>
+        <td><?= $escaper->escapeHtml($ipAddress->slug) ?></td>
+        <td><?= $escaper->escapeHtml($ipAddress->name) ?></td>
+        <td><?= $escaper->escapeHtml($ipAddress->description) ?></td>
+        <td>
+            <a href="<?= $this->url('ip-address', ['action' => 'edit', 'slug' => $ipAddress->slug]) ?>">Edit</a>
+            |
+            <a class="post" href="<?= $this->url('ip-address', ['action' => 'delete', 'slug' => $ipAddress->slug]) ?>">Delete</a>
+        </td>
+    </tr>
+<?php endforeach;?>
+</table>
+<p>
+    <a href="<?= $this->url('ip-address', ['action' => 'add']) ?>">Add new ipAddress</a>
+</p>

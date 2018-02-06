@@ -19,18 +19,21 @@ return [
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
+                        'controller' => Controller\ApplicationController::class,
                         'action'     => 'index',
                     ],
                 ],
             ],
-            'application' => [
+            'app' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/application[/:action]',
+                    'route' => '/app[/:action[/:slug]][/]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'slug'     => '[a-zA-Z0-9]+',
+                    ],
                     'defaults' => [
-                        'controller' => Controller\IndexController::class,
-                        'action'     => 'index',
+                        'controller' => Controller\AppController::class,
                     ],
                 ],
             ],
@@ -38,7 +41,8 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\IndexController::class => InvokableFactory::class,
+            Controller\ApplicationController::class => Controller\ApplicationControllerFactory::class,
+            Controller\AppController::class => Controller\AppControllerFactory::class,
         ],
     ],
     'view_manager' => [

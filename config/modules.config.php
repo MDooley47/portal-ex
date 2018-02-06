@@ -21,6 +21,17 @@ return [
     'Zend\Db',
     'Zend\Router',
     'Zend\Validator',
-    'Application',
+
     'App',
+    'Application',
+    'Attribute',
+    'Group',
+    'GroupType',
+    'IpAddress',
+    'Privilege',
+    'SessionManager',
+    'Setting',
+    'Tab',
+    'Traits',
+    'User',
 ];

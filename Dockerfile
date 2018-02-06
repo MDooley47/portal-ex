@@ -1,16 +1,16 @@
-FROM php:7.0-apache
+FROM php:7.1-apache
 
 # Install dependencies from apt
-RUN apt-get update \
-    && apt-get install -y \
- 		git \
-        wget \
-        postgresql-client \
- 		zlib1g-dev \
- 		libgmp-dev \
-        libicu-dev \
-        libpq-dev \
-        apache2-dev
+RUN apt-get update
+RUN apt-get install -y \
+    git \
+    wget \
+    postgresql-client \
+    zlib1g-dev \
+    libgmp-dev \
+    libicu-dev \
+    libpq-dev \
+    apache2-dev
 
 # Install php extensions from docker-php-ext-install
 RUN docker-php-ext-install zip \
@@ -37,12 +37,32 @@ WORKDIR /var/www/
 # Copy code into container
 COPY . /var/www/
 
+# Arguments for changing environmental variables
+ARG app_name
+ARG db_host
+ARG db_name
+ARG db_username
+ARG db_password
+ARG setup_database
+ARG setup_permissions
+ARG storage_path
+
 # Run docker-scripts
     # make them executable
         RUN chmod +x /var/www/docker-scripts/*.sh
     # Install composer, run it, and remove it
         RUN ./docker-scripts/composerInstallDependencies.sh
     # Install composer  run it, and remove it
-        RUN ./docker-scripts/move-confs.sh
+        RUN ./docker-scripts/move-config-files.sh
+    # Updates ./.env
+        RUN ./docker-scripts/update-env.sh \
+            app_name "$app_name" \
+            db_host "$db_host" \
+            db_name "$db_name" \
+            db_username "$db_username" \
+            db_password "$db_password" \
+            setup_database "$setup_database" \
+            setup_permissions "$setup_permissions" \
+            storage_path "$storage_path"
     # Fix permissions // Should only have run once. WILL NOT RUN WITH DOCKER-COMPOSE
     #    RUN ./docker-scripts/permissionFixing.sh

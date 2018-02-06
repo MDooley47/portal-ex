@@ -31,7 +31,8 @@ class IconFilter extends InputFilter
                 [
                     'name' => 'FileRenameUpload',
                     'options' => [
-                        'target'=>'/volumes/storage/images/',
+                        'target'=> realpath(getenv('storage_path'))
+                                . '/images/',
                         'useUploadName'=>false,
                         'useUploadExtension'=>true,
                         'overwrite'=>true,

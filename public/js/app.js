@@ -5,7 +5,7 @@ $(document).ready(function() {
 /**
  * Sends post request before following links
  * with the class .post
- * Sends id assuming /action[/:id]
+ * Sends slug to action assuming /action[/:slug]
  *
  * @return void
  */
@@ -13,7 +13,7 @@ function setupPostLinks() {
     $('.post').click(function(e) {
         href = $(this).attr('href');
         hrefArr = href.split('/');
-        slug = hrefArr[hrefArr.length - 1];
+        slug = hrefArr[hrefArr.length - 2];
         action = href.substring(0, href.length - (slug.length + 1));
 
         $.post(action, { 'slug': slug });
