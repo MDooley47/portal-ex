@@ -1,6 +1,6 @@
 <?php
 
-namespace Traits\Models;
+namespace Traits\Controllers;
 
 trait HasTables
 {
@@ -21,7 +21,9 @@ trait HasTables
 
     private function getTable($table)
     {
-        return $this->tables[strtolower($table)];
+        return (isset($this->tables[strtolower($table)]))
+            ? $this->tables[strtolower($table)]
+            : $this->table;
     }
 }
 

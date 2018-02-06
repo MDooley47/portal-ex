@@ -24,11 +24,25 @@ return [
                     ],
                 ],
             ],
+            'app' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/app[/:action[/:slug]][/]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'slug'     => '[a-zA-Z0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\AppController::class,
+                    ],
+                ],
+            ],
         ],
     ],
     'controllers' => [
         'factories' => [
-            Controller\ApplicationController::class => Controller\HasTablesFactory::class,
+            Controller\ApplicationController::class => Controller\ApplicationControllerFactory::class,
+            Controller\AppController::class => Controller\AppControllerFactory::class,
         ],
     ],
     'view_manager' => [

@@ -8,7 +8,7 @@
 namespace Application\Controller;
 
 use SessionManager\Session;
-use Traits\Models\HasTables;
+use Traits\Controllers\HasTables;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -34,7 +34,7 @@ class ApplicationController extends AbstractActionController
         }
 
         return new ViewModel([
-            'apps' => $this->tables["app"]->fetchAll(),
+            'apps' => $this->tables['app']->fetchAll(),
         ]);
     }
 }

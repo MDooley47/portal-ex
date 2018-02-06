@@ -2,18 +2,12 @@
 
 namespace Application\Controller;
 
-use Application\Controller\ApplicationController;
-
-use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Factory\FactoryInterface;
-
-class HasTablesFactory implements FactoryInterface
+trait HasTablesFactory
 {
     private $tables = [];
 
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    private function addTables($additionalTables = [])
     {
-        $this->container = $container;
         $this->add('App')
             ->add('Attribute')
             ->add('Group')
@@ -24,7 +18,10 @@ class HasTablesFactory implements FactoryInterface
             ->add('Tab')
             ->add('User');
 
-        return new ApplicationController($this->tables);
+        foreach ($additionalTables as $table)
+        {
+            $this->add($table);
+        }
     }
 
     private function add($name)

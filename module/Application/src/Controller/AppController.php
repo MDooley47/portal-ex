@@ -1,6 +1,8 @@
 <?php
 
-namespace App\Controller;
+namespace Application\Controller;
+
+use SessionManager\Session;
 
 use Traits\Controllers\App\AddAction;
 use Traits\Controllers\App\DeleteAction;
@@ -11,27 +13,16 @@ use Traits\Controllers\App\OpenAction;
 use Traits\Controllers\HasTables;
 
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Validator\File\IsImage;
 use Zend\View\Model\ViewModel;
+use Zend\Session\Container;
 
 class AppController extends AbstractActionController
 {
     use HasTables, AddAction, DeleteAction, EditAction,
         IconAction, IndexAction, OpenAction;
-    /**
-     * AppTable to be used to interface with the tableGateway/database
-     */
-    private $table;
 
-    /**
-     * Constructs AppController.
-     * Sets $this->table to the paramater.
-     *
-     * @param AppTable $table
-     * @return void
-     */
-    public function __construct(AppTable $table)
+    public function __construct($tables)
     {
-        $this->table = $table;
+        $this->addTableArray($tables);
     }
 }
