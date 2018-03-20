@@ -35,6 +35,11 @@ class Session
         self::set($name, $value);
     }
 
+    public static function remove($name)
+    {
+        $_SESSION[$name] = null;
+    }
+
     public static function get($name)
     {
         return $_SESSION[$name];
