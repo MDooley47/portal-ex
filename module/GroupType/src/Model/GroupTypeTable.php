@@ -50,7 +50,7 @@ class GroupTypeTable
         {
             $rowset = $this->tableGateway->select(['slug' => $id]);
         }
-        else if ($options['type' == 'id'])
+        else if ($options['type'] == 'id')
         {
             $rowset = $this->tableGateway->select(['id' => $id]);
         }
@@ -58,7 +58,7 @@ class GroupTypeTable
         if (! $row)
         {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
+                'Could not Find Row with identifier %s of type %s',
                 $id, $options['type']
             ));
         }
@@ -96,7 +96,7 @@ class GroupTypeTable
     {
         $data = [
             'name' => $groupType->name,
-            'email' => $groupType->email
+            'description' => $groupType->description
         ];
 
         $slug = $groupType->slug;

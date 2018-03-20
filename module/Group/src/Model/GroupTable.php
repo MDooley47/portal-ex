@@ -96,7 +96,8 @@ class GroupTable
     {
         $data = [
             'name' => $group->name,
-            'email' => $group->email
+            'description' => $group->description,
+            'groupType' => $group->grouptype,
         ];
 
         $slug = $group->slug;

@@ -96,7 +96,8 @@ class AttributeTable
     {
         $data = [
             'name' => $attribute->name,
-            'email' => $attribute->email
+            'description' => $attribute->description,
+            'data' => $attribute->data,
         ];
 
         $slug = $attribute->slug;
