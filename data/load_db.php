@@ -8,6 +8,7 @@ $tables = [
     "groupTypes", # Needs to seed
     "ipAddresses",
     "ownerTabs",
+    "ownerTypes", # Needs to seed
     "privileges",
     "settings",
     "tabApps",
