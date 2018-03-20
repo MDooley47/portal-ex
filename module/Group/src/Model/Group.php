@@ -59,7 +59,7 @@ class Group
             'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
-            'description' => $this->description,
+            'description' => $this->description,            'grouptype' => $this->grouptype,
         ];
     }
 

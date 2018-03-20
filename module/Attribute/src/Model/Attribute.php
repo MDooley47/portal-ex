@@ -60,6 +60,7 @@ class Attribute
             'slug' => $this->slug,
             'name' => $this->name,
             'description' => $this->description,
+            'data' => $this->data,
         ];
     }
 
