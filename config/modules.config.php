@@ -28,6 +28,7 @@ return [
     'Group',
     'GroupType',
     'IpAddress',
+    'OwnerType',
     'Privilege',
     'SessionManager',
     'Setting',
