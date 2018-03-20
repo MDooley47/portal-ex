@@ -2,13 +2,6 @@
 
 namespace App;
 
-use Zend\Router\Http\Segment;
-use Zend\ServiceManager\Factory\InvokableFactory;
+include APPLICATION_PATH . '/module/Traits/config/returnViewManager.php';
 
-return [
-    'view_manager' => [
-        'template_path_stack' => [
-            'app' => APPLICATION_PATH . '/module/Application/view',
-        ],
-    ],
-];
+return $return_view_manager;
