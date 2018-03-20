@@ -1,0 +1,35 @@
+<?php
+    use SessionManager\Tables;
+
+    $escaper = new Zend\Escaper\Escaper('utf-8');
+    $this->headTitle($title = 'Add New Group');
+    $this->headLink()
+        ->prependStylesheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css');
+    $this->headScript()
+        ->prependFile('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js');
+
+    $tables = new Tables($tables_array);
+?>
+
+<h1><?= $escaper->escapeHTML($title); ?></h1>
+
+<?php
+    $form->setAttribute('action', $this->url('group', ['action' => 'add']));
+    $form->setAttribute('enctype', 'multipart/form-data');
+    $form->prepare();
+?>
+<?= $this->form()->openTag($form) ?>
+    <?= $this->formRow($this->form->get('name')); ?>
+    <br>
+    <?= $this->formRow($this->form->get('description')); ?>
+    <br>
+    <select class="select2 single grouptype" name="grouptype">
+        <option></option>
+    <? foreach ($tables->getTable('grouptype')->fetchAll() as $grouptype) : ?>
+            <option value="<?= $grouptype->slug ?>"><?= $grouptype->name ?></option>
+    <? endforeach; ?>
+    </select>
+
+<?= $this->formRow($this->form->get('submit')); ?>
+
+<?= $this->form()->closeTag(); ?>

@@ -1,0 +1,44 @@
+<?php
+
+$title = "All OwnerTypes";
+$escaper = new Zend\Escaper\Escaper('utf-8');
+$this->headTitle($title);
+
+$i = 0;
+$data = [];
+foreach ($ownerTypes as $ownerType) {
+    $data[$i++] = $ownerType;
+}
+
+?>
+
+<h1><?= $escaper->escapeHTML($title) ?></h1>
+
+<hr>
+<span class="text-center">Below is a view of what is in the db</span>
+<hr>
+<table class="table">
+    <tr>
+    <th>ID</th>
+    <th>Slug</th>
+    <th>Name</th>
+    <th>Description</th>
+    <th>Actions</th>
+</tr>
+<?php foreach ($data as $ownerType) : ?>
+    <tr>
+        <td><?= $escaper->escapeHtml($ownerType->id) ?></td>
+        <td><?= $escaper->escapeHtml($ownerType->slug) ?></td>
+        <td><?= $escaper->escapeHtml($ownerType->name) ?></td>
+        <td><?= $escaper->escapeHtml($ownerType->description) ?></td>
+        <td>
+            <a href="<?= $this->url('ownertype', ['action' => 'edit', 'slug' => $ownerType->slug]) ?>">Edit</a>
+            |
+            <a class="post" href="<?= $this->url('ownertype', ['action' => 'delete', 'slug' => $ownerType->slug]) ?>">Delete</a>
+        </td>
+    </tr>
+<?php endforeach;?>
+</table>
+<p>
+    <a href="<?= $this->url('ownertype', ['action' => 'add']) ?>">Add new OwnerType</a>
+</p>
