@@ -1,12 +1,12 @@
 <?php
 
-namespace Traits\Controllers;
+namespace Traits;
 
 trait HasTables
 {
     private $tables = [];
 
-    private function addTableArray($tables)
+    public function addTableArray($tables)
     {
         foreach ($tables as $name => $table)
         {
@@ -14,12 +14,12 @@ trait HasTables
         }
     }
 
-    private function addTable($name, $table)
+    public function addTable($name, $table)
     {
         $this->tables[strtolower($name)] = $table;
     }
 
-    private function getTable($table)
+    public function getTable($table)
     {
         return (isset($this->tables[strtolower($table)]))
             ? $this->tables[strtolower($table)]
