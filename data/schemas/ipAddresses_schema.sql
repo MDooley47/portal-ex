@@ -1,1 +1,1 @@
-CREATE TABLE "ipAddresses" (id SERIAL PRIMARY KEY, slug text NOT NULL UNIQUE, name text, description text, ip INET NOT NULL);
+CREATE TABLE "ipAddresses" (slug TEXT PRIMARY KEY, name TEXT, description TEXT, ip INET NOT NULL);
