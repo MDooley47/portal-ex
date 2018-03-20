@@ -4,22 +4,20 @@ namespace Application\Controller;
 
 use SessionManager\Session;
 
-use Traits\Controllers\App\AddAction;
-use Traits\Controllers\App\DeleteAction;
-use Traits\Controllers\App\EditAction;
-use Traits\Controllers\App\IconAction;
-use Traits\Controllers\App\IndexAction;
-use Traits\Controllers\App\OpenAction;
+use Traits\Controllers\GroupType\AddAction;
+use Traits\Controllers\GroupType\DeleteAction;
+use Traits\Controllers\GroupType\EditAction;
+use Traits\Controllers\GroupType\IndexAction;
 use Traits\HasTables;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 
-class AppController extends AbstractActionController
+class GroupTypeController extends AbstractActionController
 {
     use HasTables, AddAction, DeleteAction, EditAction,
-        IconAction, IndexAction, OpenAction;
+        IndexAction;
 
     public function __construct($tables)
     {

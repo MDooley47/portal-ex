@@ -4,22 +4,20 @@ namespace Application\Controller;
 
 use SessionManager\Session;
 
-use Traits\Controllers\App\AddAction;
-use Traits\Controllers\App\DeleteAction;
-use Traits\Controllers\App\EditAction;
-use Traits\Controllers\App\IconAction;
-use Traits\Controllers\App\IndexAction;
-use Traits\Controllers\App\OpenAction;
 use Traits\HasTables;
+use Traits\Controllers\IpAddress\AddAction;
+use Traits\Controllers\IpAddress\DeleteAction;
+use Traits\Controllers\IpAddress\EditAction;
+use Traits\Controllers\IpAddress\IndexAction;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 use Zend\Session\Container;
 
-class AppController extends AbstractActionController
+class IpAddressController extends AbstractActionController
 {
     use HasTables, AddAction, DeleteAction, EditAction,
-        IconAction, IndexAction, OpenAction;
+        IndexAction;
 
     public function __construct($tables)
     {

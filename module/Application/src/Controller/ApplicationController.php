@@ -8,7 +8,7 @@
 namespace Application\Controller;
 
 use SessionManager\Session;
-use Traits\Controllers\HasTables;
+use Traits\HasTables;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
