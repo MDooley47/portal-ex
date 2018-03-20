@@ -52,6 +52,14 @@ class AttributeForm extends Form
         ]);
 
         $this->add([
+            'name' => 'data',
+            'type' => 'text',
+            'options' => [
+                'label' => 'Data',
+            ],
+        ]);
+
+        $this->add([
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => [

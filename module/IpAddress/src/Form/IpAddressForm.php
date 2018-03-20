@@ -52,6 +52,14 @@ class IpAddressForm extends Form
         ]);
 
         $this->add([
+            'name' => 'ip',
+            'type' => 'text',
+            'options' => [
+                'label' => 'Ip Address',
+            ],
+        ]);
+
+        $this->add([
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => [
