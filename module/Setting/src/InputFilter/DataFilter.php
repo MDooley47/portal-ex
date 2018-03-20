@@ -4,7 +4,7 @@ namespace Setting\InputFilter;
 
 use Zend\InputFilter\InputFilter;
 
-class NameFilter extends InputFilter
+class DataFilter extends InputFilter
 {
     /**
      * Constructs NameFilter
@@ -14,13 +14,13 @@ class NameFilter extends InputFilter
     public function __construct()
     {
         $this->add([
-            'name' => 'name',
+            'name' => 'data',
             'required' => true,
             'validators' => [
                 [
                     'name' => 'StringLength',
                     'options' => [
-                        'min' => 1
+                        'min' => 5
                     ],
                 ],
             ],
