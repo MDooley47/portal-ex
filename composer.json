@@ -29,6 +29,7 @@
             "App\\" : "module/App/src/",
             "Application\\" : "module/Application/src/",
             "Attribute\\" : "module/Attribute/src/",
+            "Configuration\\" : "module/Configuration/src/",
             "Group\\" : "module/Group/src/",
             "GroupType\\" : "module/GroupType/src/",
             "IpAddress\\" : "module/IpAddress/src/",

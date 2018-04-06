@@ -7,6 +7,7 @@ $return_view_manager = [
         'template_path_stack' => [
             'app' => $viewPath,
             'attribute' => $viewPath,
+            'configuration' => $viewPath,
             'group' => $viewPath,
             'grouptype' => $viewPath,
             'ipaddress' => $viewPath,

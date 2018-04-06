@@ -51,6 +51,20 @@ return [
                     ],
                 ],
             ],
+            'configuration' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/configuration[/:action[/:slug]][/]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'slug'     => '[a-zA-Z0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ConfigurationController::class,
+                        'action' => 'index',
+                    ],
+                ],
+            ],
             'group' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -170,6 +184,7 @@ return [
             Controller\ApplicationController::class => Controller\ApplicationControllerFactory::class,
             Controller\AppController::class => Controller\AppControllerFactory::class,
             Controller\AttributeController::class => Controller\AttributeControllerFactory::class,
+            Controller\ConfigurationController::class => Controller\ConfigurationControllerFactory::class,
             Controller\GroupController::class => Controller\GroupControllerFactory::class,
             Controller\GroupTypeController::class => Controller\GroupTypeControllerFactory::class,
             Controller\IpAddressController::class => Controller\IpAddressControllerFactory::class,

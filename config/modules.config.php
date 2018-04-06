@@ -25,6 +25,7 @@ return [
     'App',
     'Application',
     'Attribute',
+    'Configuration',
     'Group',
     'GroupType',
     'IpAddress',

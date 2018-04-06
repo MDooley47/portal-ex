@@ -1,0 +1,139 @@
+<?php
+use Traits\Controllers\Configuration\HelperFunctions;
+
+class traitsObj {
+    use HelperFunctions;
+}
+
+?>
+<div class="config">
+    <div>
+        <h1>Portal-Ex Configuration</h1>
+        <p>This configurator will assist in the installation and configuration of portal-ex</p>
+        <span class="bold">App Name:</span> <?= traitsObj::envWithError('app_name') ?>
+    </div>
+    <div>
+        <h2>Connections</h2>
+        <div>
+            <h3>Database</h3>
+            <ul>
+                <li><span class="bold">Host:</span> <?= traitsObj::envWithError('db_host') ?></li>
+                <li><span class="bold">Host:</span>
+                    <?php
+                        try
+                        {
+                                $result = traitsObj::database($options = [
+                                'database' => [
+                                    'host' => env("db_host"),
+                                    'username' => env("db_username"),
+                                    'password' => env("db_password"),
+
+                                ],
+                                'action' => 'test_connection',
+                            ]);
+                        }
+                        catch (\PDOException $e)
+                        {
+                            echo $e;
+                        }
+
+                        if ($result['status'])
+                        {
+                            ?>
+                            <em class="success">Success!</em>
+                            <?
+                        }
+                        else
+                        {
+                            ?>
+                            <em class="failure">Failure.</em> <?= $results['message'] ?>
+                            <?
+                        }
+                    ?>
+                </li>
+                <li><span class="bold">Name:</span> <?= traitsObj::envWithError('db_name') ?></li>
+                <li><span class="bold">Name:</span>
+                    <?php
+                        try
+                        {
+                                $result = traitsObj::database($options = [
+                                'database' => [
+                                    'host' => env("db_host"),
+                                    'name' => env("db_name"),
+                                    'username' => env("db_username"),
+                                    'password' => env("db_password"),
+
+                                ],
+                                'action' => 'test_connection',
+                            ]);
+                        }
+                        catch (\PDOException $e)
+                        {
+                            echo $e;
+                        }
+
+                        if ($result['status'])
+                        {
+                            ?>
+                            <em class="success">Success!</em>
+                            <?
+                        }
+                        else
+                        {
+                            ?>
+                            <em class="failure">Failure.</em> <?= $results['message'] ?>
+                            <?
+                        }
+                    ?>
+                </li>
+            </ul>
+            <h4>Tables</h4>
+            <ul>
+                <? foreach ($seed_tables as $table => $presets) : ?>
+                    <li><span class="bold"><?= $table ?>: </span>
+                        <?php
+                            if (traitsObj::database(['action' => 'tables_exist', 'table' => $table]))
+                            {
+                                ?>
+                                <span class="success">Yes</span>
+                                <ul>
+                                    <li>Seed data:</li>
+                                </ul>
+                                <?
+                            }
+                            else
+                            {
+                                ?>
+                                <span class="failure">No</span>
+                                <?
+                            }
+                        ?>
+                    </li>
+                <? endforeach ?>
+            </ul>
+        </div>
+        <div>
+            <h3>Internet</h3>
+            <ul>
+                <li><span class="bold">Access to Google:</span>
+                    <?php
+                        if (traitsObj::internet(['action' => 'test_connection']))
+                        {
+                            ?>
+                            <span class="success">Yes</span>
+                            <?
+                        }
+                        else
+                        {
+                            ?>
+                            <span class="failure">No</span>
+                            <?
+                        }
+                     ?>
+                </li>
+                <li><span class="bold">External IP:</span> <?= traitsObj::internet(['action' => 'get_external_ip']) ?></li>
+                <li><span class="bold">Domain Name:</span> <?= traitsObj::envWithError('domain'); ?></li>
+            </ul>
+        </div>
+    </div>
+</div>
