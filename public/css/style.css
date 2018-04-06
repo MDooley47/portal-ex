@@ -145,3 +145,13 @@ header section #account-action {
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
 }
+
+.config .bold {
+    font-weight: bold;
+}
+.config .success {
+    color: #00aa00;
+}
+.config .failure {
+    color: #aa0000;
+}
