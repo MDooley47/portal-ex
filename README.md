@@ -31,6 +31,7 @@ Use `docker-compose up --build --force-recreate` when developing this applicatio
 At this time asset building is not handled by the container.
 Add the dependencies with `npm install` or `yarn install`.
 Manually build assets with `npm run dev` when developing.
+_Pro Tip:_ use `npm run watch` for automatic asset building when you save changes.
 
 
 ## Deploying
