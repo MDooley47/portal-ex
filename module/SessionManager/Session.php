@@ -2,6 +2,8 @@
 
 namespace SessionManager;
 
+use SessionManager\TableModels\UserPrivilegesTableGateway;
+
 class Session
 {
     public static function start($options = [])
@@ -92,6 +94,12 @@ class Session
         }
 
         return false;
+    }
+
+    public static function hasPrivilege($privilege, $group = null)
+    {
+        $table = new UserPrivilegesTableGateway();
+        return $table->hasPrivilege(self::get('userSlug'), $privilege, $group);
     }
 }
 
