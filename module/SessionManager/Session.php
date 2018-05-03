@@ -6,6 +6,15 @@ use SessionManager\TableModels\UserPrivilegesTableGateway;
 
 class Session
 {
+    /* Custom session variables used.
+     *
+     *  activeTime:
+     *      The time at which a session became active
+     *
+     *  userSlug:
+     *      The slug of the active user
+     */
+
     public static function start($options = [])
     {
         if (session_status() == PHP_SESSION_NONE)
