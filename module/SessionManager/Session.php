@@ -24,6 +24,11 @@ class Session
         return self::destroy();
     }
 
+    public static function add($name, $value = NULL)
+    {
+        self::set($name, $value);
+    }
+
     public static function set($name, $value = NULL)
     {
         if (!isset($value))
@@ -35,9 +40,14 @@ class Session
         $_SESSION[$name] = $value;
     }
 
-    public static function add($name, $value = NULL)
+    public static function setActiveTime()
     {
-        self::set($name, $value);
+        self::set('activeTime', time());
+    }
+
+    public static function setUser($user)
+    {
+        return self::set('userSlug', $user->slug);
     }
 
     public static function remove($name)
