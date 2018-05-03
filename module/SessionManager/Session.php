@@ -66,6 +66,12 @@ class Session
 
         return $table->getUser(self::get('userSlug'));
     }
+
+    public static function getId()
+    {
+        return session_id();
+    }
+
     public static function isSet($name)
     {
         return isset($_SESSION[$name]);
