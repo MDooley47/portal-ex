@@ -6,7 +6,12 @@ class Session
 {
     public static function start($options = [])
     {
-        return session_start($options);
+        if (session_status() == PHP_SESSION_NONE)
+        {
+            $session = session_start($options);
+            self::setActiveTime();
+            return $session;
+        }
     }
 
     public static function destroy()
