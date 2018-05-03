@@ -60,6 +60,12 @@ class Session
         return $_SESSION[$name];
     }
 
+    public static function getUser($table)
+    {
+        if (! self::isSet('userSlug')) return false;
+
+        return $table->getUser(self::get('userSlug'));
+    }
     public static function isSet($name)
     {
         return isset($_SESSION[$name]);
