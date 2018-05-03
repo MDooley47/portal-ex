@@ -27,6 +27,10 @@ docker volume create portal-ex-data
 ## Developing
 Use `docker-compose up --build --force-recreate --abort-on-container-exit` when developing this application.
 Use `docker-compose up --build --force-recreate` when developing this application with database migrations.
+### Asset Building
+At this time asset building is not handled by the container.
+Add the dependencies with `npm install` or `yarn install`.
+Manually build assets with `npm run dev` when developing.
 
 
 ## Deploying
