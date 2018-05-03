@@ -56,7 +56,6 @@ class User
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
             'email' => $this->email,
