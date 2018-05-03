@@ -16,7 +16,7 @@ Then, add the argument to the command in sub-section `Updates ./.env` of section
 ```
 RUN ./docker-scripts/update-env.sh new_argument "$new_argument"
 ```
-The plain text `new_argument` is the key in `.env`. It is *very* important to place the value (`$new_argument`) in quotation marks. This allows the entering of strings with spaces.
+The plain text `new_argument` is the key in `.env`. It is _very_ important to place the value (`$new_argument`) in quotation marks. This allows the entering of strings with spaces.
 
 ## Volumes
 Create a volume. For this README it will be called called `portal-ex-data`.
@@ -25,12 +25,12 @@ docker volume create portal-ex-data
 ```
 
 ## Developing
-Use `docker-compose up --build --force-recreate --abort-on-container-exit` when developing this application.
+Use `docker-compose up --build --force-recreate --abort-on-container-exit` when developing this application.\
 Use `docker-compose up --build --force-recreate` when developing this application with database migrations.
 ### Asset Building
-At this time asset building is not handled by the container.
-Add the dependencies with `npm install` or `yarn install`.
-Manually build assets with `npm run dev` when developing.
+At this time asset building is not handled by the container.\
+Add the dependencies with `npm install` or `yarn install`.\
+Manually build assets with `npm run dev` when developing.\
 _Pro Tip:_ use `npm run watch` for automatic asset building when you save changes.
 
 
