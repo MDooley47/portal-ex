@@ -8,7 +8,7 @@ use Traits\Controllers\App\EditAction;
 use Traits\Controllers\App\IconAction;
 use Traits\Controllers\App\IndexAction;
 use Traits\Controllers\App\OpenAction;
-use Traits\Controllers\HasTables;
+use Traits\HasTables;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Validator\File\IsImage;

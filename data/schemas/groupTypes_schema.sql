@@ -1,4 +1,4 @@
-CREATE TABLE "groupTypes" (id SERIAL PRIMARY KEY, slug text NOT NULL UNIQUE, name text NOT NULL, description text);
+CREATE TABLE "groupTypes" (slug TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT);
 
 
 INSERT INTO "groupTypes" (slug, name, description) VALUES ('orG332', 'group', 'A group of users within the system, an organization or building.');

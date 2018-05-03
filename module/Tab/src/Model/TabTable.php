@@ -96,7 +96,7 @@ class TabTable
     {
         $data = [
             'name' => $tab->name,
-            'email' => $tab->email
+            'description' => $tab->description,
         ];
 
         $slug = $tab->slug;

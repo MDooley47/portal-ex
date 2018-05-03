@@ -52,6 +52,15 @@ class GroupForm extends Form
         ]);
 
         $this->add([
+            'name' => 'grouptype',
+            'type' => 'select',
+            'options' => [
+                'label' => 'GroupType',
+                'disable_inarray_validator' => true,
+            ],
+        ]);
+
+        $this->add([
             'name' => 'submit',
             'type' => 'submit',
             'attributes' => [

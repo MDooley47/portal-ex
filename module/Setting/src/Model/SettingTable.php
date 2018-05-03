@@ -44,7 +44,7 @@ class SettingTable
      * identifier $id is. Default value is 'type' => 'id'.
      * @return Settings
      */
-    public function getSettings($id, $options = ['type' => 'slug'])
+    public function getSetting($id, $options = ['type' => 'slug'])
     {
         if ($options['type'] == 'slug')
         {
@@ -95,11 +95,10 @@ class SettingTable
     public function saveSetting(Setting $setting)
     {
         $data = [
-            'name' => $tab->name,
-            'email' => $tab->email
+            'data' => $setting->data
         ];
 
-        $slug = $tab->slug;
+        $slug = $setting->slug;
 
         if ($slug == NULL)
         {

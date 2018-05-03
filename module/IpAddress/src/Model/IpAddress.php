@@ -56,10 +56,10 @@ class IpAddress
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
             'description' => $this->description,
+            'ip' => $this->ip,
         ];
     }
 

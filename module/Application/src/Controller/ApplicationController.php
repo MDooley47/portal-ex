@@ -8,7 +8,7 @@
 namespace Application\Controller;
 
 use SessionManager\Session;
-use Traits\Controllers\HasTables;
+use Traits\HasTables;
 
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -25,16 +25,20 @@ class ApplicationController extends AbstractActionController
 
     public function indexAction()
     {
+
         // activate session if not active
-        if (!Session::active())
+        if (!Session::isActive())
         {
-            $newSession = true;
-            Session::add('activeTime', time());
-            Session::add('userId', 1);
+            // TODO: TAKE TO LOGIN PAGE
+            Session::add('userSlug', 'njwdq3');
+        }
+        else {
+            // TODO: SHOW THEIR DASHBOARD
+            Session::hasPrivilege('auth');
         }
 
         return new ViewModel([
-            'apps' => $this->tables['app']->fetchAll(),
+            'apps' => $this->getTable('app')->fetchAll(),
         ]);
     }
 }

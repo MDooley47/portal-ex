@@ -50,10 +50,7 @@ class UserTable
         {
             $rowset = $this->tableGateway->select(['slug' => $id]);
         }
-        else if ($options['type' == 'id'])
-        {
-            $rowset = $this->tableGateway->select(['id' => $id]);
-        }
+
         $row = $rowset->current();
         if (! $row)
         {

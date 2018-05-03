@@ -96,7 +96,7 @@ class PrivilegeTable
     {
         $data = [
             'name' => $privilege->name,
-            'email' => $privilege->email
+            'description' => $privilege->description
         ];
 
         $slug = $privilege->slug;

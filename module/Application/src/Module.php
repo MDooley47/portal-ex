@@ -7,6 +7,8 @@
 
 namespace Application;
 
+use Zend\Db\TableGateway\Feature\GlobalAdapterFeature;
+
 class Module
 {
     const VERSION = '3.0.2';
@@ -14,5 +16,12 @@ class Module
     public function getConfig()
     {
         return include __DIR__ . '/../config/module.config.php';
+    }
+
+    public function onBootstrap($e)
+    {
+         $sm = $e->getApplication()->getServiceManager();
+         $adapter = $sm->get('Zend\Db\Adapter\Adapter');
+         GlobalAdapterFeature::setStaticAdapter($adapter);
     }
 }
