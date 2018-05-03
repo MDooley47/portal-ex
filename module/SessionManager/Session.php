@@ -77,16 +77,15 @@ class Session
         return isset($_SESSION[$name]);
     }
 
-    public static function active()
+    public static function isActive()
     {
         self::start();
 
         if (self::isSet('activeTime')
-            && self::isSet('userId'))
+            && self::isSet('userSlug'))
         {
             // activeTime must be within the hour.
-            if ((self::get('activeTime') > (time() - 3600))
-                && (self::get('userId') > 0))
+            if (self::get('activeTime') > (time() - 3600))
             {
                 return true;
             }
