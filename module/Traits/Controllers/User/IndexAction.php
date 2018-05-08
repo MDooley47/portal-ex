@@ -17,6 +17,7 @@ trait IndexAction
 
         return new ViewModel([
             'users' => $table->fetchAll(),
+            'tables_array' => $this->tables,
         ]);
     }
 }
