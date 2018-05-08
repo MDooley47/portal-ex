@@ -23,6 +23,10 @@ function setupPostLinks() {
 
         $.post(action, { 'slug': slug });
     });
+
+    $('.post-noslug').click(function(e) {
+        $.post($(this).attr('href'));
+    });
 }
 
 /**
