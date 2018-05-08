@@ -1,8 +1,11 @@
 <?php
 
+use Dotenv\Dotenv;
+
+use Zend\Log\Logger;
+use Zend\Log\Writer\Stream;
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
-use Dotenv\Dotenv;
 
 /**
  * This makes our life easier when dealing with paths. Everything is relative
@@ -52,6 +55,47 @@ function env($key, $default = null)
    return $value;
 }
 
+/**
+ * Make a logging easy
+ */
+function logger($type)
+{
+    $logger = new Logger;
+
+    switch (strtolower($type))
+    {
+        case 'debug':
+            $writer = new Stream(APPLICATION_PATH . '/data/logs/debug.log');
+            $logger->addWriter($writer);
+            break;
+        case 'info':
+        default:
+            $writer = new Stream(APPLICATION_PATH . '/data/logs/info.log');
+            $logger->addWriter($writer);
+    }
+
+    return $logger;
+}
+
+
+function note($value, $type = null)
+{
+    if (! isset($type))
+    {
+        $type = (env('debug')) ? 'DEBUG' : 'INFO';
+    }
+    $logger = logger($type);
+
+    switch (strtolower($type))
+    {
+        case 'debug':
+            $logger->log(Logger::DEBUG, $value);
+            break;
+        case 'info':
+        default:
+            $logger->log(Logger::INFO, $value);
+    }
+}
 
 /**
  * Global function for removing the base path.

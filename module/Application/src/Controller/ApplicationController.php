@@ -7,6 +7,8 @@
 
 namespace Application\Controller;
 
+use RuntimeException;
+
 use SessionManager\Session;
 use Traits\HasTables;
 
@@ -27,10 +29,9 @@ class ApplicationController extends AbstractActionController
     {
 
         // activate session if not active
-        if (!Session::isActive())
+        if (! Session::isActive())
         {
-            // TODO: TAKE TO LOGIN PAGE
-            Session::add('userSlug', 'njwdq3');
+            return $this->redirect()->toRoute('login');
         }
         else {
             // TODO: SHOW THEIR DASHBOARD
@@ -40,5 +41,60 @@ class ApplicationController extends AbstractActionController
         return new ViewModel([
             'apps' => $this->getTable('app')->fetchAll(),
         ]);
+    }
+
+    public function loginAction()
+    {
+        if ($this->getRequest()->isPost())
+        {
+            return $this->loginPostAction();
+        }
+
+        if (Session::isActive())
+        {
+            return $this->redirect()->toRoute('home');
+        }
+
+        return new ViewModel();
+    }
+
+    public function loginPostAction()
+    {
+        $email = $this->params()->fromPost('email');
+        $password = $this->params()->fromPost('password');
+
+        if (! Session::isActive())
+        {
+            try
+            {
+                $user = $this->getTable('user')->getUser($email, ['type' => 'email']);
+
+                note("Login: Email: " . $email, "INFO");
+                Session::start();
+                Session::setUser($user);
+            }
+            catch (RuntimeException $e)
+            {
+                note("Login Attempt: Incorrect Email: " . $email, "INFO");
+                return $this->redirect()->toRoute('login');
+            }
+        }
+
+        return $this->redirect()->toRoute('home');
+    }
+
+    public function logoutAction()
+    {
+        if ($this->getRequest()->isPost())
+        {
+            if (Session::isActive())
+            {
+                Session::end();
+            }
+        }
+        else
+        {
+            return $this->redirect()->toRoute('home');
+        }
     }
 }

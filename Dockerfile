@@ -52,7 +52,7 @@ ARG storage_path
         RUN chmod +x /var/www/docker-scripts/*.sh
     # Install composer, run it, and remove it
         RUN ./docker-scripts/composerInstallDependencies.sh
-    # Install composer  run it, and remove it
+    # Install move config files
         RUN ./docker-scripts/move-config-files.sh
     # Updates ./.env
         RUN ./docker-scripts/update-env.sh \

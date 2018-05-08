@@ -1,0 +1,14 @@
+body {
+    background-color: var(--color-body-background);
+    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
+}
+
+.config .bold {
+    font-weight: bold;
+}
+.config .success {
+    color: var(--color-success);
+}
+.config .failure {
+    color: var(--color-failure);
+}

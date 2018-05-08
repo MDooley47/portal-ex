@@ -17,7 +17,7 @@ class UserPrivilegesTableGateway extends AbstractTableGateway
         $this->initialize();
     }
 
-    public function hasPrivilege($user, $privilege, $group = null)
+    public function hasPrivilege($user, $privilege, $group = null): bool
     {
         $rowset = $this->select(function (Select $select)
             use ($user, $privilege, $group)

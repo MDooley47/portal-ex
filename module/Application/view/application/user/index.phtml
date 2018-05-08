@@ -1,5 +1,10 @@
 <?php
 
+use SessionManager\Session;
+use SessionManager\Tables;
+
+$tables = new Tables($tables_array);
+
 $title = "All Users";
 $escaper = new Zend\Escaper\Escaper('utf-8');
 $this->headTitle($title);
@@ -19,15 +24,13 @@ foreach ($users as $user) {
 <hr>
 <table class="table">
     <tr>
-    <th>ID</th>
-    <th>Slug</th>
-    <th>Name</th>
-    <th>Email</th>
-    <th>Actions</th>
-</tr>
+        <th>Slug</th>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Actions</th>
+    </tr>
 <?php foreach ($data as $user) : ?>
     <tr>
-        <td><?= $escaper->escapeHtml($user->id) ?></td>
         <td><?= $escaper->escapeHtml($user->slug) ?></td>
         <td><?= $escaper->escapeHtml($user->name) ?></td>
         <td><?= $escaper->escapeHtml($user->email) ?></td>
@@ -41,4 +44,19 @@ foreach ($users as $user) {
 </table>
 <p>
     <a href="<?= $this->url('user', ['action' => 'add']) ?>">Add new user</a>
+</p>
+<p>
+    <h1>SESSION</h1>
+    <?php
+        if (Session::isActive())
+        {
+        ?>
+        <ul>
+            <li><?= Session::get('userSlug') ?></li>
+            <li><?= Session::getUser($tables->getTable('user'))->name ?></li>
+            <li><?= Session::getUser($tables->getTable('user'))->email ?></li>
+        </ul>
+        <?
+        }
+    ?>
 </p>
