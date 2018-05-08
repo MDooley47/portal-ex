@@ -2,6 +2,7 @@
 
 namespace SessionManager;
 
+use User\Model\User;
 use SessionManager\TableModels\UserPrivilegesTableGateway;
 
 class Session
@@ -58,7 +59,15 @@ class Session
 
     public static function setUser($user)
     {
-        return self::set('userSlug', $user->slug);
+        if ($user instanceof User)
+        {
+            $slug = $user->slug;
+        }
+        else
+        {
+            $slug = $user;
+        }
+        return self::set('userSlug', $slug);
     }
 
     public static function remove($name)
@@ -88,7 +97,7 @@ class Session
         return isset($_SESSION[$name]);
     }
 
-    public static function isActive()
+    public static function isActive(): bool
     {
         self::start();
 
@@ -105,7 +114,7 @@ class Session
         return false;
     }
 
-    public static function hasPrivilege($privilege, $group = null)
+    public static function hasPrivilege($privilege, $group = null): bool
     {
         $table = new UserPrivilegesTableGateway();
         return $table->hasPrivilege(self::get('userSlug'), $privilege, $group);
