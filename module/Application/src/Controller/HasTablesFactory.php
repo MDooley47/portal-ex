@@ -13,6 +13,7 @@ trait HasTablesFactory
             ->add('Group')
             ->add('GroupType')
             ->add('IpAddress')
+            ->add('OwnerType')
             ->add('Privilege')
             ->add('Setting')
             ->add('Tab')

@@ -50,10 +50,11 @@ class UserTable
         {
             $rowset = $this->tableGateway->select(['slug' => $id]);
         }
-        else if ($options['type' == 'id'])
+        else if ($options['type'] == 'email')
         {
-            $rowset = $this->tableGateway->select(['id' => $id]);
+            $rowset = $this->tableGateway->select(['email' =>  strtolower($id)]);
         }
+
         $row = $rowset->current();
         if (! $row)
         {

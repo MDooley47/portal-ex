@@ -1,7 +1,7 @@
-CREATE TABLE privileges (id SERIAL PRIMARY KEY, slug text NOT NULL UNIQUE, name text NOT NULL, description text);
+CREATE TABLE privileges (slug TEXT PRIMARY KEY, name TEXT NOT NULL, level INT NOT NULL, description TEXT);
 
 
-INSERT INTO privileges (slug, name, description) VALUES ('orG332', 'anonymous', 'Not logged in.');
-INSERT INTO privileges (slug, name, description) VALUES ('29ry38', 'authenticated user', 'No special privilege.');
-INSERT INTO privileges (slug, name, description) VALUES ('ri12io', 'group admin', 'Admin of group, building, or organization.');
-INSERT INTO privileges (slug, name, description) VALUES ('oq34fE', 'system admin', '');
+INSERT INTO privileges (slug, name, level, description) VALUES ('anon', 'anonymous', 0, 'Not logged in.');
+INSERT INTO privileges (slug, name, level, description) VALUES ('auth', 'authenticated user', 10, 'No special privilege.');
+INSERT INTO privileges (slug, name, level, description) VALUES ('admin', 'group admin', 20, 'Admin of group, building, or organization.');
+INSERT INTO privileges (slug, name, level, description) VALUES ('sudo', 'system admin', 30, 'Admin of everything');

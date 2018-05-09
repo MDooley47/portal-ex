@@ -8,7 +8,7 @@ use Traits\Models\HasSlug;
 use Traits\Models\HasGuarded;
 use Traits\Models\ExchangeArray;
 
-use Setting\InputFilter\NameFilter;
+use Setting\InputFilter\DataFilter;
 
 use Zend\Filter\StringTrim;
 use Zend\Filter\StripTags;
@@ -56,10 +56,8 @@ class Setting
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
             'slug' => $this->slug,
-            'name' => $this->name,
-            'description' => $this->description,
+            'data' => $this->data,
         ];
     }
 
@@ -75,7 +73,7 @@ class Setting
     public function getInputFilter($options = [])
     {
         $tmpFilter = (new InputFilter())
-            ->merge(new NameFilter());
+            ->merge(new DataFilter());
 
         $this->inputFilter = $tmpFilter;
 

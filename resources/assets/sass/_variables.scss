@@ -1,0 +1,21 @@
+// Color map
+$colors: (
+    brand-primary: #0000ff,
+    brand-primary-lightened: #2222ff,
+    brand-accent: #ffffff,
+    body-background: #cccccc,
+    success: #00aa00,
+    failure: #aa0000,
+    app-bg: #ffffff,
+    app-txt: #000000,
+    app-txt-bg: rgba(255,255,255,.8),
+);
+
+// CSS 4 Support
+// Rips CSS4 vars out of color map
+:root {
+    // each item in color map
+    @each $name, $color in $colors {
+        --color-#{$name}: #{$color};
+    }
+}

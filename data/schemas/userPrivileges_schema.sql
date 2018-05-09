@@ -1,21 +1,21 @@
-CREATE TABLE "userPrivileges" (id SERIAL PRIMARY KEY, "userId" INT NOT NULL, "privilegeId" INT NOT NULL DEFAULT 1, "groupId" INT);
+CREATE TABLE "userPrivileges" (id SERIAL PRIMARY KEY, "userSlug" TEXT NOT NULL, "privilegeSlug" TEXT NOT NULL DEFAULT 'anon', "groupSlug" TEXT);
 
 
-INSERT INTO "userPrivileges" ("userId", "privilegeId") VALUES ('1', '4');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug") VALUES ('njwdq3', 'auth');
 
-INSERT INTO "userPrivileges" ("userId", "privilegeId") VALUES ('2', '2');
-INSERT INTO "userPrivileges" ("userId", "privilegeId", "groupId") VALUES ('2', '3', '2');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug") VALUES ('un9f2e', 'auth');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug", "groupSlug") VALUES ('un9f2e', 'admin', '29ry38');
 
-INSERT INTO "userPrivileges" ("userId", "privilegeId") VALUES ('3', '2');
-INSERT INTO "userPrivileges" ("userId", "privilegeId", "groupId") VALUES ('3', '2', '1');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug") VALUES ('3ehu9Q', 'auth');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug", "groupSlug") VALUES ('3ehu9Q', 'auth', 'orG332');
 
-INSERT INTO "userPrivileges" ("userId", "privilegeId") VALUES ('4', '2');
-INSERT INTO "userPrivileges" ("userId", "privilegeId", "groupId") VALUES ('4', '2', '1');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug") VALUES ('uhf83W', 'auth');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug", "groupSlug") VALUES ('uhf83W', 'auth', 'orG332');
 
-INSERT INTO "userPrivileges" ("userId", "privilegeId") VALUES ('5', '2');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug") VALUES ('9ddsoj', 'auth');
 
-INSERT INTO "userPrivileges" ("userId", "privilegeId") VALUES ('6', '2');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug") VALUES ('huwei2', 'auth');
 
-INSERT INTO "userPrivileges" ("userId", "privilegeId") VALUES ('7', '2');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug") VALUES ('DSAF23', 'auth');
 
-INSERT INTO "userPrivileges" ("userId", "privilegeId") VALUES ('8', '2');
+INSERT INTO "userPrivileges" ("userSlug", "privilegeSlug") VALUES ('8u2fSA', 'auth');

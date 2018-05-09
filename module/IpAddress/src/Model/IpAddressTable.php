@@ -96,7 +96,8 @@ class IpAddressTable
     {
         $data = [
             'name' => $ipAddress->name,
-            'email' => $ipAddress->email
+            'description' => $ipAddress->description,
+            'ip' => $ipAddress->ip,
         ];
 
         $slug = $ipAddress->slug;

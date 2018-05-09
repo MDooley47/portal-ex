@@ -1,0 +1,37 @@
+/** Application Grid **/
+.app-tile {
+    background-color: var(--color-app-bg);
+    height: 100px;
+    width: 100px;
+    margin: 0 auto;
+    text-align: center;
+    border-radius: 15px;
+    overflow: hidden;
+    font-size: 9pt;
+    color: #000000;
+    margin-top: 10px;
+}
+.app-tile:hover, .app-tile a:hover {
+    text-decoration: none;
+}
+.app-tile a, .app-tile .app-name {
+    display: block;
+}
+.app-tile img, .app-image {
+    margin-top: 5px;
+    height: 90px;
+    width: 90px;
+}
+.app-tile .app-name {
+    display: block;
+    position: absolute;
+    width: 100px;
+    height: 12pt;
+    background-color: var(--color-app-txt-bg);
+    bottom: 0;
+    margin-top: -12pt;
+    color: var(--color-app-txt);
+    text-decoration: none;
+    border-bottom-right-radius: 15px;
+    border-bottom-left-radius: 15px;
+}

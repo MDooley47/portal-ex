@@ -36,18 +36,10 @@ class SettingForm extends Form
         ]);
 
         $this->add([
-            'name' => 'name',
+            'name' => 'data',
             'type' => 'text',
             'options' => [
-                'label' => 'Name',
-            ],
-        ]);
-
-        $this->add([
-            'name' => 'description',
-            'type' => 'text',
-            'options' => [
-                'label' => 'Description',
+                'label' => 'Data',
             ],
         ]);
 

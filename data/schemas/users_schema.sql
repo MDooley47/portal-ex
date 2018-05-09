@@ -1,4 +1,4 @@
-CREATE TABLE users (id SERIAL PRIMARY KEY, slug text NOT NULL UNIQUE, name text NOT NULL, email text NOT NULL UNIQUE);
+CREATE TABLE users (slug TEXT PRIMARY KEY, name TEXT NOT NULL, email TEXT NOT NULL UNIQUE);
 
 
 INSERT INTO users (slug, name, email) VALUES ('njwdq3', 'Eddard Stark', 'eddard@stark.got');

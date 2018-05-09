@@ -1,1 +1,1 @@
-CREATE TABLE "attributes" (id SERIAL PRIMARY KEY, slug text NOT NULL UNIQUE, name text, description text, data text NOT NULL);
+CREATE TABLE "attributes" (slug TEXT PRIMARY KEY, name TEXT, description TEXT, data TEXT NOT NULL);

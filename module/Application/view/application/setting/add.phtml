@@ -1,0 +1,19 @@
+<?php
+    $escaper = new Zend\Escaper\Escaper('utf-8');
+    $this->headTitle($title = 'Add New Setting');
+
+?>
+
+<h1><?= $escaper->escapeHTML($title); ?></h1>
+
+<?php
+    $form->setAttribute('action', $this->url('setting', ['action' => 'add']));
+    $form->setAttribute('enctype', 'multipart/form-data');
+    $form->prepare();
+?>
+    <?= $this->form()->openTag($form) ?>
+    <?= $this->formRow($this->form->get('data')); ?>
+
+<?= $this->formRow($this->form->get('submit')); ?>
+
+<?= $this->form()->closeTag(); ?>

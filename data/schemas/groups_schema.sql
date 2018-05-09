@@ -1,7 +1,7 @@
-CREATE TABLE groups (id SERIAL PRIMARY KEY, "groupType" int NOT NULL, slug text NOT NULL UNIQUE, name text NOT NULL, description text);
+CREATE TABLE groups (slug TEXT PRIMARY KEY, "groupType" TEXT NOT NULL, name TEXT NOT NULL, description TEXT);
 
 
-INSERT INTO groups ("groupType", slug, name, description) VALUES ('1', 'orG332', 'kids', 'example group');
-INSERT INTO groups ("groupType", slug, name, description) VALUES ('2', '29ry38', 'starks', 'example building');
-INSERT INTO groups ("groupType", slug, name, description) VALUES ('2', '29rsdf', 'snows', 'example building');
-INSERT INTO groups ("groupType", slug, name, description) VALUES ('3', 'ri12io', 'winterfell', 'example orgnization');
+INSERT INTO groups ("groupType", slug, name, description) VALUES ('orG332', 'orG332', 'kids', 'example group');
+INSERT INTO groups ("groupType", slug, name, description) VALUES ('29ry38', '29ry38', 'starks', 'example building');
+INSERT INTO groups ("groupType", slug, name, description) VALUES ('29ry38', '29rsdf', 'snows', 'example building');
+INSERT INTO groups ("groupType", slug, name, description) VALUES ('ri12io', 'ri12io', 'winterfell', 'example orgnization');

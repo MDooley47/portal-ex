@@ -1,4 +1,4 @@
-CREATE TABLE tabs (id SERIAL PRIMARY KEY, slug text NOT NULL UNIQUE, name text NOT NULL, description text);
+CREATE TABLE tabs (slug TEXT PRIMARY KEY, name TEXT NOT NULL, description TEXT);
 
 
 INSERT INTO tabs (slug, name, description) VALUES ('orG332', 'kids', 'example tab');
