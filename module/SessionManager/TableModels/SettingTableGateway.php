@@ -1,29 +1,24 @@
 <?php
 
-namespace Setting\Model;
+namespace SessionManager\TableModels;
 
 use RuntimeException;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Validator\Db\RecordExists;
 
-class SettingTable
+use Setting\Model\Setting;
+
+use Zend\Db\TableGateway\AbstractTableGateway;
+use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
+
+
+class SettingTableGateway extends AbstractTableGateway
 {
-    /**
-     * TableGateway.
-     */
-    private $tableGateway;
-
-    /**
-     * Constructs SettingTable
-     *
-     * Sets $this->tableGateway to passed in tableGateway.
-     *
-     * @param TableGateway $tableGateway
-     * @return void
-     */
-    public function __construct(TableGateway $tableGateway)
+    public function __construct()
     {
-        $this->tableGateway = $tableGateway;
+        $this->table      = 'settings';
+        $this->featureSet = new Feature\FeatureSet();
+        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+        $this->initialize();
     }
 
     /**
@@ -33,7 +28,7 @@ class SettingTable
      */
     public function fetchAll()
     {
-        return $this->tableGateway->select();
+        return $this->select();
     }
 
     /**
@@ -48,11 +43,11 @@ class SettingTable
     {
         if ($options['type'] == 'slug')
         {
-            $rowset = $this->tableGateway->select(['slug' => $id]);
+            $rowset = $this->select(['slug' => $id]);
         }
         else if ($options['type' == 'id'])
         {
-            $rowset = $this->tableGateway->select(['id' => $id]);
+            $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
         if (! $row)
@@ -77,9 +72,9 @@ class SettingTable
     public function settingExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->tableGateway->getTable(),
+            'table' => $this->getTable(),
             'field' => $options['type'],
-            'adapter' => $this->tableGateway->getAdapter(),
+            'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
 
@@ -107,13 +102,13 @@ class SettingTable
                 $data['slug'] = Setting::generateSlug();
             }
             while ($this->settingExists($data['slug'], ['type' => 'slug']));
-            $this->tableGateway->insert($data);
+            $this->insert($data);
             return;
         }
 
         if ($dbSetting = $this->getSetting($slug))
         {
-            $this->tableGateway->update($data, ['slug' => $slug]);
+            $this->update($data, ['slug' => $slug]);
         }
         else
         {
@@ -132,6 +127,6 @@ class SettingTable
      */
     public function deleteSetting($slug)
     {
-        $this->tableGateway->delete(['slug' => $slug]);
+        $this->delete(['slug' => $slug]);
     }
 }

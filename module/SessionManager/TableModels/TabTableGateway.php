@@ -1,29 +1,24 @@
 <?php
 
-namespace Tab\Model;
+namespace SessionManager\TableModels;
 
 use RuntimeException;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Validator\Db\RecordExists;
 
-class TabTable
+use Tab\Model\Tab;
+
+use Zend\Db\TableGateway\AbstractTableGateway;
+use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
+
+
+class TabTableGateway extends AbstractTableGateway
 {
-    /**
-     * TableGateway.
-     */
-    private $tableGateway;
-
-    /**
-     * Constructs TabTable
-     *
-     * Sets $this->tableGateway to passed in tableGateway.
-     *
-     * @param TableGateway $tableGateway
-     * @return void
-     */
-    public function __construct(TableGateway $tableGateway)
+    public function __construct()
     {
-        $this->tableGateway = $tableGateway;
+        $this->table      = 'tabs';
+        $this->featureSet = new Feature\FeatureSet();
+        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+        $this->initialize();
     }
 
     /**
@@ -67,20 +62,20 @@ class TabTable
     }
 
     /**
-     * Checks if an tab exists in the database.
-     *
-     * @param mixed $id The identifier.
-     * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
-     * @return boolean If value exists
-     */
+    * Checks if an tab exists in the database.
+    *
+    * @param mixed $id The identifier.
+    * @param dictionary $options Contains 'type' which defines what type of
+    * identifier $id is. Default value is 'type' => 'id'.
+    * @return boolean If value exists
+    */
     public function tabExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
             'table' => $this->tableGateway->getTable(),
             'field' => $options['type'],
             'adapter' => $this->tableGateway->getAdapter(),
-        ]))->isValid($id);
+            ]))->isValid($id);
     }
 
     /**

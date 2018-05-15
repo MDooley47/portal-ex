@@ -17,7 +17,6 @@ trait IndexAction
 
         return new ViewModel([
             'groups' => $table->fetchAll(),
-            'tables_array' => $this->tables,
         ]);
     }
 }

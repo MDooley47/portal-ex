@@ -3,7 +3,7 @@
 namespace SessionManager;
 
 use User\Model\User;
-use SessionManager\TableModels\UserPrivilegesTableGateway;
+use SessionManager\Tables;
 
 class Session
 {
@@ -80,9 +80,11 @@ class Session
         return $_SESSION[$name];
     }
 
-    public static function getUser($table)
+    public static function getUser()
     {
         if (! self::isSet('userSlug')) return false;
+
+        $table = (new Tables())->getTable('user');
 
         return $table->getUser(self::get('userSlug'));
     }
@@ -116,8 +118,14 @@ class Session
 
     public static function hasPrivilege($privilege, $group = null): bool
     {
-        $table = new UserPrivilegesTableGateway();
+        $table = (new Tables())->getTable('userPrivileges');
         return $table->hasPrivilege(self::get('userSlug'), $privilege, $group);
+    }
+
+    public static function getGroups()
+    {
+        $table = (new Tables())->getTable('userGroups');
+        return $table->getGroups(self::get('userSlug'));
     }
 }
 

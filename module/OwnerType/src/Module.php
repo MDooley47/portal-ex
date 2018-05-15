@@ -18,48 +18,4 @@ class Module implements ConfigProviderInterface
     {
         return include __DIR__ . '/../config/module.config.php';
     }
-
-    /**
-     * Gets the service configuration
-     *
-     * @return dictionary
-     */
-    public function getServiceConfig()
-    {
-        return [
-            'factories' => [
-                Model\OwnerTypeTable::class => function ($container)
-                {
-                    $tableGateway = $container->get(Model\OwnerTypeTableGateway::class);
-                    return new Model\OwnerTypeTable($tableGateway);
-                },
-                Model\OwnerTypeTableGateway::class => function ($container)
-                {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\OwnerType());
-                    return new TableGateway('ownerTypes', $dbAdapter, null, $resultSetPrototype);
-                },
-            ],
-        ];
-    }
-
-    /**
-     * Gets the Controller configuration.
-     *
-     * @return dictionary
-     */
-    public function getControllerConfig()
-    {
-        return [
-            'factories' => [
-                Controller\OwnerTypeController::class => function($container)
-                {
-                    return new Controller\OwnerTypeController(
-                        $container->get(Model\OwnerTypeTable::class)
-                    );
-                },
-            ],
-        ];
-    }
 }
