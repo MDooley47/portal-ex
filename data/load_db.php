@@ -6,6 +6,7 @@ $tables = [
     "groups",
     "groupApps",
     "groupTypes", # Needs to seed
+    "groupGroups",
     "ipAddresses",
     "ownerTabs",
     "ownerTypes", # Needs to seed

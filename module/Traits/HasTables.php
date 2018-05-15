@@ -12,6 +12,7 @@ trait HasTables
             ->add('App')
             ->add('Attribute')
             ->add('Group')
+            ->add('GroupGroups')
             ->add('GroupType')
             ->add('IpAddress')
             ->add('OwnerType')
