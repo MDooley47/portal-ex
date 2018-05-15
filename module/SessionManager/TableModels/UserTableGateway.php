@@ -59,7 +59,7 @@ class UserTableGateway extends AbstractTableGateway
             ));
         }
 
-        return $row;
+        return (new User())->exchangeArray($row->getArrayCopy());
     }
 
     /**
