@@ -61,16 +61,17 @@ function env($key, $default = null)
 function logger($type)
 {
     $logger = new Logger;
+    $logFile = APPLICATION_PATH . '/data/logs/log.log';
 
     switch (strtolower($type))
     {
         case 'debug':
-            $writer = new Stream(APPLICATION_PATH . '/data/logs/debug.log');
+            $writer = new Stream($logFile);
             $logger->addWriter($writer);
             break;
         case 'info':
         default:
-            $writer = new Stream(APPLICATION_PATH . '/data/logs/info.log');
+            $writer = new Stream($logFile);
             $logger->addWriter($writer);
     }
 
