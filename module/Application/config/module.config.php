@@ -173,7 +173,7 @@ return [
             'tab' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/tab[/:action[/:slug]][/]',
+                    'route' => '/tab[/:slug[/:action]][/]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
