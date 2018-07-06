@@ -15,10 +15,12 @@ trait HasTables
             ->add('GroupGroups')
             ->add('GroupType')
             ->add('IpAddress')
+            ->add('OwnerTabs')
             ->add('OwnerType')
             ->add('Privilege')
             ->add('Setting')
             ->add('Tab')
+            ->add('TabApps')
             ->add('User')
             ->add('UserPrivileges')
             ->add('UserGroups');
