@@ -56,7 +56,7 @@ function env($key, $default = null)
 }
 
 /**
- * Make a logging easy
+ * Make logging easy
  */
 function logger($type)
 {
@@ -85,6 +85,7 @@ function note($value, $type = null)
     {
         $type = (env('debug')) ? 'DEBUG' : 'INFO';
     }
+
     $logger = logger($type);
 
     switch (strtolower($type))
@@ -128,6 +129,16 @@ function dd($data)
 {
     var_dump($data);
     die();
+}
+
+function arrayValueDefault($key, &$search, $default = null)
+{
+    if (! array_key_exists($key, $search))
+    {
+        $search[$key] = $default;
+    }
+
+    return $search[$key];
 }
 
 // Decline static file requests back to the PHP built-in webserver
