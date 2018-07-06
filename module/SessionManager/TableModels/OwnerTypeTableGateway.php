@@ -4,7 +4,7 @@ namespace SessionManager\TableModels;
 
 use RuntimeException;
 
-use Group\Model\Group;
+use OwnerType\Model\OwnerType;
 
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
@@ -21,6 +21,35 @@ class OwnerTypeTableGateway extends AbstractTableGateway
         $this->initialize();
     }
 
+    public function getType($id, $options = [])
+    {
+
+        if (! array_key_exists('type', $options))
+        {
+            $options['type'] = 'slug';
+        }
+
+        $rowset = $this->select(function (Select $select)
+                    use ($id, $options)
+                {
+                    switch (strtolower($options['type']))
+                    {
+                        case 'name':
+                            $select->where([
+                                'name' => $id,
+                            ]);
+                            break;
+                        case 'slug':
+                        default:
+                            $select->where([
+                                'slug' => $id,
+                            ]);
+                    }
+                });
+
+        return (new OwnerType())
+            ->exchangeArray($rowset->current()->getArrayCopy());
+    }
 
     /**
      * Selects all OwnerTypes from the database.
