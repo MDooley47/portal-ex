@@ -32,18 +32,16 @@ class AppTableGateway extends AbstractTableGateway
         return $this->select();
     }
 
-    public function getGroups($user)
+    public function getApps($appSlugs)
     {
+        $apps = [];
 
-        $rowset = $this->select(function (Select $select)
-                    use ($user, $privilege, $group)
-                {
-                    $select->where([
-                        'userSlug' => $user,
-                    ]);
-                });
+        foreach($appSlugs as $app)
+        {
+            array_push($apps, $this->getApp($app));
+        }
 
-        return $rowset;
+        return $apps;
     }
 
     /**
@@ -54,16 +52,10 @@ class AppTableGateway extends AbstractTableGateway
      * identifier $id is. Default value is 'type' => 'slug'.
      * @return App
      */
-    public function getApp($id, $options = ['type' => 'slug'])
+    public function getApp($id, $options = [])
     {
-        if ($options['type'] == 'slug')
-        {
-            $rowset = $this->select(['slug' => $id]);
-        }
-        else if ($options['type' == 'id'])
-        {
-            $rowset = $this->select(['id' => $id]);
-        }
+        $rowset = $this->select(['slug' => $id]);
+
         $row = $rowset->current();
         if (! $row)
         {
