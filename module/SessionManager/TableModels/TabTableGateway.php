@@ -28,7 +28,7 @@ class TabTableGateway extends AbstractTableGateway
      */
     public function fetchAll()
     {
-        return $this->tableGateway->select();
+        return $this->select();
     }
 
     /**
@@ -39,26 +39,32 @@ class TabTableGateway extends AbstractTableGateway
      * identifier $id is. Default value is 'type' => 'id'.
      * @return Tab
      */
-    public function getTab($id, $options = ['type' => 'slug'])
+    public function getTab($id, $options = [])
     {
-        if ($options['type'] == 'slug')
-        {
-            $rowset = $this->tableGateway->select(['slug' => $id]);
-        }
-        else if ($options['type' == 'id'])
-        {
-            $rowset = $this->tableGateway->select(['id' => $id]);
-        }
+        $rowset = $this->select(['slug' => $id]);
         $row = $rowset->current();
+
         if (! $row)
         {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
-                $id, $options['type']
+                'Could not Find Row with identifier %s of type %s.',
+                $id, 'slug'
             ));
         }
 
-        return $row;
+        return (new Tab())->exchangeArray($row->getArrayCopy());
+    }
+
+    public function getTabs($tabSlugs)
+    {
+        $tabs = [];
+
+        foreach($tabSlugs as $tab)
+        {
+            array_push($tabs, $this->getTab($tab));
+        }
+
+        return $tabs;
     }
 
     /**
@@ -72,9 +78,9 @@ class TabTableGateway extends AbstractTableGateway
     public function tabExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->tableGateway->getTable(),
+            'table' => $this->getTable(),
             'field' => $options['type'],
-            'adapter' => $this->tableGateway->getAdapter(),
+            'adapter' => $this->getAdapter(),
             ]))->isValid($id);
     }
 
@@ -103,13 +109,13 @@ class TabTableGateway extends AbstractTableGateway
                 $data['slug'] = Tab::generateSlug();
             }
             while ($this->tabExists($data['slug'], ['type' => 'slug']));
-            $this->tableGateway->insert($data);
+            $this->insert($data);
             return;
         }
 
         if ($dbTab = $this->getTab($slug))
         {
-            $this->tableGateway->update($data, ['slug' => $slug]);
+            $this->update($data, ['slug' => $slug]);
         }
         else
         {
@@ -128,6 +134,6 @@ class TabTableGateway extends AbstractTableGateway
      */
     public function deleteTab($slug)
     {
-        $this->tableGateway->delete(['slug' => $slug]);
+        $this->delete(['slug' => $slug]);
     }
 }
