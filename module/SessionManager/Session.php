@@ -18,10 +18,33 @@ class Session
 
     public static function start($options = [])
     {
+
+        arrayValueDefault('session_options', $options, []);
+        arrayValueDefault('start_active_time', $options, true);
+
+        //$options['start_active_time'] = true;
+
+//        var_dump($options);
+
         if (session_status() == PHP_SESSION_NONE)
         {
-            $session = session_start($options);
-            self::setActiveTime();
+            $session = session_start($options['session_options']);
+
+            //debug_print_backtrace();
+            // dd(self::end());
+
+            note("session has started");
+            //dd($options);
+            //dd($options['start_active_time']);
+            //dd($options['start_active_time'] == true);
+
+            if ($options['start_active_time'] == true ||
+                $options['start_active_time'] == 1)
+            {
+                note("start_active_time");
+                self::setActiveTime();
+            }
+
             return $session;
         }
     }
@@ -102,17 +125,21 @@ class Session
     public static function isActive(): bool
     {
         self::start();
+        //self::start(['start_active_time' => false]);
 
         if (self::isSet('activeTime')
             && self::isSet('userSlug'))
         {
+            note('both are set');
             // activeTime must be within the hour.
             if (self::get('activeTime') > (time() - 3600))
             {
+                note('active');
+                self::setActiveTime(); // update active time
                 return true;
             }
         }
-
+        note('not_active');
         return false;
     }
 
@@ -128,5 +155,3 @@ class Session
         return $table->getGroups(self::get('userSlug'));
     }
 }
-
-?>
