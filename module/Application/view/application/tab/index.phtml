@@ -1,44 +1,45 @@
 <?php
 
-$title = "All Tabs";
+$title = "Tab";
 $escaper = new Zend\Escaper\Escaper('utf-8');
 $this->headTitle($title);
 
 $i = 0;
 $data = [];
-foreach ($tabs as $tab) {
-    $data[$i++] = $tab;
+foreach ($apps as $app) {
+    $data[$i++] = $app;
 }
 
 ?>
 
-<h1><?= $escaper->escapeHTML($title) ?></h1>
-
-<hr>
-<span class="text-center">Below is a view of what is in the db</span>
-<hr>
-<table class="table">
-    <tr>
-    <th>ID</th>
-    <th>Slug</th>
-    <th>Name</th>
-    <th>Description</th>
-    <th>Actions</th>
-</tr>
-<?php foreach ($data as $tab) : ?>
-    <tr>
-        <td><?= $escaper->escapeHtml($tab->id) ?></td>
-        <td><?= $escaper->escapeHtml($tab->slug) ?></td>
-        <td><?= $escaper->escapeHtml($tab->name) ?></td>
-        <td><?= $escaper->escapeHtml($tab->description) ?></td>
-        <td>
-            <a href="<?= $this->url('tab', ['action' => 'edit', 'slug' => $tab->slug]) ?>">Edit</a>
-            |
-            <a class="post" href="<?= $this->url('tab', ['action' => 'delete', 'slug' => $tab->slug]) ?>">Delete</a>
-        </td>
-    </tr>
-<?php endforeach;?>
-</table>
-<p>
-    <a href="<?= $this->url('tab', ['action' => 'add']) ?>">Add new tab</a>
-</p>
+<?php
+    $i = 0;
+    $opened = false;
+    foreach ($data as $app) :
+        $i++;
+        if ((($i-1) % 6) == 0 && !$opened) :
+            echo "<div class='row'>";
+        endif;
+?>
+        <div class="col-xs-6 col-sm-3 col-md-2">
+            <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
+                <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
+                    <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
+                    "?v=" . (int) $app->version ?>" alt="">
+                    <span class="app-name"><?= $escaper->escapeHtml($app->name) ?></span>
+                </a>
+            </div>
+        </div>
+<?php
+        if ((($i) % 6) == 0 && $opened) :
+            $opened = false;
+            echo "</div>";
+        else :
+            $opened = true;
+        endif;
+    endforeach;
+    if ($opened)
+    {
+        echo "</div>";
+    }
+?>

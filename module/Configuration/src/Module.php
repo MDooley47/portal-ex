@@ -20,16 +20,6 @@ class Module implements ConfigProviderInterface
     }
 
     /**
-     * Gets the service configuration
-     *
-     * @return dictionary
-     */
-    public function getServiceConfig()
-    {
-        return [];
-    }
-
-    /**
      * Gets the Controller configuration.
      *
      * @return dictionary

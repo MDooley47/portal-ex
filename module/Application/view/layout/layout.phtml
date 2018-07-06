@@ -1,3 +1,10 @@
+<?php
+    use SessionManager\Session;
+    use SessionManager\Tables;
+
+    $tables = new Tables();
+?>
+
 <?= $this->doctype() ?>
 
 <html lang="en">
@@ -47,13 +54,39 @@
                             <span class="icon-bar"></span>
                             <span class="icon-bar"></span>
                         </button>
-                        <a class="navbar-brand" href="<?= $this->url('home') ?>">App Launch Portal</a>
+                        <!--<a class="navbar-brand" href="<?= $this->url('home') ?>">App Launch Portal</a>-->
                     </div>
                     <div class="collapse navbar-collapse">
                         <ul class="nav navbar-nav">
-                            <li class="active"><a href="<?= $this->url('home') ?>">Home</a></li>
-                            <li><a href="#admin">Admin</a></li>
-                            <li><a href="<?= $this->url('app')?>">App</a></li>
+                            <?
+                                /*
+                                 * For some reason the icon viewing the icon's causes
+                                 * the layout's PHP to be processed. You can observe
+                                 * this by uncommenting the following line.
+                                 */
+                                 note("URI: " . $_SERVER[REQUEST_URI]);
+
+                                if (count($groups = Session::getGroups()) > 0)
+                                foreach ($groups as $group) :
+                            ?>
+                                <!--<li class="nav_group"><?= $group->name ?></li>-->
+                            <?
+                                    foreach ($tables
+                                        ->getTable('ownerTabs')
+                                        ->getTabs($group->slug, [
+                                            'type' => 'group'
+                                            ]) as $tab) :
+                            ?>
+                                    <li class="nav_tab">
+                                        <a href="<?= $this->url('tab', ['slug' => $tab->slug]) ?>">
+                                            <?= $tab->name ?>
+                                        </a>
+                                    </li>
+
+                            <?
+                                    endforeach;
+                                endforeach;
+                            ?>
                         </ul>
                     </div>
                 </div>

@@ -19,17 +19,17 @@ foreach ($grouptypes as $groupType) {
 <hr>
 <table class="table">
     <tr>
-    <th>ID</th>
     <th>Slug</th>
     <th>Name</th>
+    <th>Level</th>
     <th>Description</th>
     <th>Actions</th>
 </tr>
 <?php foreach ($data as $groupType) : ?>
     <tr>
-        <td><?= $escaper->escapeHtml($groupType->id) ?></td>
         <td><?= $escaper->escapeHtml($groupType->slug) ?></td>
         <td><?= $escaper->escapeHtml($groupType->name) ?></td>
+        <td><?= $escaper->escapeHtml($groupType->level) ?></td>
         <td><?= $escaper->escapeHtml($groupType->description) ?></td>
         <td>
             <a href="<?= $this->url('grouptype', ['action' => 'edit', 'slug' => $groupType->slug]) ?>">Edit</a>

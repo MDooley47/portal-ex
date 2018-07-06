@@ -36,11 +36,14 @@ class ApplicationController extends AbstractActionController
         else {
             // TODO: SHOW THEIR DASHBOARD
             Session::hasPrivilege('auth');
-        }
 
-        return new ViewModel([
-            'apps' => $this->getTable('app')->fetchAll(),
-        ]);
+            $tab = Session::getUser()->defaultTab();
+
+            return (new ViewModel([
+                'apps' => $tab->getApps(),
+            ]))
+            ->setTemplate('application/tab/index');
+        }
     }
 
     public function loginAction()

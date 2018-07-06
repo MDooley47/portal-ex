@@ -15,8 +15,16 @@ trait IndexAction
     {
         $table = $this->getTable('tab');
 
+        // get provided slug
+        $slug = $this->params()->fromRoute('slug', null);
+
+        if ((! isset($slug)) || false)
+        {
+            return $this->redirect()->toRoute('home');
+        }
+
         return new ViewModel([
-            'tabs' => $table->fetchAll(),
+            'apps' => $table->getTab($slug)->getApps(),
         ]);
     }
 }
