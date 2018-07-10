@@ -1,29 +1,25 @@
 <?php
 
-namespace App\Model;
+namespace SessionManager\TableModels;
 
 use RuntimeException;
-use Zend\Db\TableGateway\TableGateway;
+
+use App\Model\App;
+
+use Zend\Db\TableGateway\AbstractTableGateway;
+use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
 use Zend\Validator\Db\RecordExists;
 
-class AppTable
-{
-    /**
-     * TableGateway.
-     */
-    private $tableGateway;
 
-    /**
-     * Constructs AppTable
-     *
-     * Sets $this->tableGateway to passed in tableGateway.
-     *
-     * @param TableGateway $tableGateway
-     * @return void
-     */
-    public function __construct(TableGateway $tableGateway)
+class AppTableGateway extends AbstractTableGateway
+{
+    public function __construct()
     {
-        $this->tableGateway = $tableGateway;
+        $this->table      = 'apps';
+        $this->featureSet = new Feature\FeatureSet();
+        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+        $this->initialize();
     }
 
     /**
@@ -33,7 +29,19 @@ class AppTable
      */
     public function fetchAll()
     {
-        return $this->tableGateway->select();
+        return $this->select();
+    }
+
+    public function getApps($appSlugs)
+    {
+        $apps = [];
+
+        foreach($appSlugs as $app)
+        {
+            array_push($apps, $this->getApp($app));
+        }
+
+        return $apps;
     }
 
     /**
@@ -44,16 +52,10 @@ class AppTable
      * identifier $id is. Default value is 'type' => 'slug'.
      * @return App
      */
-    public function getApp($id, $options = ['type' => 'slug'])
+    public function getApp($id, $options = [])
     {
-        if ($options['type'] == 'slug')
-        {
-            $rowset = $this->tableGateway->select(['slug' => $id]);
-        }
-        else if ($options['type' == 'id'])
-        {
-            $rowset = $this->tableGateway->select(['id' => $id]);
-        }
+        $rowset = $this->select(['slug' => $id]);
+
         $row = $rowset->current();
         if (! $row)
         {
@@ -77,9 +79,9 @@ class AppTable
     public function appExists($id, $options = ['type' => 'slug'])
     {
         return (new RecordExists([
-            'table' => $this->tableGateway->getTable(),
+            'table' => $this->getTable(),
             'field' => $options['type'],
-            'adapter' => $this->tableGateway->getAdapter(),
+            'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
 
@@ -109,7 +111,7 @@ class AppTable
                 $data['slug'] = App::generateSlug();
             }
             while ($this->appExists($data['slug']));
-            $this->tableGateway->insert($data);
+            $this->insert($data);
             return;
         }
 
@@ -120,7 +122,7 @@ class AppTable
                 if (file_exists(addBasePath($file = $dbApp->iconPath))) unlink($file);
             }
             $data['version'] = 1 + (int) $dbApp->version;
-            $this->tableGateway->update($data,['slug' => $slug]);
+            $this->update($data,['slug' => $slug]);
         }
         else
         {
@@ -140,6 +142,6 @@ class AppTable
     public function deleteApp($slug)
     {
         if (file_exists($file = $this->getApp($slug)->iconPath)) unlink($file);
-        $this->tableGateway->delete(['slug' => $slug]);
+        $this->delete(['slug' => $slug]);
     }
 }

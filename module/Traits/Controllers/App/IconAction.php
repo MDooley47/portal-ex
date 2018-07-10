@@ -8,7 +8,6 @@ trait IconAction
      * Displays Icon
      *
      * Sends the App's Icon via XSendFile.
-     *
      * @return Response|Redirect
      */
     public function iconAction()
@@ -21,7 +20,7 @@ trait IconAction
         // redirect to /app if there was no slug provided.
         if (! $slug)
         {
-            return $this->redirect()->toRoute('app');
+            return $this->redirect()->toRoute('home');
         }
 
         // Try to get an app with the provided slug. If there is
@@ -32,19 +31,19 @@ trait IconAction
         }
         catch (Exception $ex)
         {
-            return $this->redirect()->toRoute('app');
+            return $this->redirect()->toRoute('home');
         }
 
         // Check that there is a phone at app.iconPath. If
         // there is no file, redirect to /app
-        if (!file_exists(addBasePath($app->iconPath)))
+        if (! file_exists(addBasePath($app->iconPath)))
         {
-            return $this->redirect()->toRoute('app');
+            return $this->redirect()->toRoute('home');
         }
 
         // return a response with using X-Sendfile to
         // send the file to the user.
-        return ($this->getResponse())
+        return $this->getResponse()
             ->getHeaders()
             ->addHeaderLine('Content-Type', 'image/'
                 . pathinfo($app->iconPath, PATHINFO_EXTENSION))

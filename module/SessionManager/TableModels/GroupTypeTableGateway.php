@@ -1,30 +1,26 @@
 <?php
 
-namespace GroupType\Model;
+namespace SessionManager\TableModels;
 
 use RuntimeException;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Validator\Db\RecordExists;
 
-class GroupTypeTable
+use GroupType\Model\GroupType;
+
+use Zend\Db\TableGateway\AbstractTableGateway;
+use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
+
+
+class GroupTypeTableGateway extends AbstractTableGateway
 {
-    /**
-     * TableGateway.
-     */
-    private $tableGateway;
-
-    /**
-     * Constructs GroupTypeTable
-     *
-     * Sets $this->tableGateway to passed in tableGateway.
-     *
-     * @param TableGateway $tableGateway
-     * @return void
-     */
-    public function __construct(TableGateway $tableGateway)
+    public function __construct()
     {
-        $this->tableGateway = $tableGateway;
+        $this->table      = 'groupTypes';
+        $this->featureSet = new Feature\FeatureSet();
+        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+        $this->initialize();
     }
+
 
     /**
      * Selects all GroupTypes from the database.
@@ -33,7 +29,7 @@ class GroupTypeTable
      */
     public function fetchAll()
     {
-        return $this->tableGateway->select();
+        return $this->select();
     }
 
     /**
@@ -48,11 +44,11 @@ class GroupTypeTable
     {
         if ($options['type'] == 'slug')
         {
-            $rowset = $this->tableGateway->select(['slug' => $id]);
+            $rowset = $this->select(['slug' => $id]);
         }
         else if ($options['type'] == 'id')
         {
-            $rowset = $this->tableGateway->select(['id' => $id]);
+            $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
         if (! $row)
@@ -77,9 +73,9 @@ class GroupTypeTable
     public function groupTypeExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->tableGateway->getTable(),
+            'table' => $this->getTable(),
             'field' => $options['type'],
-            'adapter' => $this->tableGateway->getAdapter(),
+            'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
 
@@ -108,13 +104,13 @@ class GroupTypeTable
                 $data['slug'] = GroupType::generateSlug();
             }
             while ($this->groupTypeExists($data['slug'], ['type' => 'slug']));
-            $this->tableGateway->insert($data);
+            $this->insert($data);
             return;
         }
 
         if ($dbGroupType = $this->getGroupType($slug))
         {
-            $this->tableGateway->update($data, ['slug' => $slug]);
+            $this->update($data, ['slug' => $slug]);
         }
         else
         {
@@ -133,6 +129,6 @@ class GroupTypeTable
      */
     public function deleteGroupType($slug)
     {
-        $this->tableGateway->delete(['slug' => $slug]);
+        $this->delete(['slug' => $slug]);
     }
 }

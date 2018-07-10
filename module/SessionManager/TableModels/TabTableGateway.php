@@ -1,29 +1,24 @@
 <?php
 
-namespace Tab\Model;
+namespace SessionManager\TableModels;
 
 use RuntimeException;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Validator\Db\RecordExists;
 
-class TabTable
+use Tab\Model\Tab;
+
+use Zend\Db\TableGateway\AbstractTableGateway;
+use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
+
+
+class TabTableGateway extends AbstractTableGateway
 {
-    /**
-     * TableGateway.
-     */
-    private $tableGateway;
-
-    /**
-     * Constructs TabTable
-     *
-     * Sets $this->tableGateway to passed in tableGateway.
-     *
-     * @param TableGateway $tableGateway
-     * @return void
-     */
-    public function __construct(TableGateway $tableGateway)
+    public function __construct()
     {
-        $this->tableGateway = $tableGateway;
+        $this->table      = 'tabs';
+        $this->featureSet = new Feature\FeatureSet();
+        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+        $this->initialize();
     }
 
     /**
@@ -33,7 +28,7 @@ class TabTable
      */
     public function fetchAll()
     {
-        return $this->tableGateway->select();
+        return $this->select();
     }
 
     /**
@@ -44,43 +39,49 @@ class TabTable
      * identifier $id is. Default value is 'type' => 'id'.
      * @return Tab
      */
-    public function getTab($id, $options = ['type' => 'slug'])
+    public function getTab($id, $options = [])
     {
-        if ($options['type'] == 'slug')
-        {
-            $rowset = $this->tableGateway->select(['slug' => $id]);
-        }
-        else if ($options['type' == 'id'])
-        {
-            $rowset = $this->tableGateway->select(['id' => $id]);
-        }
+        $rowset = $this->select(['slug' => $id]);
         $row = $rowset->current();
+
         if (! $row)
         {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
-                $id, $options['type']
+                'Could not Find Row with identifier %s of type %s.',
+                $id, 'slug'
             ));
         }
 
-        return $row;
+        return (new Tab())->exchangeArray($row->getArrayCopy());
+    }
+
+    public function getTabs($tabSlugs)
+    {
+        $tabs = [];
+
+        foreach($tabSlugs as $tab)
+        {
+            array_push($tabs, $this->getTab($tab));
+        }
+
+        return $tabs;
     }
 
     /**
-     * Checks if an tab exists in the database.
-     *
-     * @param mixed $id The identifier.
-     * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
-     * @return boolean If value exists
-     */
+    * Checks if an tab exists in the database.
+    *
+    * @param mixed $id The identifier.
+    * @param dictionary $options Contains 'type' which defines what type of
+    * identifier $id is. Default value is 'type' => 'id'.
+    * @return boolean If value exists
+    */
     public function tabExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->tableGateway->getTable(),
+            'table' => $this->getTable(),
             'field' => $options['type'],
-            'adapter' => $this->tableGateway->getAdapter(),
-        ]))->isValid($id);
+            'adapter' => $this->getAdapter(),
+            ]))->isValid($id);
     }
 
     /**
@@ -108,13 +109,13 @@ class TabTable
                 $data['slug'] = Tab::generateSlug();
             }
             while ($this->tabExists($data['slug'], ['type' => 'slug']));
-            $this->tableGateway->insert($data);
+            $this->insert($data);
             return;
         }
 
         if ($dbTab = $this->getTab($slug))
         {
-            $this->tableGateway->update($data, ['slug' => $slug]);
+            $this->update($data, ['slug' => $slug]);
         }
         else
         {
@@ -133,6 +134,6 @@ class TabTable
      */
     public function deleteTab($slug)
     {
-        $this->tableGateway->delete(['slug' => $slug]);
+        $this->delete(['slug' => $slug]);
     }
 }

@@ -1,29 +1,24 @@
 <?php
 
-namespace Privilege\Model;
+namespace SessionManager\TableModels;
 
 use RuntimeException;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Validator\Db\RecordExists;
 
-class PrivilegeTable
+use Privilege\Model\Privilege;
+
+use Zend\Db\TableGateway\AbstractTableGateway;
+use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
+
+
+class PrivilegeTableGateway extends AbstractTableGateway
 {
-    /**
-     * TableGateway.
-     */
-    private $tableGateway;
-
-    /**
-     * Constructs PrivilegeTable
-     *
-     * Sets $this->tableGateway to passed in tableGateway.
-     *
-     * @param TableGateway $tableGateway
-     * @return void
-     */
-    public function __construct(TableGateway $tableGateway)
+    public function __construct()
     {
-        $this->tableGateway = $tableGateway;
+        $this->table      = 'privileges';
+        $this->featureSet = new Feature\FeatureSet();
+        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+        $this->initialize();
     }
 
     /**
@@ -33,7 +28,7 @@ class PrivilegeTable
      */
     public function fetchAll()
     {
-        return $this->tableGateway->select();
+        return $this->select();
     }
 
     /**
@@ -48,11 +43,11 @@ class PrivilegeTable
     {
         if ($options['type'] == 'slug')
         {
-            $rowset = $this->tableGateway->select(['slug' => $id]);
+            $rowset = $this->select(['slug' => $id]);
         }
         else if ($options['type' == 'id'])
         {
-            $rowset = $this->tableGateway->select(['id' => $id]);
+            $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
         if (! $row)
@@ -77,9 +72,9 @@ class PrivilegeTable
     public function privilegeExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->tableGateway->getTable(),
+            'table' => $this->getTable(),
             'field' => $options['type'],
-            'adapter' => $this->tableGateway->getAdapter(),
+            'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
 
@@ -108,13 +103,13 @@ class PrivilegeTable
                 $data['slug'] = Privilege::generateSlug();
             }
             while ($this->privilegeExists($data['slug'], ['type' => 'slug']));
-            $this->tableGateway->insert($data);
+            $this->insert($data);
             return;
         }
 
         if ($dbPrivilege = $this->getPrivilege($slug))
         {
-            $this->tableGateway->update($data, ['slug' => $slug]);
+            $this->update($data, ['slug' => $slug]);
         }
         else
         {
@@ -133,6 +128,6 @@ class PrivilegeTable
      */
     public function deletePrivilege($slug)
     {
-        $this->tableGateway->delete(['slug' => $slug]);
+        $this->delete(['slug' => $slug]);
     }
 }

@@ -1,29 +1,54 @@
 <?php
 
-namespace OwnerType\Model;
+namespace SessionManager\TableModels;
 
 use RuntimeException;
-use Zend\Db\TableGateway\TableGateway;
-use Zend\Validator\Db\RecordExists;
 
-class OwnerTypeTable
+use OwnerType\Model\OwnerType;
+
+use Zend\Db\TableGateway\AbstractTableGateway;
+use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
+
+
+class OwnerTypeTableGateway extends AbstractTableGateway
 {
-    /**
-     * TableGateway.
-     */
-    private $tableGateway;
-
-    /**
-     * Constructs OwnerTypeTable
-     *
-     * Sets $this->tableGateway to passed in tableGateway.
-     *
-     * @param TableGateway $tableGateway
-     * @return void
-     */
-    public function __construct(TableGateway $tableGateway)
+    public function __construct()
     {
-        $this->tableGateway = $tableGateway;
+        $this->table      = 'ownerTypes';
+        $this->featureSet = new Feature\FeatureSet();
+        $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
+        $this->initialize();
+    }
+
+    public function getType($id, $options = [])
+    {
+
+        if (! array_key_exists('type', $options))
+        {
+            $options['type'] = 'slug';
+        }
+
+        $rowset = $this->select(function (Select $select)
+                    use ($id, $options)
+                {
+                    switch (strtolower($options['type']))
+                    {
+                        case 'name':
+                            $select->where([
+                                'name' => $id,
+                            ]);
+                            break;
+                        case 'slug':
+                        default:
+                            $select->where([
+                                'slug' => $id,
+                            ]);
+                    }
+                });
+
+        return (new OwnerType())
+            ->exchangeArray($rowset->current()->getArrayCopy());
     }
 
     /**
@@ -33,7 +58,7 @@ class OwnerTypeTable
      */
     public function fetchAll()
     {
-        return $this->tableGateway->select();
+        return $this->select();
     }
 
     /**
@@ -48,11 +73,11 @@ class OwnerTypeTable
     {
         if ($options['type'] == 'slug')
         {
-            $rowset = $this->tableGateway->select(['slug' => $id]);
+            $rowset = $this->select(['slug' => $id]);
         }
         else if ($options['type'] == 'id')
         {
-            $rowset = $this->tableGateway->select(['id' => $id]);
+            $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
         if (! $row)
@@ -77,9 +102,9 @@ class OwnerTypeTable
     public function ownerTypeExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->tableGateway->getTable(),
+            'table' => $this->getTable(),
             'field' => $options['type'],
-            'adapter' => $this->tableGateway->getAdapter(),
+            'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
 
@@ -108,13 +133,13 @@ class OwnerTypeTable
                 $data['slug'] = OwnerType::generateSlug();
             }
             while ($this->ownerTypeExists($data['slug'], ['type' => 'slug']));
-            $this->tableGateway->insert($data);
+            $this->insert($data);
             return;
         }
 
         if ($dbOwnerType = $this->getOwnerType($slug))
         {
-            $this->tableGateway->update($data, ['slug' => $slug]);
+            $this->update($data, ['slug' => $slug]);
         }
         else
         {
@@ -133,6 +158,6 @@ class OwnerTypeTable
      */
     public function deleteOwnerType($slug)
     {
-        $this->tableGateway->delete(['slug' => $slug]);
+        $this->delete(['slug' => $slug]);
     }
 }

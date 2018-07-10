@@ -4,6 +4,8 @@ namespace Tab\Model;
 
 use DomainException;
 
+use SessionManager\Tables;
+
 use Traits\Models\HasSlug;
 use Traits\Models\HasGuarded;
 use Traits\Models\ExchangeArray;
@@ -23,10 +25,6 @@ class Tab
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**
-     * Int for Tab's id found in the db.
-     */
-    public $id;
-    /**
      * String for Tab's name.
      */
     public $name;
@@ -44,9 +42,15 @@ class Tab
      * Static variable containing values users cannot change.
      */
     protected static $guarded = [
-        'id',
         'slug',
     ];
+
+    public function getApps()
+    {
+        $tables = new Tables();
+
+        return $tables->getTable('tabApps')->getApps($this->slug, ['type' => 'tab']);
+    }
 
     /**
      * Get tab values as array
@@ -56,11 +60,18 @@ class Tab
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
             'description' => $this->description,
         ];
+    }
+
+    public function getGroup()
+    {
+        return (new Tables())
+            ->getTable('owerTabs')
+            ->getGroup($this->slug);
+
     }
 
     /**

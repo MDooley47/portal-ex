@@ -18,48 +18,4 @@ class Module implements ConfigProviderInterface
     {
         return include __DIR__ . '/../config/module.config.php';
     }
-
-    /**
-     * Gets the service configuration
-     *
-     * @return dictionary
-     */
-    public function getServiceConfig()
-    {
-        return [
-            'factories' => [
-                Model\IpAddressTable::class => function ($container)
-                {
-                    $tableGateway = $container->get(Model\IpAddressTableGateway::class);
-                    return new Model\IpAddressTable($tableGateway);
-                },
-                Model\IpAddressTableGateway::class => function ($container)
-                {
-                    $dbAdapter = $container->get(AdapterInterface::class);
-                    $resultSetPrototype = new ResultSet();
-                    $resultSetPrototype->setArrayObjectPrototype(new Model\IpAddress());
-                    return new TableGateway('ipAddresses', $dbAdapter, null, $resultSetPrototype);
-                },
-            ],
-        ];
-    }
-
-    /**
-     * Gets the Controller configuration.
-     *
-     * @return dictionary
-     */
-    public function getControllerConfig()
-    {
-        return [
-            'factories' => [
-                Controller\IpAddressController::class => function($container)
-                {
-                    return new Controller\IpAddressController(
-                        $container->get(Model\IpAddressTable::class)
-                    );
-                },
-            ],
-        ];
-    }
 }

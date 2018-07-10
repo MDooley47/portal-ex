@@ -4,6 +4,8 @@ namespace Group\Model;
 
 use DomainException;
 
+use SessionManager\Tables;
+
 use Traits\Models\HasSlug;
 use Traits\Models\HasGuarded;
 use Traits\Models\ExchangeArray;
@@ -22,10 +24,7 @@ use Zend\Validator\StringLength;
 class Group
 {
     use HasSlug, HasGuarded, ExchangeArray;
-    /**
-     * Int for Group's id found in the db.
-     */
-    public $id;
+
     /**
      * String for Group's name.
      */
@@ -44,9 +43,21 @@ class Group
      * Static variable containing values users cannot change.
      */
     protected static $guarded = [
-        'id',
         'slug',
     ];
+
+    public function getTabs()
+    {
+        $tables = new Tables();
+
+        return $tables
+            ->getTable('ownerTabs')
+            ->getTabs($this->slug, [
+                'type' => $tables
+                    ->getTable('ownerTypes')
+                    ->getType('group', ['type' => 'name']),
+            ]);
+    }
 
     /**
      * Get group values as array
@@ -56,10 +67,10 @@ class Group
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
             'slug' => $this->slug,
             'name' => $this->name,
-            'description' => $this->description,            'grouptype' => $this->grouptype,
+            'description' => $this->description,
+            'grouptype' => $this->grouptype,
         ];
     }
 

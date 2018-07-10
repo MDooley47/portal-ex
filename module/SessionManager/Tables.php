@@ -8,9 +8,8 @@ class Tables
 {
     use HasTables;
 
-    public function __construct($tables_array)
+    public function __construct($additionalTables = null)
     {
-        $this->addTableArray($tables_array);
+        $this->init($additionalTables);
     }
 }
-?>

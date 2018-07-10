@@ -3,6 +3,9 @@
 namespace User\Model;
 
 use DomainException;
+use Symfony\Component\Routing\Loader\Configurator\Traits\AddTrait;
+
+use SessionManager\Tables;
 
 use Traits\Models\HasSlug;
 use Traits\Models\HasGuarded;
@@ -44,8 +47,8 @@ class User
      * Static variable containing values users cannot change.
      */
     protected static $guarded = [
-        'id',
         'slug',
+        'codist',
     ];
 
     /**
@@ -59,6 +62,10 @@ class User
             'slug' => $this->slug,
             'name' => $this->name,
             'email' => $this->email,
+            'codist' => $this->codist,
+            'county' => $this->county(),
+            'district' => $this->district(),
+            'building' => $this->building(),
         ];
     }
 
@@ -79,6 +86,64 @@ class User
         $this->inputFilter = $tmpFilter;
 
         return $tmpFilter;
+    }
+
+    public function defaultTab()
+    {
+        return (new Tables())
+            ->getTable('tab')
+            ->getTab($this->district());
+            //->getTab($this->codist);
+    }
+
+    /**
+     *   COUNTY CODE 2 DIGITS
+     * DISTRICT CODE 4 DIGITS
+     * BUILDING CODE 3 DIGITS
+     *
+     *  EXAMPLE: 06-8473-729
+     *   COUNTY: 06
+     * DISTRICT: 8473
+     * BUILDING: 729
+     *
+     * note: hyphen's are assumed to be part of the codist.
+     */
+
+    public function county(): String
+    {
+        return explode("-", $this->codist)[0];
+    }
+
+    public function district($options = []): String
+    {
+        arrayValueDefault("composite-key", $options, true);
+
+        $codist = explode("-", $this->codist);
+
+        if ($options["composite-key"])
+        {
+            $out = $codist[0] . "-" . $codist[1];
+        }
+        else {
+            $out = $codist[1];
+        }
+
+        return $out;
+    }
+
+    public function building($options = []): String
+    {
+        arrayValueDefault("composite-key", $options, true);
+
+        if ($options["composite-key"])
+        {
+            $out = $this->codist;
+        }
+        else {
+            $out = explode("-", $this->codist)[2];
+        }
+
+        return $out;
     }
 
     /**

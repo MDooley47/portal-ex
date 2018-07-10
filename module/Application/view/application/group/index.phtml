@@ -1,8 +1,9 @@
 <?php
 
 use SessionManager\Tables;
+use SessionManager\Session;
 
-$tables = new Tables($tables_array);
+$tables = new Tables();
 
 $title = "All Groups";
 $escaper = new Zend\Escaper\Escaper('utf-8');
@@ -47,3 +48,15 @@ $this->headTitle($title);
 <p>
     <a href="<?= $this->url('group', ['action' => 'add']) ?>">Add new group</a>
 </p>
+
+<h1>SESSION</h1>
+<ul>
+    <?php
+    Session::start();
+    foreach (Session::getGroups() as $group) :
+    ?>
+
+    <li><?= $group->name ?></li>
+
+    <? endforeach; ?>
+</ul>
