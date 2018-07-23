@@ -9,6 +9,7 @@ use Tab\Model\Tab;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 use Zend\Db\Sql\Select;
+use Zend\Validator\Db\RecordExists;
 
 
 class TabTableGateway extends AbstractTableGateway
@@ -75,7 +76,7 @@ class TabTableGateway extends AbstractTableGateway
     * identifier $id is. Default value is 'type' => 'id'.
     * @return boolean If value exists
     */
-    public function tabExists($id, $options = ['type' => 'id'])
+    public function tabExists($id, $options = ['type' => 'slug'])
     {
         return (new RecordExists([
             'table' => $this->getTable(),
@@ -110,7 +111,7 @@ class TabTableGateway extends AbstractTableGateway
             }
             while ($this->tabExists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
-            return;
+            return $data['slug'];
         }
 
         if ($dbTab = $this->getTab($slug))
