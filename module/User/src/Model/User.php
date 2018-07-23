@@ -91,8 +91,8 @@ class User
     public function defaultTab()
     {
         return (new Tables())
-            ->getTable('tab')
-            ->getTab($this->district());
+            ->getTable('ownerTabs')
+            ->getTabs($this->district())[0];
             //->getTab($this->codist);
     }
 
