@@ -46,17 +46,37 @@ class Group
         'slug',
     ];
 
+    /**
+     * Get associated tabs
+     *
+     * @return array
+     */
+
     public function getTabs()
     {
         $tables = new Tables();
+
+        //dd($tables->getTable('ownerType'));
 
         return $tables
             ->getTable('ownerTabs')
             ->getTabs($this->slug, [
                 'type' => $tables
-                    ->getTable('ownerTypes')
-                    ->getType('group', ['type' => 'name']),
+                    ->getTable('ownerType')
+                    ->getType('group', ['type' => 'name'])
+                    ->name,
             ]);
+    }
+
+    /**
+     * Boolean representation of if the group has at least one tab
+     *
+     * @return Boolean
+     */
+
+    public function hasTab(): bool
+    {
+        return !empty($this->getTabs());
     }
 
     /**

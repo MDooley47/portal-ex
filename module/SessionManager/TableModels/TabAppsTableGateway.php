@@ -3,13 +3,16 @@
 namespace SessionManager\TableModels;
 
 use SessionManager\Tables;
+use Traits\Interfaces\CorrelationInterface;
 
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 use Zend\Db\Sql\Select;
 
 
-class TabAppsTableGateway extends AbstractTableGateway
+class TabAppsTableGateway
+    extends AbstractTableGateway
+    implements CorrelationInterface
 {
     public function __construct()
     {
@@ -44,5 +47,37 @@ class TabAppsTableGateway extends AbstractTableGateway
         return (new Tables())
             ->getTable('app')
             ->getApps(array_column($rowset->toArray(), 'appSlug'));
+    }
+
+    public function addCorrelation($tab, $app, $options = [])
+    {
+        if ($this->correlationExists($tab, $app, $options))
+        {
+            # correlation already exists
+            return;
+        }
+
+        $data = [
+            'tabSlug' => $tab,
+            'appSlug' => $app,
+        ];
+
+        return $this->insert($data);
+    }
+
+    public function correlationExists($tab, $app, $options = [])
+    {
+        $adapter = $this->getAdapter();
+
+        $clause = '"appSlug"'
+                . ' = '
+                . "'$app'";
+
+        return (new RecordExists([
+            'table' => $this->getTable(),
+            'field' => 'tabSlug', // change
+            'adapter' => $adapter,
+            'exclude' => $clause,
+        ]))->isValid($tab);
     }
 }

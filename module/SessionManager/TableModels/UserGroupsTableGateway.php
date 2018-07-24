@@ -3,13 +3,16 @@
 namespace SessionManager\TableModels;
 
 use SessionManager\Tables;
+use Traits\Interfaces\CorrelationInterface;
 
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 use Zend\Db\Sql\Select;
 
 
-class UserGroupsTableGateway extends AbstractTableGateway
+class UserGroupsTableGateway
+    extends AbstractTableGateway
+    implements CorrelationInterface
 {
     public function __construct()
     {
@@ -45,5 +48,37 @@ class UserGroupsTableGateway extends AbstractTableGateway
         }
 
         return $groups;
+    }
+
+    public function addCorrelation($user, $group, $options = [])
+    {
+        if ($this->correlationExists($user, $group, $options))
+        {
+            # correlation already exists
+            return;
+        }
+
+        $data = [
+            'userSlug' => $user,
+            'groupSlug' => $group,
+        ];
+
+        return $this->insert($data);
+    }
+
+    public function correlationExists($user, $group, $options = [])
+    {
+        $adapter = $this->getAdapter();
+
+        $clause = '"groupSlug"'
+                . ' = '
+                . "'$group'";
+
+        return (new RecordExists([
+            'table' => $this->getTable(),
+            'field' => 'userSlug', // change
+            'adapter' => $adapter,
+            'exclude' => $clause,
+        ]))->isValid($user);
     }
 }
