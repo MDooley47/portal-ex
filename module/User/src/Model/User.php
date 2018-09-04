@@ -7,11 +7,12 @@ use SessionManager\Tables;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use User\InputFilter\NameFilter;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterInterface;
 
 class User
+    implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**

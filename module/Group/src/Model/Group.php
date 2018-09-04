@@ -8,10 +8,12 @@ use SessionManager\Tables;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
 class Group
+    implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
 
