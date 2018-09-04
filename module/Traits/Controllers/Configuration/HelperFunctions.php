@@ -1,4 +1,4 @@
-<?
+<?php
 
 namespace Traits\Controllers\Configuration;
 
@@ -6,71 +6,64 @@ use PDO;
 
 trait HelperFunctions
 {
-    static function database($options = [])
-        {
-        switch(strtolower($options['action']))
-        {
+    public static function database($options = [])
+    {
+        switch (strtolower($options['action'])) {
             case 'test_connection':
                 try {
                     self::database_getPDO($options['database']);
+
                     return [
-                        "status" => true,
+                        'status' => true,
                     ];
-                }
-                catch (PDOException $e)
-                {
+                } catch (PDOException $e) {
                     die($e);
+
                     return [
-                        "status" => false,
-                        "message" => $e->getMessage(),
+                        'status'  => false,
+                        'message' => $e->getMessage(),
                     ];
                 }
                 break;
             case 'try_connection':
-                try
-                {
+                try {
                     return self::database_getPDO(null);
-                }
-                catch (\PDOException $e)
-                {
+                } catch (\PDOException $e) {
                     echo $e;
                 }
                 break;
             case 'tables_exist':
                 $db = self::database(['action' => 'try_connection']);
+
                 return self::database_tableExist($db, $options['table']);
                 break;
         }
     }
 
-    static function database_getPDO($database)
+    public static function database_getPDO($database)
     {
-        if ($database === null)
-        {
+        if ($database === null) {
             $database = [
-                'host' => env("db_host"),
-                'name' => env("db_name"),
-                'username' => env("db_username"),
-                'password' => env("db_password"),
+                'host'     => env('db_host'),
+                'name'     => env('db_name'),
+                'username' => env('db_username'),
+                'password' => env('db_password'),
 
             ];
         }
 
-        if (isset($database['name']))
-        {
+        if (isset($database['name'])) {
             $db = new PDO(
-                "pgsql:host="
-                . $database['host']
-                . ";dbname="
-                . $database['name'],
+                'pgsql:host='
+                .$database['host']
+                .';dbname='
+                .$database['name'],
                 $database['username'],
                 $database['password']
             );
-        }
-        else
-        {
+        } else {
             $db = new PDO(
-                "pgsql:host=" . $database['host'],
+                'pgsql:host='.$database['host'],
                 $database['username'],
                 $database['password']
             );
@@ -78,17 +71,19 @@ trait HelperFunctions
 
         return $db;
     }
-    static function database_tableExist($db, $table)
+
+    public static function database_tableExist($db, $table)
     {
-        if (! isset($db)) return false;
-        return ($db->query("SELECT * FROM \"$table\" LIMIT 1") != false);
+        if (!isset($db)) {
+            return false;
+        }
+
+        return $db->query("SELECT * FROM \"$table\" LIMIT 1") != false;
     }
 
-
-    static function internet($options = [])
+    public static function internet($options = [])
     {
-        switch(strtolower($options['action']))
-        {
+        switch (strtolower($options['action'])) {
             case 'test_connection':
                 return self::internet_isConnected();
                 break;
@@ -98,29 +93,31 @@ trait HelperFunctions
         }
     }
 
-    static function internet_isConnected($options = ['uri' => 'google.com', 'port' => 80])
+    public static function internet_isConnected($options = ['uri' => 'google.com', 'port' => 80])
     {
         $connected = @fsockopen($options['uri'], $options['port']);
-        if ($connected){
+        if ($connected) {
             fclose($connected);
+
             return true;
         }
+
         return false;
     }
-    static function internet_getIP($options = ['type' => 'external'])
+
+    public static function internet_getIP($options = ['type' => 'external'])
     {
-        switch(strtolower($options['type']))
-        {
+        switch (strtolower($options['type'])) {
             case 'external':
-                return curl_exec(curl_init("ipecho.net/plain"));
+                return curl_exec(curl_init('ipecho.net/plain'));
                 break;
         }
     }
 
-
-    static function envWithError($property, $options = [])
+    public static function envWithError($property, $options = [])
     {
         $val = env($property);
-        return (! isset($val)) ? "ERROR: Cannot find value: " . $property : $val;
+
+        return (!isset($val)) ? 'ERROR: Cannot find value: '.$property : $val;
     }
 }

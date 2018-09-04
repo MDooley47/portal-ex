@@ -4,13 +4,12 @@ namespace Traits\Controllers\Tab;
 
 use Tab\Form\TabForm;
 use Tab\Model\Tab;
-
 use Zend\View\Model\ViewModel;
 
 trait EditAction
 {
     /**
-     * Edits Tab
+     * Edits Tab.
      *
      * @return ViewModel|Redirect
      */
@@ -22,21 +21,17 @@ trait EditAction
         $slug = $this->params()->fromRoute('slug', 0);
 
         // redirect to /tab/add if there was no slug provided.
-        if (! $slug)
-        {
+        if (!$slug) {
             return $this->redirect()->toRoute('tab', ['action' => 'add']);
         }
 
         // Try to get an tab with the provided slug. If there is
         // no tab, redirect to /tab
-        try
-        {
-              $tab = $table->getTab($slug);
-         }
-         catch (Exception $ex)
-         {
-             return $this->redirect()->toRoute('tab');
-         }
+        try {
+            $tab = $table->getTab($slug);
+        } catch (Exception $ex) {
+            return $this->redirect()->toRoute('tab');
+        }
 
         $form = new TabForm();
         $form->bind($tab);
@@ -48,8 +43,7 @@ trait EditAction
             'form' => $form,
         ];
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -58,8 +52,7 @@ trait EditAction
             $form->setInputFilter($tab->getInputFilter());
             $form->setData($post);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 Tab::sanitizeGuarded($data);
                 $data['slug'] = $slug;

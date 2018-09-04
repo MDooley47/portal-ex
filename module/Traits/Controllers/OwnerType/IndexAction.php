@@ -7,7 +7,7 @@ use Zend\View\Model\ViewModel;
 trait IndexAction
 {
     /**
-     * Displays the index page for OwnerType
+     * Displays the index page for OwnerType.
      *
      * @return ViewModel
      */

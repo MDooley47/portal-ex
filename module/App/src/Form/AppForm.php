@@ -2,7 +2,6 @@
 
 namespace App\Form;
 
-use Zend\Form\Element;
 use Zend\Form\Form;
 
 class AppForm extends Form
@@ -10,13 +9,14 @@ class AppForm extends Form
     /**
      * Constructs AppForm.
      * * Calls the parent (Zend\Form\Form) constructor
-     * * Calls $this->addElements
+     * * Calls $this->addElements.
      *
-     * @param String $name
+     * @param string     $name
      * @param dictionary $options
+     *
      * @return void
      */
-    public function __construct($name = "app", $options = [])
+    public function __construct($name = 'app', $options = [])
     {
         parent::__construct($name, $options);
 
@@ -36,32 +36,41 @@ class AppForm extends Form
         ]);
 
         $this->add([
-            'name' => 'name',
-            'type' => 'text',
+            'name'    => 'name',
+            'type'    => 'text',
             'options' => [
                 'label' => 'App Name',
             ],
         ]);
 
         $this->add([
-            'name' => 'url',
-            'type' => 'url',
+            'name'    => 'url',
+            'type'    => 'url',
             'options' => [
                 'label' => 'App URL',
             ],
         ]);
 
         $this->add([
-            'name' => 'icon',
-            'type' => 'file',
+            'name'    => 'icon',
+            'type'    => 'file',
             'options' => [
                 'label' => 'App Icon',
             ],
         ]);
 
         $this->add([
-            'name' => 'submit',
-            'type' => 'submit',
+            'name'    => 'tab',
+            'type'    => 'select',
+            'options' => [
+                'label'                     => 'tab',
+                'disable_inarray_validator' => true,
+            ],
+        ]);
+
+        $this->add([
+            'name'       => 'submit',
+            'type'       => 'submit',
             'attributes' => [
                'value' => 'Submit',
             ],

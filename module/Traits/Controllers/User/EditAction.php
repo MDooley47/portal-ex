@@ -4,13 +4,12 @@ namespace Traits\Controllers\User;
 
 use User\Form\UserForm;
 use User\Model\User;
-
 use Zend\View\Model\ViewModel;
 
 trait EditAction
 {
     /**
-     * Edits User
+     * Edits User.
      *
      * @return ViewModel|Redirect
      */
@@ -22,21 +21,17 @@ trait EditAction
         $slug = $this->params()->fromRoute('slug', 0);
 
         // redirect to /user/add if there was no slug provided.
-        if (! $slug)
-        {
+        if (!$slug) {
             return $this->redirect()->toRoute('user', ['action' => 'add']);
         }
 
         // Try to get an user with the provided slug. If there is
         // no user, redirect to /user
-        try
-        {
-              $user = $table->getUser($slug);
-         }
-         catch (Exception $ex)
-         {
-             return $this->redirect()->toRoute('user');
-         }
+        try {
+            $user = $table->getUser($slug);
+        } catch (Exception $ex) {
+            return $this->redirect()->toRoute('user');
+        }
 
         $form = new UserForm();
         $form->bind($user);
@@ -48,8 +43,7 @@ trait EditAction
             'form' => $form,
         ];
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -58,8 +52,7 @@ trait EditAction
             $form->setInputFilter($user->getInputFilter());
             $form->setData($post);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 User::sanitizeGuarded($data);
                 $data['slug'] = $slug;

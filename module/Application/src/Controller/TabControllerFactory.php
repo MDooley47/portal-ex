@@ -2,8 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Controller\TabController;
-
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -15,6 +13,7 @@ class TabControllerFactory implements FactoryInterface
     {
         $this->container = $container;
         $this->addTables();
+
         return new TabController($this->tables);
     }
 }

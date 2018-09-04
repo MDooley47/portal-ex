@@ -2,8 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Controller\GroupController;
-
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -15,6 +13,7 @@ class GroupControllerFactory implements FactoryInterface
     {
         $this->container = $container;
         $this->addTables();
+
         return new GroupController($this->tables);
     }
 }

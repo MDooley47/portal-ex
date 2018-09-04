@@ -2,25 +2,20 @@
 
 namespace SessionManager\TableModels;
 
-use RuntimeException;
-
 use Group\Model\Group;
-
+use RuntimeException;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
-
 
 class GroupTableGateway extends AbstractTableGateway
 {
     public function __construct()
     {
-        $this->table      = 'groups';
+        $this->table = 'groups';
         $this->featureSet = new Feature\FeatureSet();
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
     }
-
 
     /**
      * Selects all Groups from the database.
@@ -33,28 +28,25 @@ class GroupTableGateway extends AbstractTableGateway
     }
 
     /**
-     * Selects an Group from the database
+     * Selects an Group from the database.
      *
-     * @param mixed $id The identifier.
+     * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
      * @return Group
      */
     public function getGroup($id, $options = ['type' => 'slug'])
     {
-        if ($options['type'] == 'slug')
-        {
+        if ($options['type'] == 'slug') {
             $rowset = $this->select(['slug' => $id]);
-        }
-        else if ($options['type' == 'id'])
-        {
+        } elseif ($options['type' == 'id']) {
             $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
-        if (! $row)
-        {
+        if (!$row) {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
+                'Could not find row with identifier %s of type %s',
                 $id, $options['type']
             ));
         }
@@ -65,16 +57,17 @@ class GroupTableGateway extends AbstractTableGateway
     /**
      * Checks if an group exists in the database.
      *
-     * @param mixed $id The identifier.
+     * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
-     * @return boolean If value exists
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
+     * @return bool If value exists
      */
     public function groupExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->getTable(),
-            'field' => $options['type'],
+            'table'   => $this->getTable(),
+            'field'   => $options['type'],
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
@@ -85,36 +78,33 @@ class GroupTableGateway extends AbstractTableGateway
      * If $group->slug is not null then attempts to update an group with that slug
      *
      * @param Group $group
-     * @return void
+     *
      * @throws RuntimeException Group does not exist
+     *
+     * @return void
      */
     public function saveGroup(Group $group)
     {
         $data = [
-            'name' => $group->name,
+            'name'        => $group->name,
             'description' => $group->description,
-            'groupType' => $group->grouptype,
+            'groupType'   => $group->grouptype,
         ];
 
         $slug = $group->slug;
 
-        if ($slug == NULL)
-        {
-            do
-            {
+        if ($slug == null) {
+            do {
                 $data['slug'] = Group::generateSlug();
-            }
-            while ($this->groupExists($data['slug'], ['type' => 'slug']));
+            } while ($this->groupExists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
+
             return;
         }
 
-        if ($dbGroup = $this->getGroup($slug))
-        {
+        if ($dbGroup = $this->getGroup($slug)) {
             $this->update($data, ['slug' => $slug]);
-        }
-        else
-        {
+        } else {
             throw new RuntimeException(springf(
                 'Cannot update group with identifier %d; does not exist',
                 $id
@@ -125,7 +115,8 @@ class GroupTableGateway extends AbstractTableGateway
     /**
      * Deletes Group and deletes the Group's icon.
      *
-     * @param String $slug Group's slug.
+     * @param string $slug Group's slug.
+     *
      * @return void
      */
     public function deleteGroup($slug)

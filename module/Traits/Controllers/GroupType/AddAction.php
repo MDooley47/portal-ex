@@ -4,13 +4,12 @@ namespace Traits\Controllers\GroupType;
 
 use GroupType\Form\GroupTypeForm;
 use GroupType\Model\GroupType;
-
 use Zend\View\Model\ViewModel;
 
 trait AddAction
 {
     /**
-     * Adds GroupType
+     * Adds GroupType.
      *
      * On a get request, addAction() will display
      * a form for adding a new GroupType.
@@ -27,8 +26,7 @@ trait AddAction
 
         $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -39,8 +37,7 @@ trait AddAction
             $grouptype = new GroupType();
 
             $form->setInputFilter($grouptype->getInputFilter());
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 GroupType::sanitizeGuarded($data);
                 $grouptype->exchangeArray($data);
@@ -48,7 +45,6 @@ trait AddAction
 
                 return $this->redirect()->toRoute('grouptype', ['action' => 'add']);
             }
-
         }
 
         // if not post request, return with viewModel

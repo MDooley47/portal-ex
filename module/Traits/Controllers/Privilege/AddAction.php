@@ -4,13 +4,12 @@ namespace Traits\Controllers\Privilege;
 
 use Privilege\Form\PrivilegeForm;
 use Privilege\Model\Privilege;
-
 use Zend\View\Model\ViewModel;
 
 trait AddAction
 {
     /**
-     * Adds Privilege
+     * Adds Privilege.
      *
      * On a get request, addAction() will display
      * a form for adding a new Privilege.
@@ -27,8 +26,7 @@ trait AddAction
 
         $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -39,8 +37,7 @@ trait AddAction
             $privilege = new Privilege();
 
             $form->setInputFilter($privilege->getInputFilter());
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 Privilege::sanitizeGuarded($data);
                 $privilege->exchangeArray($data);
@@ -48,7 +45,6 @@ trait AddAction
 
                 return $this->redirect()->toRoute('privilege', ['action' => 'add']);
             }
-
         }
 
         // if not post request, return with viewModel

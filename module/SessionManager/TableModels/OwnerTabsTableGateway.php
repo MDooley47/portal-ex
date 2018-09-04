@@ -6,21 +6,17 @@ use OwnerType\Model\OwnerType;
 use SessionManager\Tables;
 use Tab\Model\Tab;
 use Traits\Interfaces\CorrelationInterface;
-
 use Zend\Db\Adapter\Adapter;
+use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
 use Zend\Validator\Db\RecordExists;
 
-
-class OwnerTabsTableGateway
-    extends AbstractTableGateway
-    implements CorrelationInterface
+class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
     public function __construct()
     {
-        $this->table      = 'ownerTabs';
+        $this->table = 'ownerTabs';
         $this->featureSet = new Feature\FeatureSet();
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
@@ -30,8 +26,7 @@ class OwnerTabsTableGateway
     {
         $tables = new Tables();
 
-        if (! array_key_exists('type', $options))
-        {
+        if (!array_key_exists('type', $options)) {
             $options['type'] = 'group';
         }
 
@@ -40,14 +35,12 @@ class OwnerTabsTableGateway
             ->getType($options['type'], ['type' => 'name'])
             ->slug;
 
-        $rowset = $this->select(function (Select $select)
-                    use ($slug, $options)
-            {
-                $select->where([
+        $rowset = $this->select(function (Select $select) use ($slug, $options) {
+            $select->where([
                     'ownerSlug' => $slug,
                     'ownerType' => $options['type'],
                 ]);
-            });
+        });
 
         return $tables
             ->getTable('tab')
@@ -60,8 +53,7 @@ class OwnerTabsTableGateway
 
         $row = $rowset->current();
 
-        if (! $row)
-        {
+        if (!$row) {
             throw new RuntimeException(sprintf(
                 'OwnerTabs could not Find Row with identifier %d of type Tab',
                 $slug
@@ -73,15 +65,11 @@ class OwnerTabsTableGateway
 
     public function correlationExists($tab, $owner, $options = [])
     {
-
         arrayValueDefault('type', $options, 'group');
 
-        if ($options['type'] instanceof OwnerType)
-        {
+        if ($options['type'] instanceof OwnerType) {
             $options['type'] = $options['type']->slug;
-        }
-        else
-        {
+        } else {
             $options['type'] = (new Tables())
                 ->getTable('ownerType')
                 ->getType($options['type'], ['type' => 'name'])
@@ -91,16 +79,16 @@ class OwnerTabsTableGateway
         $adapter = $this->getAdapter();
 
         $clause = '"ownerSlug"'
-                . ' = '
-                . "'$owner'"
-            . ' AND '
-                . '"ownerType"'
-                . ' = '
-                . "'" . $options['type'] . "'";
+                .' = '
+                ."'$owner'"
+            .' AND '
+                .'"ownerType"'
+                .' = '
+                ."'".$options['type']."'";
 
         return (new RecordExists([
-            'table' => $this->getTable(),
-            'field' => 'tabSlug', // change
+            'table'   => $this->getTable(),
+            'field'   => 'tabSlug', // change
             'adapter' => $adapter,
             'exclude' => $clause,
         ]))->isValid($tab);
@@ -110,19 +98,17 @@ class OwnerTabsTableGateway
     {
         arrayValueDefault('type', $options, 'group');
 
-        if ($this->correlationExists($tab, $owner, $options))
-        {
-            # correlation already exists
+        if ($this->correlationExists($tab, $owner, $options)) {
+            // correlation already exists
             return;
         }
 
-        if ($options['type'] instanceof OwnerType)
-        {
+        if ($options['type'] instanceof OwnerType) {
             $options['type'] = $options['type']->slug;
         }
 
         $data = [
-            'tabSlug' => $tab,
+            'tabSlug'   => $tab,
             'ownerSlug' => $owner,
             'ownerType' => $options['type'],
         ];

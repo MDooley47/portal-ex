@@ -4,13 +4,12 @@ namespace Traits\Controllers\Group;
 
 use Group\Form\GroupForm;
 use Group\Model\Group;
-
 use Zend\View\Model\ViewModel;
 
 trait AddAction
 {
     /**
-     * Adds Group
+     * Adds Group.
      *
      * On a get request, addAction() will display
      * a form for adding a new Group.
@@ -27,8 +26,7 @@ trait AddAction
 
         $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -39,8 +37,7 @@ trait AddAction
             $group = new Group();
 
             $form->setInputFilter($group->getInputFilter());
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
 
                 Group::sanitizeGuarded($data);
@@ -54,7 +51,6 @@ trait AddAction
         // if not post request, return with viewModel
         return new ViewModel([
             'form' => $form,
-            'tables_array' => $this->tables,
         ]);
     }
 }

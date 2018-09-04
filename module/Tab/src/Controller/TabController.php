@@ -2,15 +2,12 @@
 
 namespace Tab\Controller;
 
-use Traits\HasTables;
 use Traits\Controllers\Tab\AddAction;
 use Traits\Controllers\Tab\DeleteAction;
 use Traits\Controllers\Tab\EditAction;
 use Traits\Controllers\Tab\IndexAction;
-
+use Traits\HasTables;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Validator\File\IsImage;
-use Zend\View\Model\ViewModel;
 
 class TabController extends AbstractActionController
 {
@@ -18,7 +15,7 @@ class TabController extends AbstractActionController
         IndexAction;
 
     /**
-     * TabTable to be used to interface with the tableGateway/database
+     * TabTable to be used to interface with the tableGateway/database.
      */
     private $table;
 
@@ -27,6 +24,7 @@ class TabController extends AbstractActionController
      * Sets $this->table to the paramater.
      *
      * @param TabTable $table
+     *
      * @return void
      */
     public function __construct(TabTable $table)

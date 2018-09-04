@@ -7,17 +7,14 @@ use Traits\Controllers\Attribute\DeleteAction;
 use Traits\Controllers\Attribute\EditAction;
 use Traits\Controllers\Attribute\IndexAction;
 use Traits\HasTables;
-
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Validator\File\IsImage;
-use Zend\View\Model\ViewModel;
 
 class AttributeController extends AbstractActionController
 {
     use HasTables, AddAction, DeleteAction, EditAction,
         IndexAction;
     /**
-     * AttributeTable to be used to interface with the tableGateway/database
+     * AttributeTable to be used to interface with the tableGateway/database.
      */
     private $table;
 
@@ -26,6 +23,7 @@ class AttributeController extends AbstractActionController
      * Sets $this->table to the paramater.
      *
      * @param AttributeTable $table
+     *
      * @return void
      */
     public function __construct(AttributeTable $table)

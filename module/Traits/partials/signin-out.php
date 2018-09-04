@@ -1,8 +1,9 @@
 <?php
+
 use SessionManager\Session;
 
-if (Session::isActive()) : ?>
-<a href="<?= $this->url('logout') ?>" class="post-noslug">Sign Out</a>
-<? else : ?>
-<a href="<?= $this->url('login') ?>">Sign In</a>
-<? endif; ?>
+if (Session::isActive()) {
+    echo '<a href='.$this->url('logout').' class="post-noslug">Sign Out</a>';
+} else {
+    echo '<a href = '.$this->url('login').' > Sign In </a >';
+}

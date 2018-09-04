@@ -10,25 +10,21 @@ trait HasGuarded
      * Takes in dictionary and removes keys found in $this->guarded.
      *
      * @param dictionary|Model &$data
+     *
      * @return dictionary $data
      */
     public static function sanitizeGuarded(&$data)
     {
-        if (is_array($data))
-        {
-            foreach ($data as $key => $value)
-            {
-                if (in_array($key, self::$guarded))
-                {
+        if (is_array($data)) {
+            foreach ($data as $key => $value) {
+                if (in_array($key, self::$guarded)) {
                     unset($data[$key]);
                 }
             }
-        }
-        else if (method_exists($data, 'getArrayCopy'))
-        {
+        } elseif (method_exists($data, 'getArrayCopy')) {
             return $data = self::sanitizeGuarded($data->getArrayCopy());
         }
+
         return $data;
     }
 }
-?>

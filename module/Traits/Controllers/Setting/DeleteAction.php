@@ -5,7 +5,7 @@ namespace Traits\Controllers\Setting;
 trait DeleteAction
 {
     /**
-     * Deletes Setting
+     * Deletes Setting.
      *
      * Removes the setting from the database
      * and removes the setting's icon.
@@ -20,8 +20,7 @@ trait DeleteAction
 
         // iff it is a post request, the setting will be deleted
         // after delete redirect to /setting
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $slug = $request->getPost('slug');
 
             $table->deleteSetting($slug);
