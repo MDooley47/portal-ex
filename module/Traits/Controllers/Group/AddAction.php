@@ -50,8 +50,7 @@ trait AddAction
 
         // if not post request, return with viewModel
         return new ViewModel([
-            'form'         => $form,
-            'tables_array' => $this->tables,
+            'form' => $form,
         ]);
     }
 }
