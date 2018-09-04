@@ -2,6 +2,7 @@
 
 namespace App\Model;
 
+use App\InputFilter\TabFilter;
 use App\InputFilter\IconFilter;
 use App\InputFilter\IconPathFilter;
 use App\InputFilter\NameFilter;
@@ -87,7 +88,8 @@ class App
     {
         $tmpFilter = (new InputFilter())
             ->merge(new NameFilter())
-            ->merge(new URLFilter());
+            ->merge(new URLFilter())
+            ->merge(new TabFilter(false));
 
         if (($options['hasPath']) && (!$tmpFilter->has('iconPath'))) {
             $tmpFilter->merge(new IconPathFilter());

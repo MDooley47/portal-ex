@@ -60,8 +60,17 @@ class AppForm extends Form
         ]);
 
         $this->add([
-            'name'       => 'submit',
-            'type'       => 'submit',
+            'name' => 'tab',
+            'type' => 'select',
+            'options' => [
+                'label' => 'tab',
+                'disable_inarray_validator' => true,
+            ],
+        ]);
+
+        $this->add([
+            'name' => 'submit',
+            'type' => 'submit',
             'attributes' => [
                'value' => 'Submit',
             ],
