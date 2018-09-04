@@ -1,6 +1,7 @@
 <?php
 /**
  * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
+ *
  * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -9,14 +10,12 @@ namespace Application;
 
 use Zend\Router\Http\Literal;
 use Zend\Router\Http\Segment;
-use Zend\Router\Http\Method;
-use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'router' => [
         'routes' => [
             'home' => [
-                'type' => Literal::class,
+                'type'    => Literal::class,
                 'options' => [
                     'route'    => '/',
                     'defaults' => [
@@ -26,7 +25,7 @@ return [
                 ],
             ],
             'login' => [
-                'type' => Segment::class,
+                'type'    => Segment::class,
                 'options' => [
                     'route'    => '/login[/]',
                     'defaults' => [
@@ -36,7 +35,7 @@ return [
                 ],
             ],
             'logout' => [
-                'type' => Segment::class,
+                'type'    => Segment::class,
                 'options' => [
                     'route'    => '/logout[/]',
                     'defaults' => [
@@ -48,9 +47,9 @@ return [
             'app' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/app[/:action[/:slug]][/]',
+                    'route'       => '/app[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -61,9 +60,9 @@ return [
             'attribute' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/attribute[/:action[/:slug]][/]',
+                    'route'       => '/attribute[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -75,23 +74,23 @@ return [
             'configuration' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/configuration[/:action[/:slug]][/]',
+                    'route'       => '/configuration[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
                         'controller' => Controller\ConfigurationController::class,
-                        'action' => 'index',
+                        'action'     => 'index',
                     ],
                 ],
             ],
             'group' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/group[/:action[/:slug]][/]',
+                    'route'       => '/group[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -103,9 +102,9 @@ return [
             'grouptype' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/grouptype[/:action[/:slug]][/]',
+                    'route'       => '/grouptype[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -117,9 +116,9 @@ return [
             'ipaddress' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/ipaddress[/:action[/:slug]][/]',
+                    'route'       => '/ipaddress[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -131,9 +130,9 @@ return [
             'ownertype' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/ownertype[/:action[/:slug]][/]',
+                    'route'       => '/ownertype[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -145,9 +144,9 @@ return [
             'privilege' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/privilege[/:action[/:slug]][/]',
+                    'route'       => '/privilege[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -159,9 +158,9 @@ return [
             'setting' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/setting[/:action[/:slug]][/]',
+                    'route'       => '/setting[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -173,9 +172,9 @@ return [
             'tab' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/tab[/:slug[/:action]][/]',
+                    'route'       => '/tab[/:slug[/:action]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -187,9 +186,9 @@ return [
             'user' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/user[/:action[/:slug]][/]',
+                    'route'       => '/user[/:action[/:slug]][/]',
                     'constraints' => [
-                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
@@ -202,18 +201,18 @@ return [
     ],
     'controllers' => [
         'factories' => [
-            Controller\ApplicationController::class => Controller\ApplicationControllerFactory::class,
-            Controller\AppController::class => Controller\AppControllerFactory::class,
-            Controller\AttributeController::class => Controller\AttributeControllerFactory::class,
+            Controller\ApplicationController::class   => Controller\ApplicationControllerFactory::class,
+            Controller\AppController::class           => Controller\AppControllerFactory::class,
+            Controller\AttributeController::class     => Controller\AttributeControllerFactory::class,
             Controller\ConfigurationController::class => Controller\ConfigurationControllerFactory::class,
-            Controller\GroupController::class => Controller\GroupControllerFactory::class,
-            Controller\GroupTypeController::class => Controller\GroupTypeControllerFactory::class,
-            Controller\IpAddressController::class => Controller\IpAddressControllerFactory::class,
-            Controller\OwnerTypeController::class => Controller\OwnerTypeControllerFactory::class,
-            Controller\PrivilegeController::class => Controller\PrivilegeControllerFactory::class,
-            Controller\SettingController::class => Controller\SettingControllerFactory::class,
-            Controller\TabController::class => Controller\TabControllerFactory::class,
-            Controller\UserController::class => Controller\UserControllerFactory::class,
+            Controller\GroupController::class         => Controller\GroupControllerFactory::class,
+            Controller\GroupTypeController::class     => Controller\GroupTypeControllerFactory::class,
+            Controller\IpAddressController::class     => Controller\IpAddressControllerFactory::class,
+            Controller\OwnerTypeController::class     => Controller\OwnerTypeControllerFactory::class,
+            Controller\PrivilegeController::class     => Controller\PrivilegeControllerFactory::class,
+            Controller\SettingController::class       => Controller\SettingControllerFactory::class,
+            Controller\TabController::class           => Controller\TabControllerFactory::class,
+            Controller\UserController::class          => Controller\UserControllerFactory::class,
         ],
     ],
     'view_manager' => [
@@ -222,14 +221,14 @@ return [
         'doctype'                  => 'HTML5',
         'not_found_template'       => 'error/404',
         'exception_template'       => 'error/index',
-        'template_map' => [
-            'layout/layout'           => __DIR__ . '/../view/layout/layout.phtml',
-            'application/index/index' => __DIR__ . '/../view/application/index/index.phtml',
-            'error/404'               => __DIR__ . '/../view/error/404.phtml',
-            'error/index'             => __DIR__ . '/../view/error/index.phtml',
+        'template_map'             => [
+            'layout/layout'           => __DIR__.'/../view/layout/layout.phtml',
+            'application/index/index' => __DIR__.'/../view/application/index/index.phtml',
+            'error/404'               => __DIR__.'/../view/error/404.phtml',
+            'error/index'             => __DIR__.'/../view/error/index.phtml',
         ],
         'template_path_stack' => [
-            __DIR__ . '/../view',
+            __DIR__.'/../view',
         ],
     ],
 ];

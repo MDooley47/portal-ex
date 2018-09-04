@@ -5,7 +5,7 @@ namespace Traits\Controllers\Tab;
 trait DeleteAction
 {
     /**
-     * Deletes Tab
+     * Deletes Tab.
      *
      * Removes the tab from the database
      * and removes the tab's icon.
@@ -20,8 +20,7 @@ trait DeleteAction
 
         // iff it is a post request, the tab will be deleted
         // after delete redirect to /tab
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $slug = $request->getPost('slug');
 
             $table->deleteTab($slug);

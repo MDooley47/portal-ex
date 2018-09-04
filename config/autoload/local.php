@@ -1,6 +1,6 @@
 <?php
 /**
- * Local Configuration Override
+ * Local Configuration Override.
  *
  * This configuration override file is for overriding environment-specific and
  * security-sensitive configuration information.
@@ -15,6 +15,6 @@
 return [
     'db' => [
         'username' => getenv('db_username'),
-        'password' => getenv('db_password')
-    ]
+        'password' => getenv('db_password'),
+    ],
 ];

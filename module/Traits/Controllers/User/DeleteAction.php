@@ -5,7 +5,7 @@ namespace Traits\Controllers\User;
 trait DeleteAction
 {
     /**
-     * Deletes User
+     * Deletes User.
      *
      * Removes the user from the database
      * and removes the user's icon.
@@ -20,8 +20,7 @@ trait DeleteAction
 
         // iff it is a post request, the user will be deleted
         // after delete redirect to /user
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $slug = $request->getPost('slug');
 
             $table->deleteUser($slug);

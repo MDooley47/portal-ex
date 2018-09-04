@@ -5,7 +5,7 @@ namespace Traits\Controllers\App;
 trait DeleteAction
 {
     /**
-     * Deletes App
+     * Deletes App.
      *
      * Removes the app from the database
      * and removes the app's icon.
@@ -20,8 +20,7 @@ trait DeleteAction
 
         // iff it is a post request, the app will be deleted
         // after delete redirect to /app
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $slug = $request->getPost('slug');
 
             $table->deleteApp($slug);

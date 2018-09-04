@@ -3,21 +3,12 @@
 namespace Setting\Model;
 
 use DomainException;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
-use Traits\Models\ExchangeArray;
-
 use Setting\InputFilter\DataFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
 class Setting
 {
@@ -49,7 +40,7 @@ class Setting
     ];
 
     /**
-     * Get tab values as array
+     * Get tab values as array.
      *
      * @return array
      */
@@ -62,12 +53,13 @@ class Setting
     }
 
     /**
-     * Gets Setting's input filter
+     * Gets Setting's input filter.
      *
      * Returns the tab's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return Setting $this
      */
     public function getInputFilter($options = [])
@@ -81,13 +73,14 @@ class Setting
     }
 
     /**
-     * Sets Setting's inputFilter
+     * Sets Setting's inputFilter.
      *
      * Throws error. Setting's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return Setting $this
      * @throws DomainException
+     *
+     * @return Setting $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

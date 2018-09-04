@@ -3,23 +3,13 @@
 namespace Tab\Model;
 
 use DomainException;
-
 use SessionManager\Tables;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
-use Traits\Models\ExchangeArray;
-
 use Tab\InputFilter\NameFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
 class Tab
 {
@@ -53,15 +43,15 @@ class Tab
     }
 
     /**
-     * Get tab values as array
+     * Get tab values as array.
      *
      * @return array
      */
     public function getArrayCopy()
     {
         return [
-            'slug' => $this->slug,
-            'name' => $this->name,
+            'slug'        => $this->slug,
+            'name'        => $this->name,
             'description' => $this->description,
         ];
     }
@@ -71,16 +61,16 @@ class Tab
         return (new Tables())
             ->getTable('owerTabs')
             ->getGroup($this->slug);
-
     }
 
     /**
-     * Gets Tab's input filter
+     * Gets Tab's input filter.
      *
      * Returns the tab's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return Tab $this
      */
     public function getInputFilter($options = [])
@@ -94,13 +84,14 @@ class Tab
     }
 
     /**
-     * Sets Tab's inputFilter
+     * Sets Tab's inputFilter.
      *
      * Throws error. Tab's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return Tab $this
      * @throws DomainException
+     *
+     * @return Tab $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

@@ -5,7 +5,7 @@ namespace Traits\Controllers\IpAddress;
 trait DeleteAction
 {
     /**
-     * Deletes IpAddress
+     * Deletes IpAddress.
      *
      * Removes the ipaddress from the database
      * and removes the ipaddress's icon.
@@ -20,8 +20,7 @@ trait DeleteAction
 
         // iff it is a post request, the ipaddress will be deleted
         // after delete redirect to /ipaddress
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $slug = $request->getPost('slug');
 
             $table->deleteIpAddress($slug);

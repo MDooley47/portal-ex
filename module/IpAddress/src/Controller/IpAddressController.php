@@ -2,15 +2,12 @@
 
 namespace IpAddress\Controller;
 
-use Traits\HasTables;
 use Traits\Controllers\IpAddress\AddAction;
 use Traits\Controllers\IpAddress\DeleteAction;
 use Traits\Controllers\IpAddress\EditAction;
 use Traits\Controllers\IpAddress\IndexAction;
-
+use Traits\HasTables;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Validator\File\IsImage;
-use Zend\View\Model\ViewModel;
 
 class IpAddressController extends AbstractActionController
 {
@@ -18,7 +15,7 @@ class IpAddressController extends AbstractActionController
         IndexAction;
 
     /**
-     * IpAddressTable to be used to interface with the tableGateway/database
+     * IpAddressTable to be used to interface with the tableGateway/database.
      */
     private $table;
 
@@ -27,6 +24,7 @@ class IpAddressController extends AbstractActionController
      * Sets $this->table to the paramater.
      *
      * @param IpAddressTable $table
+     *
      * @return void
      */
     public function __construct(IpAddressTable $table)

@@ -4,19 +4,15 @@ namespace SessionManager\TableModels;
 
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
-
+use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
 
-
-class TabAppsTableGateway
-    extends AbstractTableGateway
-    implements CorrelationInterface
+class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
     public function __construct()
     {
-        $this->table      = 'tabApps';
+        $this->table = 'tabApps';
         $this->featureSet = new Feature\FeatureSet();
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
@@ -24,17 +20,12 @@ class TabAppsTableGateway
 
     public function getApps($slug, $options = [])
     {
-
-        if (! array_key_exists('type', $options))
-        {
+        if (!array_key_exists('type', $options)) {
             $options['type'] = null;
         }
 
-        $rowset = $this->select(function (Select $select)
-                    use ($slug, $options)
-                {
-                    switch (strtolower($options['type']))
-                    {
+        $rowset = $this->select(function (Select $select) use ($slug, $options) {
+            switch (strtolower($options['type'])) {
                         case 'tab':
                         default:
                             $select->where([
@@ -42,7 +33,7 @@ class TabAppsTableGateway
                             ]);
                             break;
                     }
-                });
+        });
 
         return (new Tables())
             ->getTable('app')
@@ -51,9 +42,8 @@ class TabAppsTableGateway
 
     public function addCorrelation($tab, $app, $options = [])
     {
-        if ($this->correlationExists($tab, $app, $options))
-        {
-            # correlation already exists
+        if ($this->correlationExists($tab, $app, $options)) {
+            // correlation already exists
             return;
         }
 
@@ -70,12 +60,12 @@ class TabAppsTableGateway
         $adapter = $this->getAdapter();
 
         $clause = '"appSlug"'
-                . ' = '
-                . "'$app'";
+                .' = '
+                ."'$app'";
 
         return (new RecordExists([
-            'table' => $this->getTable(),
-            'field' => 'tabSlug', // change
+            'table'   => $this->getTable(),
+            'field'   => 'tabSlug', // change
             'adapter' => $adapter,
             'exclude' => $clause,
         ]))->isValid($tab);

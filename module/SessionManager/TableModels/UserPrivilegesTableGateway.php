@@ -3,19 +3,15 @@
 namespace SessionManager\TableModels;
 
 use Traits\Interfaces\CorrelationInterface;
-
+use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
 
-
-class UserPrivilegesTableGateway
-    extends AbstractTableGateway
-    implements CorrelationInterface
+class UserPrivilegesTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
     public function __construct()
     {
-        $this->table      = 'userPrivileges';
+        $this->table = 'userPrivileges';
         $this->featureSet = new Feature\FeatureSet();
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
@@ -23,35 +19,32 @@ class UserPrivilegesTableGateway
 
     public function hasPrivilege($user, $privilege, $group = null): bool
     {
-        $rowset = $this->select(function (Select $select)
-            use ($user, $privilege, $group)
-        {
+        $rowset = $this->select(function (Select $select) use ($user, $privilege, $group) {
             $select->where([
-                'userSlug' => $user,
+                'userSlug'      => $user,
                 'privilegeSlug' => $privilege,
-                'groupSlug' => $group,
+                'groupSlug'     => $group,
             ]);
         });
 
         $row = $rowset->current();
+
         return ($row) ? true : false;
     }
 
     public function addCorrelation($user, $privilege, $options = [])
     {
-        if ($this->correlationExists($user, $privilege, $options))
-        {
-            # correlation already exists
+        if ($this->correlationExists($user, $privilege, $options)) {
+            // correlation already exists
             return;
         }
 
         $data = [
-            'userSlug' => $user,
+            'userSlug'      => $user,
             'privilegeSlug' => $privilege,
         ];
 
-        if (array_key_exists("groupSlug", $options))
-        {
+        if (array_key_exists('groupSlug', $options)) {
             $data['groupSlug'] = $options['groupSlug'];
         }
 
@@ -63,20 +56,19 @@ class UserPrivilegesTableGateway
         $adapter = $this->getAdapter();
 
         $clause = '"privilegeSlug"'
-            . ' = '
-            . "'$privilege'";
+            .' = '
+            ."'$privilege'";
 
-        if (array_key_exists("groupSlug", $options))
-        {
+        if (array_key_exists('groupSlug', $options)) {
             $groupSlug = $options['groupSlug'];
             $clause .= ' AND "groupSlug"'
-                . ' = '
-                . "'$groupSlug'";
+                .' = '
+                ."'$groupSlug'";
         }
 
         return (new RecordExists([
-            'table' => $this->getTable(),
-            'field' => 'userSlug', // change
+            'table'   => $this->getTable(),
+            'field'   => 'userSlug', // change
             'adapter' => $adapter,
             'exclude' => $clause,
         ]))->isValid($user);

@@ -3,21 +3,12 @@
 namespace GroupType\Model;
 
 use DomainException;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
-use Traits\Models\ExchangeArray;
-
 use GroupType\InputFilter\NameFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
 class GroupType
 {
@@ -49,27 +40,28 @@ class GroupType
     ];
 
     /**
-     * Get app values as array
+     * Get app values as array.
      *
      * @return array
      */
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
-            'slug' => $this->slug,
-            'name' => $this->name,
+            'id'          => $this->id,
+            'slug'        => $this->slug,
+            'name'        => $this->name,
             'description' => $this->description,
         ];
     }
 
     /**
-     * Gets GroupType's input filter
+     * Gets GroupType's input filter.
      *
      * Returns the app's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return GroupType $this
      */
     public function getInputFilter($options = [])
@@ -83,13 +75,14 @@ class GroupType
     }
 
     /**
-     * Sets GroupType's inputFilter
+     * Sets GroupType's inputFilter.
      *
      * Throws error. GroupType's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return GroupType $this
      * @throws DomainException
+     *
+     * @return GroupType $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

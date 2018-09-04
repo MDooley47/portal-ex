@@ -7,7 +7,7 @@ use Zend\View\Model\ViewModel;
 trait IndexAction
 {
     /**
-     * Displays the index page for GroupType
+     * Displays the index page for GroupType.
      *
      * @return ViewModel
      */

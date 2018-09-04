@@ -4,13 +4,12 @@ namespace Traits\Controllers\Setting;
 
 use Setting\Form\SettingForm;
 use Setting\Model\Setting;
-
 use Zend\View\Model\ViewModel;
 
 trait AddAction
 {
     /**
-     * Adds Setting
+     * Adds Setting.
      *
      * On a get request, addAction() will display
      * a form for adding a new Setting.
@@ -27,8 +26,7 @@ trait AddAction
 
         $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -39,8 +37,7 @@ trait AddAction
             $setting = new Setting();
 
             $form->setInputFilter($setting->getInputFilter());
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 Setting::sanitizeGuarded($data);
                 $setting->exchangeArray($data);
@@ -48,7 +45,6 @@ trait AddAction
 
                 return $this->redirect()->toRoute('setting', ['action' => 'add']);
             }
-
         }
 
         // if not post request, return with viewModel

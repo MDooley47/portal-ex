@@ -4,13 +4,12 @@ namespace Traits\Controllers\Privilege;
 
 use Privilege\Form\PrivilegeForm;
 use Privilege\Model\Privilege;
-
 use Zend\View\Model\ViewModel;
 
 trait EditAction
 {
     /**
-     * Edits Privilege
+     * Edits Privilege.
      *
      * @return ViewModel|Redirect
      */
@@ -22,21 +21,17 @@ trait EditAction
         $slug = $this->params()->fromRoute('slug', 0);
 
         // redirect to /privilege/add if there was no slug provided.
-        if (! $slug)
-        {
+        if (!$slug) {
             return $this->redirect()->toRoute('privilege', ['action' => 'add']);
         }
 
         // Try to get an privilege with the provided slug. If there is
         // no privilege, redirect to /privilege
-        try
-        {
-              $privilege = $table->getPrivilege($slug);
-         }
-         catch (Exception $ex)
-         {
-             return $this->redirect()->toRoute('privilege');
-         }
+        try {
+            $privilege = $table->getPrivilege($slug);
+        } catch (Exception $ex) {
+            return $this->redirect()->toRoute('privilege');
+        }
 
         $form = new PrivilegeForm();
         $form->bind($privilege);
@@ -48,8 +43,7 @@ trait EditAction
             'form' => $form,
         ];
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -58,8 +52,7 @@ trait EditAction
             $form->setInputFilter($privilege->getInputFilter());
             $form->setData($post);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 Privilege::sanitizeGuarded($data);
                 $data['slug'] = $slug;

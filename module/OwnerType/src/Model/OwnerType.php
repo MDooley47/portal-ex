@@ -3,21 +3,12 @@
 namespace OwnerType\Model;
 
 use DomainException;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
-use Traits\Models\ExchangeArray;
-
 use OwnerType\InputFilter\NameFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
 class OwnerType
 {
@@ -48,26 +39,27 @@ class OwnerType
     ];
 
     /**
-     * Get app values as array
+     * Get app values as array.
      *
      * @return array
      */
     public function getArrayCopy()
     {
         return [
-            'slug' => $this->slug,
-            'name' => $this->name,
+            'slug'        => $this->slug,
+            'name'        => $this->name,
             'description' => $this->description,
         ];
     }
 
     /**
-     * Gets OwnerType's input filter
+     * Gets OwnerType's input filter.
      *
      * Returns the app's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return OwnerType $this
      */
     public function getInputFilter($options = [])
@@ -81,13 +73,14 @@ class OwnerType
     }
 
     /**
-     * Sets OwnerType's inputFilter
+     * Sets OwnerType's inputFilter.
      *
      * Throws error. OwnerType's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return OwnerType $this
      * @throws DomainException
+     *
+     * @return OwnerType $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

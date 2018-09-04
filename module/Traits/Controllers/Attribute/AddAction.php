@@ -4,13 +4,12 @@ namespace Traits\Controllers\Attribute;
 
 use Attribute\Form\AttributeForm;
 use Attribute\Model\Attribute;
-
 use Zend\View\Model\ViewModel;
 
 trait AddAction
 {
     /**
-     * Adds Attribute
+     * Adds Attribute.
      *
      * On a get request, addAction() will display
      * a form for adding a new Attribute.
@@ -27,8 +26,7 @@ trait AddAction
 
         $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -39,8 +37,7 @@ trait AddAction
             $attribute = new Attribute();
 
             $form->setInputFilter($attribute->getInputFilter());
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 Attribute::sanitizeGuarded($data);
                 $attribute->exchangeArray($data);
@@ -48,7 +45,6 @@ trait AddAction
 
                 return $this->redirect()->toRoute('attribute', ['action' => 'add']);
             }
-
         }
 
         // if not post request, return with viewModel

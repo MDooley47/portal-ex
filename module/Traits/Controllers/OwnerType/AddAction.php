@@ -4,13 +4,12 @@ namespace Traits\Controllers\OwnerType;
 
 use OwnerType\Form\OwnerTypeForm;
 use OwnerType\Model\OwnerType;
-
 use Zend\View\Model\ViewModel;
 
 trait AddAction
 {
     /**
-     * Adds OwnerType
+     * Adds OwnerType.
      *
      * On a get request, addAction() will display
      * a form for adding a new OwnerType.
@@ -27,8 +26,7 @@ trait AddAction
 
         $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -39,8 +37,7 @@ trait AddAction
             $ownertype = new OwnerType();
 
             $form->setInputFilter($ownertype->getInputFilter());
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 OwnerType::sanitizeGuarded($data);
                 $ownertype->exchangeArray($data);
@@ -48,7 +45,6 @@ trait AddAction
 
                 return $this->redirect()->toRoute('ownertype', ['action' => 'add']);
             }
-
         }
 
         // if not post request, return with viewModel

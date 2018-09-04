@@ -4,13 +4,12 @@ namespace Traits\Controllers\Setting;
 
 use Setting\Form\SettingForm;
 use Setting\Model\Setting;
-
 use Zend\View\Model\ViewModel;
 
 trait EditAction
 {
     /**
-     * Edits Setting
+     * Edits Setting.
      *
      * @return ViewModel|Redirect
      */
@@ -22,21 +21,17 @@ trait EditAction
         $slug = $this->params()->fromRoute('slug', 0);
 
         // redirect to /setting/add if there was no slug provided.
-        if (! $slug)
-        {
+        if (!$slug) {
             return $this->redirect()->toRoute('setting', ['action' => 'add']);
         }
 
         // Try to get an setting with the provided slug. If there is
         // no setting, redirect to /setting
-        try
-        {
-              $setting = $table->getSetting($slug);
-         }
-         catch (Exception $ex)
-         {
-             return $this->redirect()->toRoute('setting');
-         }
+        try {
+            $setting = $table->getSetting($slug);
+        } catch (Exception $ex) {
+            return $this->redirect()->toRoute('setting');
+        }
 
         $form = new SettingForm();
         $form->bind($setting);
@@ -48,8 +43,7 @@ trait EditAction
             'form' => $form,
         ];
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -58,8 +52,7 @@ trait EditAction
             $form->setInputFilter($setting->getInputFilter());
             $form->setData($post);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 Setting::sanitizeGuarded($data);
                 $data['slug'] = $slug;

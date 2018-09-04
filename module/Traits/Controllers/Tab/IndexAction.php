@@ -7,7 +7,7 @@ use Zend\View\Model\ViewModel;
 trait IndexAction
 {
     /**
-     * Displays the index page for Tab
+     * Displays the index page for Tab.
      *
      * @return ViewModel
      */
@@ -18,8 +18,7 @@ trait IndexAction
         // get provided slug
         $slug = $this->params()->fromRoute('slug', null);
 
-        if ((! isset($slug)) || false)
-        {
+        if ((!isset($slug)) || false) {
             return $this->redirect()->toRoute('home');
         }
 

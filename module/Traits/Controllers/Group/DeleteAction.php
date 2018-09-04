@@ -5,7 +5,7 @@ namespace Traits\Controllers\Group;
 trait DeleteAction
 {
     /**
-     * Deletes Group
+     * Deletes Group.
      *
      * Removes the group from the database
      * and removes the group's icon.
@@ -20,8 +20,7 @@ trait DeleteAction
 
         // iff it is a post request, the group will be deleted
         // after delete redirect to /group
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $slug = $request->getPost('slug');
 
             $table->deleteGroup($slug);

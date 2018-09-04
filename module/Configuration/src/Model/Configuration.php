@@ -2,22 +2,13 @@
 
 namespace Configuration\Model;
 
-use DomainException;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
-use Traits\Models\ExchangeArray;
-
 use Configuration\InputFilter\NameFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use DomainException;
+use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
 class Configuration
 {
@@ -49,7 +40,7 @@ class Configuration
     ];
 
     /**
-     * Get privilege values as array
+     * Get privilege values as array.
      *
      * @return array
      */
@@ -59,12 +50,13 @@ class Configuration
     }
 
     /**
-     * Gets Configuration's input filter
+     * Gets Configuration's input filter.
      *
      * Returns the app's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return Configuration $this
      */
     public function getInputFilter($options = [])
@@ -78,13 +70,14 @@ class Configuration
     }
 
     /**
-     * Sets Configuration's inputFilter
+     * Sets Configuration's inputFilter.
      *
      * Throws error. Configuration's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return Configuration $this
      * @throws DomainException
+     *
+     * @return Configuration $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

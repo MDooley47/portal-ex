@@ -7,7 +7,7 @@ use Zend\View\Model\ViewModel;
 trait IndexAction
 {
     /**
-     * Displays the index page for Attribute
+     * Displays the index page for Attribute.
      *
      * @return ViewModel
      */
