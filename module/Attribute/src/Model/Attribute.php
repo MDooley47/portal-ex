@@ -4,15 +4,14 @@ namespace Attribute\Model;
 
 use Attribute\InputFilter\NameFilter;
 use DomainException;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
-use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Attribute
-    implements HasSlugInterface
+class Attribute implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**

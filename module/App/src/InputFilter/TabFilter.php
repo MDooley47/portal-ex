@@ -7,7 +7,7 @@ use Zend\InputFilter\InputFilter;
 class TabFilter extends InputFilter
 {
     /**
-     * Constructs NameFilter
+     * Constructs NameFilter.
      *
      * @param bool $required
      *
@@ -16,12 +16,10 @@ class TabFilter extends InputFilter
     public function __construct($required = false)
     {
         $this->add([
-            'name' => 'tab',
+            'name'     => 'tab',
             'required' => $required,
         ]);
 
         return $this;
     }
 }
-
-?>

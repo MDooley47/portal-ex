@@ -28,9 +28,9 @@ class PrivilegeTableGateway extends AbstractTableGateway
     /**
      * Selects an Privilege from the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'type' which defines what type of
-     *                            identifier $id is. Default value is 'type' => 'id'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'type' which defines what type of
+     *                       identifier $id is. Default value is 'type' => 'id'.
      *
      * @return Privilege
      */

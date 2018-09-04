@@ -2,8 +2,8 @@
 
 namespace Traits\Controllers\Tab;
 
-use Zend\View\Model\ViewModel;
 use SessionManager\Session;
+use Zend\View\Model\ViewModel;
 
 trait IndexAction
 {
@@ -23,13 +23,13 @@ trait IndexAction
             return $this->redirect()->toRoute('home');
         }
 
-        if (! $table->tabExists($slug)) {
+        if (!$table->tabExists($slug)) {
             return $this->getResponse()->setStatusCode(404);
             // abort(404); // abort NOT_FOUND
         }
 
         Session::isActive();
-        if (! $this
+        if (!$this
             ->getTable('userPrivileges')
             ->hasPrivilege(
                 Session::getUser(),
@@ -37,10 +37,9 @@ trait IndexAction
                 $this->getTable('ownerTabs')
                     ->getOwner($slug)
                     ->ownerSlug
-            ))
-        {
+            )) {
             return $this->getResponse()->setStatusCode(403);
-           // abort(403); // abort FORBIDDEN
+            // abort(403); // abort FORBIDDEN
         }
 
         return new ViewModel([

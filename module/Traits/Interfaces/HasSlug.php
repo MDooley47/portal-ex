@@ -3,8 +3,7 @@
 namespace Traits\Interfaces;
 
 /**
- * Interface HasSlug
- * @package Traits\Interfaces
+ * Interface HasSlug.
  *
  * @property string $slug
  */

@@ -28,12 +28,11 @@ class Session
         if (session_status() == PHP_SESSION_NONE) {
             $session = session_start($options['session_options']);
 
-            # note("session has started");
+            // note("session has started");
 
             if ($options['start_active_time'] == true ||
-                $options['start_active_time'] == 1)
-            {
-                # note("start_active_time");
+                $options['start_active_time'] == 1) {
+                // note("start_active_time");
                 self::setActiveTime();
             }
 
@@ -66,22 +65,22 @@ class Session
 
     /**
      * @param string|array $name
-     * @param mixed|null $value
+     * @param mixed|null   $value
      *
      * @return mixed
      */
-    public static function add($name, $value = NULL)
+    public static function add($name, $value = null)
     {
         return self::set($name, $value);
     }
 
     /**
      * @param string|array $name
-     * @param mixed|null $value
+     * @param mixed|null   $value
      *
      * @return mixed
      */
-    public static function set($name, $value = NULL)
+    public static function set($name, $value = null)
     {
         if (!isset($value)) {
             $value = $name[1];
@@ -174,24 +173,22 @@ class Session
         //self::start(['start_active_time' => false]);
 
         if (self::isSet('activeTime')
-            && self::isSet('userSlug'))
-        {
-            # note('both are set');
+            && self::isSet('userSlug')) {
+            // note('both are set');
             // activeTime must be within the hour.
-            if (self::get('activeTime') > (time() - 3600))
-            {
-                # note('active');
+            if (self::get('activeTime') > (time() - 3600)) {
+                // note('active');
                 self::setActiveTime(); // update active time
                 return true;
             }
         }
-        # note('not_active');
+        // note('not_active');
         return false;
     }
 
     /**
      * @param \Privilege\Model\Privilege|string $privilege
-     * @param \Group\Model\Group|string|null $group
+     * @param \Group\Model\Group|string|null    $group
      *
      * @return bool
      */

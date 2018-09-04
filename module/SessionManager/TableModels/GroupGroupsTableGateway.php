@@ -2,8 +2,6 @@
 
 namespace SessionManager\TableModels;
 
-use RuntimeException;
-
 use Group\Model\Group;
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
@@ -32,18 +30,15 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
      */
     public function addCorrelation($parentGroup, $childGroup, $options = [])
     {
-        if ($parentGroup instanceof Group)
-        {
+        if ($parentGroup instanceof Group) {
             $parentGroup = $parentGroup->slug;
         }
-        if ($childGroup instanceof Group)
-        {
+        if ($childGroup instanceof Group) {
             $childGroup = $childGroup->slug;
         }
 
-        if ($this->correlationExists($parentGroup, $childGroup, $options))
-        {
-            # correlation already exists
+        if ($this->correlationExists($parentGroup, $childGroup, $options)) {
+            // correlation already exists
             return;
         }
 
@@ -56,7 +51,7 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
     }
 
     /**
-     * TODO: support multiple parent groups
+     * TODO: support multiple parent groups.
      *
      * @param $childGroup
      */
@@ -64,14 +59,11 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
     {
         $groupTable = (new Tables())->getTable('group');
 
-        if ($childGroup instanceof Group)
-        {
+        if ($childGroup instanceof Group) {
             $childGroup = $childGroup->slug;
         }
 
-        $rowset = $this->select(function (Select $select)
-            use ($childGroup)
-        {
+        $rowset = $this->select(function (Select $select) use ($childGroup) {
             $select->where('childGroup', '=', $childGroup);
         });
 

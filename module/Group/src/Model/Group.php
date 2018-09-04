@@ -5,15 +5,14 @@ namespace Group\Model;
 use DomainException;
 use Group\InputFilter\NameFilter;
 use SessionManager\Tables;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
-use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Group
-    implements HasSlugInterface
+class Group implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
 
