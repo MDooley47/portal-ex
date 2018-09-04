@@ -19,8 +19,6 @@ class PrivilegeTableGateway extends AbstractTableGateway
 
     /**
      * Selects all Privileges from the database.
-     *
-     * @return Privilege[]
      */
     public function fetchAll()
     {
@@ -31,7 +29,7 @@ class PrivilegeTableGateway extends AbstractTableGateway
      * Selects an Privilege from the database.
      *
      * @param mixed      $id      The identifier.
-     * @param dictionary $options Contains 'type' which defines what type of
+     * @param array      $options Contains 'type' which defines what type of
      *                            identifier $id is. Default value is 'type' => 'id'.
      *
      * @return Privilege
@@ -40,8 +38,6 @@ class PrivilegeTableGateway extends AbstractTableGateway
     {
         if ($options['type'] == 'slug') {
             $rowset = $this->select(['slug' => $id]);
-        } elseif ($options['type' == 'id']) {
-            $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
         if (!$row) {
