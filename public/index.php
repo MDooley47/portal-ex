@@ -1,6 +1,8 @@
 <?php
 
 use Dotenv\Dotenv;
+use Traits\Interfaces\HasSlug;
+
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\Mvc\Application;
@@ -120,6 +122,23 @@ function removeBasePath($data)
 function addBasePath($data)
 {
     return realpath(getenv('storage_path')).$data;
+}
+
+/**
+ * @param \Traits\Interfaces\HasSlug|object(ArrayObject)|ArrayObject|string $model
+ *
+ * @return string
+ */
+function getSlug($model)
+{
+    if (($model instanceof HasSlug) ||
+        ($model instanceof ArrayObject && $model->offsetExists('slug')))
+    {
+        return $model->slug;
+    }
+    else {
+        return $model;
+    }
 }
 
 function dd($data)
