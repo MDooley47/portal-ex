@@ -20,12 +20,12 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
         $this->initialize();
     }
 
-    # TODO: support multiple parents on a group.
+    // TODO: support multiple parents on a group.
 
     /**
      * Does user have privilege?
      *
-     * @param \User\Model\User|string $user
+     * @param \User\Model\User|string        $user
      * @param \Privilege\Model\Privilege|int $privilege
      * @param \Group\Model\Group|string|null $group
      *
@@ -37,35 +37,30 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
 
         $privilegeTable = $tables->getTable('privilege');
 
-        if ($privilege instanceof Privilege)
-        {
+        if ($privilege instanceof Privilege) {
             $requestedPrivilegeLevel = $privilege->level;
-        }
-        else
-        {
-            # the following line prevents recursion from making
-            # unnecessary database calls.
+        } else {
+            // the following line prevents recursion from making
+            // unnecessary database calls.
             $privilege = $privilegeTable->getPrivilege($privilege);
             $requestedPrivilegeLevel = $privilege->level;
         }
 
         $existingPrivilegeLevel = $this->getUserPrivilege($user, $group);
 
-        if ($existingPrivilegeLevel <= $requestedPrivilegeLevel)
-        {
+        if ($existingPrivilegeLevel <= $requestedPrivilegeLevel) {
             return true;
-        }
-        else if (isset($group))
-        {
+        } elseif (isset($group)) {
             $parentGroup = $tables->getTable('groupGroups')->getParent($group);
+
             return $this->hasPrivilege($user, $privilege, $parentGroup);
         }
     }
 
     /**
-     * Get the privilege attached to the user [and group.]
+     * Get the privilege attached to the user [and group.].
      *
-     * @param \User\Model\User|string $user
+     * @param \User\Model\User|string        $user
      * @param \Group\Model\Group|string|null $group
      *
      * @return \Privilege\Model\Privilege
@@ -74,25 +69,21 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
     {
         $user = getSlug($user);
 
-        if (isset($group))
-        {
+        if (isset($group)) {
             $group = getSlug($group);
         }
 
-        $rowset = $this->select(function (Select $select)
-            use ($user, $group)
-        {
+        $rowset = $this->select(function (Select $select) use ($user, $group) {
             $select->where([
-                'userSlug' => $user,
+                'userSlug'  => $user,
                 'groupSlug' => $group,
             ]);
         });
 
         $output = $rowset->current();
 
-        if (empty($output))
-        {
-            $output = (new Tables)
+        if (empty($output)) {
+            $output = (new Tables())
                 ->getTable('privilege')
                 ->getPrivilege('anon');
         }
@@ -101,9 +92,9 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
     }
 
     /**
-     * @param \User\Model\User|string $user
+     * @param \User\Model\User|string           $user
      * @param \Privilege\Model\Privilege|string $privilege
-     * @param array $options
+     * @param array                             $options
      *
      * @return bool|null
      */
@@ -127,9 +118,9 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
     }
 
     /**
-     * @param \User\Model\User|string $user
+     * @param \User\Model\User|string           $user
      * @param \Privilege\Model\Privilege|string $privilege
-     * @param array $options
+     * @param array                             $options
      *
      * @return bool
      */

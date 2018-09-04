@@ -2,7 +2,6 @@
 
 use Dotenv\Dotenv;
 use Traits\Interfaces\HasSlug;
-
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 use Zend\Mvc\Application;
@@ -57,7 +56,7 @@ function env($key, $default = null)
 }
 
 /**
- * Makes logging easier
+ * Makes logging easier.
  *
  * Modify this method to change log files or logging methods
  * the note method will use this method to automatically
@@ -70,20 +69,20 @@ function env($key, $default = null)
  * @return Logger */
 function logger($type)
 {
-    $logger = new Logger;
-    $logPath = APPLICATION_PATH . '/data/logs/';
+    $logger = new Logger();
+    $logPath = APPLICATION_PATH.'/data/logs/';
 
     $logFileInfo = $logFileDebug = $logFileDefault = 'log.log';
 
     switch (strtolower($type)) {
         case 'debug':
-            $logFile = $logPath . $logFileDebug;
+            $logFile = $logPath.$logFileDebug;
             break;
         case 'info':
-            $logFile = $logPath . $logFileInfo;
+            $logFile = $logPath.$logFileInfo;
             break;
         default:
-            $logFile = $logPath . $logFileDefault;
+            $logFile = $logPath.$logFileDefault;
             break;
     }
 
@@ -94,9 +93,9 @@ function logger($type)
 }
 
 /**
- * Makes logging super easy
+ * Makes logging super easy.
  *
- * @param string $value
+ * @param string      $value
  * @param string|null $type
  */
 function note($value, $type = null)
@@ -153,17 +152,15 @@ function addBasePath($data)
 function getSlug($model)
 {
     if (($model instanceof HasSlug) ||
-        ($model instanceof ArrayObject && $model->offsetExists('slug')))
-    {
+        ($model instanceof ArrayObject && $model->offsetExists('slug'))) {
         return $model->slug;
-    }
-    else {
+    } else {
         return $model;
     }
 }
 
 /**
- * Dump and Die
+ * Dump and Die.
  *
  * @param mixed $data
  */
@@ -174,10 +171,10 @@ function dd($data)
 }
 
 /**
- * Get array value by key or set and return default value
+ * Get array value by key or set and return default value.
  *
- * @param string $key
- * @param &array &$search
+ * @param string     $key
+ * @param &array     &$search
  * @param mixed|null $default
  *
  * @return mixed

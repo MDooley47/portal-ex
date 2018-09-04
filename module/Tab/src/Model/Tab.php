@@ -5,15 +5,14 @@ namespace Tab\Model;
 use DomainException;
 use SessionManager\Tables;
 use Tab\InputFilter\NameFilter;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
-use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Tab
-    implements HasSlugInterface
+class Tab implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**

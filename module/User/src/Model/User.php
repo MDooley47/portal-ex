@@ -4,15 +4,14 @@ namespace User\Model;
 
 use DomainException;
 use SessionManager\Tables;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
-use Traits\Interfaces\HasSlug as HasSlugInterface;
 use User\InputFilter\NameFilter;
 use Zend\InputFilter\InputFilter;
 
-class User
-    implements HasSlugInterface
+class User implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**

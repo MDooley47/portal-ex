@@ -2,10 +2,10 @@
 
 namespace App\Model;
 
-use App\InputFilter\TabFilter;
 use App\InputFilter\IconFilter;
 use App\InputFilter\IconPathFilter;
 use App\InputFilter\NameFilter;
+use App\InputFilter\TabFilter;
 use App\InputFilter\URLFilter;
 use DomainException;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
@@ -15,8 +15,7 @@ use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class App
-    implements HasSlugInterface
+class App implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**

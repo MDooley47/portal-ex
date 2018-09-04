@@ -125,16 +125,14 @@ class AppTableGateway extends AbstractTableGateway
                 }
             }
             $data['version'] = 1 + (int) $dbApp->version;
-            $this->update($data,['slug' => $slug]);
+            $this->update($data, ['slug' => $slug]);
 
             if (isset($app->tab)) {
                 (new Tables())
                     ->getTable('tabApps')
                     ->addCorrelation($app->tab, $slug);
             }
-        }
-        else
-        {
+        } else {
             throw new RuntimeException(springf(
                 'Cannot update app with identifier %s; does not exist',
                 $slug

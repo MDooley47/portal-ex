@@ -4,15 +4,14 @@ namespace GroupType\Model;
 
 use DomainException;
 use GroupType\InputFilter\NameFilter;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
-use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class GroupType
-    implements HasSlugInterface
+class GroupType implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**
