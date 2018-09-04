@@ -2,25 +2,20 @@
 
 namespace SessionManager\TableModels;
 
-use RuntimeException;
-
 use GroupType\Model\GroupType;
-
+use RuntimeException;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
-
 
 class GroupTypeTableGateway extends AbstractTableGateway
 {
     public function __construct()
     {
-        $this->table      = 'groupTypes';
+        $this->table = 'groupTypes';
         $this->featureSet = new Feature\FeatureSet();
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
     }
-
 
     /**
      * Selects all GroupTypes from the database.
@@ -33,26 +28,23 @@ class GroupTypeTableGateway extends AbstractTableGateway
     }
 
     /**
-     * Selects an GroupType from the database
+     * Selects an GroupType from the database.
      *
-     * @param mixed $id The identifier.
+     * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
      * @return GroupType
      */
     public function getGroupType($id, $options = ['type' => 'slug'])
     {
-        if ($options['type'] == 'slug')
-        {
+        if ($options['type'] == 'slug') {
             $rowset = $this->select(['slug' => $id]);
-        }
-        else if ($options['type'] == 'id')
-        {
+        } elseif ($options['type'] == 'id') {
             $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
-        if (! $row)
-        {
+        if (!$row) {
             throw new RuntimeException(sprintf(
                 'Could not Find Row with identifier %s of type %s',
                 $id, $options['type']
@@ -65,16 +57,17 @@ class GroupTypeTableGateway extends AbstractTableGateway
     /**
      * Checks if an groupType exists in the database.
      *
-     * @param mixed $id The identifier.
+     * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
-     * @return boolean If value exists
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
+     * @return bool If value exists
      */
     public function groupTypeExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->getTable(),
-            'field' => $options['type'],
+            'table'   => $this->getTable(),
+            'field'   => $options['type'],
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
@@ -85,35 +78,32 @@ class GroupTypeTableGateway extends AbstractTableGateway
      * If $groupType->slug is not null then attempts to update an groupType with that slug
      *
      * @param GroupType $groupType
-     * @return void
+     *
      * @throws RuntimeException GroupType does not exist
+     *
+     * @return void
      */
     public function saveGroupType(GroupType $groupType)
     {
         $data = [
-            'name' => $groupType->name,
-            'description' => $groupType->description
+            'name'        => $groupType->name,
+            'description' => $groupType->description,
         ];
 
         $slug = $groupType->slug;
 
-        if ($slug == NULL)
-        {
-            do
-            {
+        if ($slug == null) {
+            do {
                 $data['slug'] = GroupType::generateSlug();
-            }
-            while ($this->groupTypeExists($data['slug'], ['type' => 'slug']));
+            } while ($this->groupTypeExists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
+
             return;
         }
 
-        if ($dbGroupType = $this->getGroupType($slug))
-        {
+        if ($dbGroupType = $this->getGroupType($slug)) {
             $this->update($data, ['slug' => $slug]);
-        }
-        else
-        {
+        } else {
             throw new RuntimeException(springf(
                 'Cannot update groupType with identifier %d; does not exist',
                 $id
@@ -124,7 +114,8 @@ class GroupTypeTableGateway extends AbstractTableGateway
     /**
      * Deletes GroupType and deletes the GroupType's icon.
      *
-     * @param String $slug GroupType's slug.
+     * @param string $slug GroupType's slug.
+     *
      * @return void
      */
     public function deleteGroupType($slug)

@@ -2,7 +2,6 @@
 
 namespace Setting\Form;
 
-use Zend\Form\Element;
 use Zend\Form\Form;
 
 class SettingForm extends Form
@@ -10,13 +9,14 @@ class SettingForm extends Form
     /**
      * Constructs SettingForm.
      * * Calls the parent (Zend\Form\Form) constructor
-     * * Calls $this->addElements
+     * * Calls $this->addElements.
      *
-     * @param String $name
+     * @param string     $name
      * @param dictionary $options
+     *
      * @return void
      */
-    public function __construct($name = "tab", $options = [])
+    public function __construct($name = 'tab', $options = [])
     {
         parent::__construct($name, $options);
 
@@ -36,16 +36,16 @@ class SettingForm extends Form
         ]);
 
         $this->add([
-            'name' => 'data',
-            'type' => 'text',
+            'name'    => 'data',
+            'type'    => 'text',
             'options' => [
                 'label' => 'Data',
             ],
         ]);
 
         $this->add([
-            'name' => 'submit',
-            'type' => 'submit',
+            'name'       => 'submit',
+            'type'       => 'submit',
             'attributes' => [
                'value' => 'Submit',
             ],

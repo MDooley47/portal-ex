@@ -2,8 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Controller\ConfigurationController;
-
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -15,6 +13,7 @@ class ConfigurationControllerFactory implements FactoryInterface
     {
         $this->container = $container;
         $this->addTables();
+
         return new ConfigurationController($this->tables);
     }
 }

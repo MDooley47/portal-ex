@@ -7,20 +7,20 @@ use Zend\InputFilter\InputFilter;
 class NameFilter extends InputFilter
 {
     /**
-     * Constructs NameFilter
+     * Constructs NameFilter.
      *
      * @return NameFilter $this
      */
     public function __construct()
     {
         $this->add([
-            'name' => 'name',
-            'required' => true,
+            'name'       => 'name',
+            'required'   => true,
             'validators' => [
                 [
-                    'name' => 'StringLength',
+                    'name'    => 'StringLength',
                     'options' => [
-                        'min' => 3
+                        'min' => 3,
                     ],
                 ],
             ],
@@ -29,5 +29,3 @@ class NameFilter extends InputFilter
         return $this;
     }
 }
-
-?>

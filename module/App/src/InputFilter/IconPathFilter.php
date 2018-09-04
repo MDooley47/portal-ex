@@ -7,20 +7,20 @@ use Zend\InputFilter\InputFilter;
 class IconPathFilter extends InputFilter
 {
     /**
-     * Constructs IconPathFilter
+     * Constructs IconPathFilter.
      *
      * @return IconPathFilter $this
      */
     public function __construct()
     {
         $this->add([
-            'name' => 'iconPath',
-            'required' => true,
+            'name'       => 'iconPath',
+            'required'   => true,
             'validators' => [
                 [
-                    'name' => 'stringLength',
+                    'name'    => 'stringLength',
                     'options' => [
-                        'min' => 22
+                        'min' => 22,
                     ],
                 ],
             ],
@@ -29,5 +29,3 @@ class IconPathFilter extends InputFilter
         return $this;
     }
 }
-
-?>

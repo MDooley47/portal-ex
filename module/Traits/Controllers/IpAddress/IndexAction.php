@@ -7,7 +7,7 @@ use Zend\View\Model\ViewModel;
 trait IndexAction
 {
     /**
-     * Displays the index page for IpAddress
+     * Displays the index page for IpAddress.
      *
      * @return ViewModel
      */

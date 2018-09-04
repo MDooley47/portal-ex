@@ -25,10 +25,8 @@ trait HasTables
             ->add('UserPrivileges')
             ->add('UserGroups');
 
-        if (isset($additionalTables) && is_array($additionalTables))
-        {
-            foreach ($additionalTables as $table)
-            {
+        if (isset($additionalTables) && is_array($additionalTables)) {
+            foreach ($additionalTables as $table) {
                 $this->add($table);
             }
         }
@@ -36,8 +34,8 @@ trait HasTables
 
     public function add($name)
     {
-        $type = "\\SessionManager\\TableModels\\" . $name . "TableGateway";
-        $this->tables[strtolower($name)] = new $type;
+        $type = '\\SessionManager\\TableModels\\'.$name.'TableGateway';
+        $this->tables[strtolower($name)] = new $type();
 
         return $this;
     }
@@ -51,8 +49,7 @@ trait HasTables
 
     public function addTableArray($tables)
     {
-        foreach ($tables as $name => $table)
-        {
+        foreach ($tables as $name => $table) {
             $this->addTable($name, $table);
         }
     }
@@ -78,5 +75,3 @@ trait HasTables
         return $this;
     }
 }
-
-?>

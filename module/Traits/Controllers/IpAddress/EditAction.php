@@ -4,13 +4,12 @@ namespace Traits\Controllers\IpAddress;
 
 use IpAddress\Form\IpAddressForm;
 use IpAddress\Model\IpAddress;
-
 use Zend\View\Model\ViewModel;
 
 trait EditAction
 {
     /**
-     * Edits IpAddress
+     * Edits IpAddress.
      *
      * @return ViewModel|Redirect
      */
@@ -22,21 +21,17 @@ trait EditAction
         $slug = $this->params()->fromRoute('slug', 0);
 
         // redirect to /app/add if there was no slug provided.
-        if (! $slug)
-        {
+        if (!$slug) {
             return $this->redirect()->toRoute('ipaddress', ['action' => 'add']);
         }
 
         // Try to get an app with the provided slug. If there is
         // no app, redirect to /app
-        try
-        {
-              $ipAddress = $table->getIpAddress($slug);
-         }
-         catch (Exception $ex)
-         {
-             return $this->redirect()->toRoute('ipaddress');
-         }
+        try {
+            $ipAddress = $table->getIpAddress($slug);
+        } catch (Exception $ex) {
+            return $this->redirect()->toRoute('ipaddress');
+        }
 
         $form = new IpAddressForm();
         $form->bind($ipAddress);
@@ -48,8 +43,7 @@ trait EditAction
             'form' => $form,
         ];
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -58,8 +52,7 @@ trait EditAction
             $form->setInputFilter($ipAddress->getInputFilter());
             $form->setData($post);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 IpAddress::sanitizeGuarded($data);
                 $data['slug'] = $slug;

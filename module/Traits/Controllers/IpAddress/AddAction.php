@@ -4,13 +4,12 @@ namespace Traits\Controllers\IpAddress;
 
 use IpAddress\Form\IpAddressForm;
 use IpAddress\Model\IpAddress;
-
 use Zend\View\Model\ViewModel;
 
 trait AddAction
 {
     /**
-     * Adds IpAddress
+     * Adds IpAddress.
      *
      * On a get request, addAction() will display
      * a form for adding a new IpAddress.
@@ -27,8 +26,7 @@ trait AddAction
 
         $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -39,8 +37,7 @@ trait AddAction
             $ipAddress = new IpAddress();
 
             $form->setInputFilter($ipAddress->getInputFilter());
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 IpAddress::sanitizeGuarded($data);
                 $ipAddress->exchangeArray($data);
@@ -48,7 +45,6 @@ trait AddAction
 
                 return $this->redirect()->toRoute('ipaddress', ['action' => 'add']);
             }
-
         }
 
         // if not post request, return with viewModel

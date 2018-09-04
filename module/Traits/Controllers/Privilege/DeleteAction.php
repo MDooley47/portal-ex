@@ -5,7 +5,7 @@ namespace Traits\Controllers\Privilege;
 trait DeleteAction
 {
     /**
-     * Deletes Privilege
+     * Deletes Privilege.
      *
      * Removes the privilege from the database
      * and removes the privilege's icon.
@@ -20,8 +20,7 @@ trait DeleteAction
 
         // iff it is a post request, the privilege will be deleted
         // after delete redirect to /privilege
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $slug = $request->getPost('slug');
 
             $table->deletePrivilege($slug);

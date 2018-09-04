@@ -2,20 +2,16 @@
 
 namespace SessionManager\TableModels;
 
-use RuntimeException;
-
 use Privilege\Model\Privilege;
-
+use RuntimeException;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
-
 
 class PrivilegeTableGateway extends AbstractTableGateway
 {
     public function __construct()
     {
-        $this->table      = 'privileges';
+        $this->table = 'privileges';
         $this->featureSet = new Feature\FeatureSet();
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
@@ -32,26 +28,23 @@ class PrivilegeTableGateway extends AbstractTableGateway
     }
 
     /**
-     * Selects an Privilege from the database
+     * Selects an Privilege from the database.
      *
-     * @param mixed $id The identifier.
+     * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
      * @return Privilege
      */
     public function getPrivilege($id, $options = ['type' => 'slug'])
     {
-        if ($options['type'] == 'slug')
-        {
+        if ($options['type'] == 'slug') {
             $rowset = $this->select(['slug' => $id]);
-        }
-        else if ($options['type' == 'id'])
-        {
+        } elseif ($options['type' == 'id']) {
             $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
-        if (! $row)
-        {
+        if (!$row) {
             throw new RuntimeException(sprintf(
                 'Could not Find Row with identifier %d of type %s',
                 $id, $options['type']
@@ -64,16 +57,17 @@ class PrivilegeTableGateway extends AbstractTableGateway
     /**
      * Checks if an privilege exists in the database.
      *
-     * @param mixed $id The identifier.
+     * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
-     * @return boolean If value exists
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
+     * @return bool If value exists
      */
     public function privilegeExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->getTable(),
-            'field' => $options['type'],
+            'table'   => $this->getTable(),
+            'field'   => $options['type'],
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
@@ -84,35 +78,32 @@ class PrivilegeTableGateway extends AbstractTableGateway
      * If $privilege->slug is not null then attempts to update an privilege with that slug
      *
      * @param Privilege $privilege
-     * @return void
+     *
      * @throws RuntimeException Privilege does not exist
+     *
+     * @return void
      */
     public function savePrivilege(Privilege $privilege)
     {
         $data = [
-            'name' => $privilege->name,
-            'description' => $privilege->description
+            'name'        => $privilege->name,
+            'description' => $privilege->description,
         ];
 
         $slug = $privilege->slug;
 
-        if ($slug == NULL)
-        {
-            do
-            {
+        if ($slug == null) {
+            do {
                 $data['slug'] = Privilege::generateSlug();
-            }
-            while ($this->privilegeExists($data['slug'], ['type' => 'slug']));
+            } while ($this->privilegeExists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
+
             return;
         }
 
-        if ($dbPrivilege = $this->getPrivilege($slug))
-        {
+        if ($dbPrivilege = $this->getPrivilege($slug)) {
             $this->update($data, ['slug' => $slug]);
-        }
-        else
-        {
+        } else {
             throw new RuntimeException(springf(
                 'Cannot update privilege with identifier %d; does not exist',
                 $id
@@ -123,7 +114,8 @@ class PrivilegeTableGateway extends AbstractTableGateway
     /**
      * Deletes Privilege and deletes the Privilege's icon.
      *
-     * @param String $slug Privilege's slug.
+     * @param string $slug Privilege's slug.
+     *
      * @return void
      */
     public function deletePrivilege($slug)

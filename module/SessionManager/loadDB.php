@@ -3,12 +3,10 @@
 namespace SessionManager;
 
 use Group\Model\Group;
-use SessionManager\Tables;
 use Tab\Model\Tab;
 
 class loadDB
 {
-
     public function __construct()
     {
         $this->makeTabsForGroupsWithoutTabs();
@@ -18,12 +16,10 @@ class loadDB
     {
         $tables = new Tables();
 
-        foreach ($tables->getTable('group')->fetchAll() as $row)
-        {
+        foreach ($tables->getTable('group')->fetchAll() as $row) {
             $group = (new Group())->exchangeArray($row->getArrayCopy());
 
-            if (! $group->hasTab())
-            {
+            if (!$group->hasTab()) {
 
 /*                do
                 {
@@ -34,7 +30,7 @@ class loadDB
 
                 $tab = (new Tab())
                     ->exchangeArray([
-                        "name" => $group->name,
+                        'name' => $group->name,
                     ]);
 
                 $tabTable = $tables->getTable('tab');
@@ -45,9 +41,9 @@ class loadDB
 
                 $tables->getTable('ownerTabs')
                     ->addCorrelation($tab->slug, $group->slug, [
-                        "type" => $tables->getTable('ownerType')
-                            ->getType("group", [
-                                "type" => "name",
+                        'type' => $tables->getTable('ownerType')
+                            ->getType('group', [
+                                'type' => 'name',
                             ]),
                     ]);
 
