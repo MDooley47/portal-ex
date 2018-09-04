@@ -62,5 +62,8 @@
         "url" : "https://github.com/ESUCC/simplesamlphp-1.git",
         "name" : "simplesaml"
     }
-    ]
+    ],
+    "require-dev": {
+        "psy/psysh": "^0.9.7"
+    }
 }
