@@ -53,7 +53,7 @@ $db = new PDO('pgsql:host=db;dbname=portal', 'postgres', 'asdfgh');
 foreach ($csv as $row) {
     /*
         // Add Counties
-    
+
         try
         {
             $db->exec("INSERT INTO groups (\"groupType\", slug, name) VALUES ('j25lhv', '" . explode("-", $row["CODIST"])[0] . "', '" . ucwords(strtolower($row["COUNTY"])) . " County');");
@@ -74,7 +74,7 @@ foreach ($csv as $row) {
 
     /*
         // Add Buildings
-    
+
         try
         {
             $db->exec("INSERT INTO groups (\"groupType\", slug, name) VALUES ('ri12io', '" . $row["CODIST"] . "', '" . ucwords(strtolower($row["SCHOOL NAME"])) . "');");
