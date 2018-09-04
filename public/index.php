@@ -57,27 +57,48 @@ function env($key, $default = null)
 }
 
 /**
- * Make logging easy.
- */
+ * Makes logging easier
+ *
+ * Modify this method to change log files or logging methods
+ * the note method will use this method to automatically
+ * grab the correct Logger.
+ *
+ * By default it is all done in the same file.
+ *
+ * @param string $type
+ *
+ * @return Logger */
 function logger($type)
 {
-    $logger = new Logger();
-    $logFile = APPLICATION_PATH.'/data/logs/log.log';
+    $logger = new Logger;
+    $logPath = APPLICATION_PATH . '/data/logs/';
+
+    $logFileInfo = $logFileDebug = $logFileDefault = 'log.log';
 
     switch (strtolower($type)) {
         case 'debug':
-            $writer = new Stream($logFile);
-            $logger->addWriter($writer);
+            $logFile = $logPath . $logFileDebug;
             break;
         case 'info':
+            $logFile = $logPath . $logFileInfo;
+            break;
         default:
-            $writer = new Stream($logFile);
-            $logger->addWriter($writer);
+            $logFile = $logPath . $logFileDefault;
+            break;
     }
+
+    $writer = new Stream($logFile);
+    $logger->addWriter($writer);
 
     return $logger;
 }
 
+/**
+ * Makes logging super easy
+ *
+ * @param string $value
+ * @param string|null $type
+ */
 function note($value, $type = null)
 {
     if (!isset($type)) {
@@ -141,12 +162,26 @@ function getSlug($model)
     }
 }
 
+/**
+ * Dump and Die
+ *
+ * @param mixed $data
+ */
 function dd($data)
 {
     var_dump($data);
     die();
 }
 
+/**
+ * Get array value by key or set and return default value
+ *
+ * @param string $key
+ * @param &array &$search
+ * @param mixed|null $default
+ *
+ * @return mixed
+ */
 function arrayValueDefault($key, &$search, $default = null)
 {
     if (!array_key_exists($key, $search)) {
