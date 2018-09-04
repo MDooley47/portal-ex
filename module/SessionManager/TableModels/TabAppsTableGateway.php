@@ -4,9 +4,10 @@ namespace SessionManager\TableModels;
 
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
-use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
+use Zend\Validator\Db\RecordExists;
 
 class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
