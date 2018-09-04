@@ -46,7 +46,7 @@ class GroupTableGateway extends AbstractTableGateway
         $row = $rowset->current();
         if (!$row) {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
+                'Could not find row with identifier %s of type %s',
                 $id, $options['type']
             ));
         }
