@@ -16,20 +16,37 @@ class Privilege
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**
-     * Int for Privilege's id found in the db.
+     * Privilege's id found in the db.
+     *
+     * @var int
      */
     public $id;
+
     /**
-     * String for Privilege's name.
-     */
-    public $name;
-    /**
-     * String for Privilege's description.
+     * Privilege's description.
+     *
+     * @var string
      */
     public $description;
 
     /**
-     * InputFilter for Privilege's inputFilter.
+     * Privilege's name.
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * Privilege's level.
+     *
+     * @var int
+     */
+    public $level;
+
+    /**
+     * Privilege's inputFilter.
+     *
+     * @var \Zend\InputFilter\InputFilter
      */
     protected $inputFilter;
 
@@ -64,7 +81,7 @@ class Privilege
      *
      * @param array $options
      *
-     * @return Privilege $this
+     * @return \Zend\InputFilter\BaseInputFilter
      */
     public function getInputFilter($options = [])
     {
@@ -79,12 +96,10 @@ class Privilege
     /**
      * Sets Privilege's inputFilter.
      *
-     * Throws error. Privilege's inputFilter cannot be modifed
-     * by an outside enity.
+     * Throws error. Privilege's inputFilter cannot be modified
+     * by an outside entity.
      *
      * @throws DomainException
-     *
-     * @return Privilege $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {
