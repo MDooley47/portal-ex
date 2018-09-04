@@ -4,6 +4,7 @@ namespace SessionManager\TableModels;
 
 use App\Model\App;
 use RuntimeException;
+use SessionManager\Tables;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 use Zend\Validator\Db\RecordExists;
@@ -108,6 +109,12 @@ class AppTableGateway extends AbstractTableGateway
             } while ($this->appExists($data['slug']));
             $this->insert($data);
 
+            if (isset($app->tab)) {
+                (new Tables())
+                    ->getTable('tabApps')
+                    ->addCorrelation($app->tab, $data['slug']);
+            }
+
             return;
         }
 
@@ -118,11 +125,19 @@ class AppTableGateway extends AbstractTableGateway
                 }
             }
             $data['version'] = 1 + (int) $dbApp->version;
-            $this->update($data, ['slug' => $slug]);
-        } else {
+            $this->update($data,['slug' => $slug]);
+
+            if (isset($app->tab)) {
+                (new Tables())
+                    ->getTable('tabApps')
+                    ->addCorrelation($app->tab, $slug);
+            }
+        }
+        else
+        {
             throw new RuntimeException(springf(
-                'Cannot update app with identifier %d; does not exist',
-                $id
+                'Cannot update app with identifier %s; does not exist',
+                $slug
             ));
         }
     }
