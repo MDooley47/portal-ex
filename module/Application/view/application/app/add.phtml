@@ -1,8 +1,16 @@
 <?php
+    use SessionManager\Tables;
+
     $fileElement = $form->get('icon');
 
     $escaper = new Zend\Escaper\Escaper('utf-8');
     $this->headTitle($title = 'Add new App');
+    $this->headLink()
+        ->prependStylesheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css');
+    $this->headScript()
+        ->prependFile('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js');
+
+    $tables = new Tables();
 
 ?>
 
@@ -24,6 +32,13 @@
     <?= $this->formFile($fileElement) ?>
     <?= $this->formElementErrors($fileElement) ?>
 </div>
+
+<select class="select2 single tab" name="tab">
+    <option></option>
+    <? foreach ($tables->getTable('tab')->fetchAll() as $tab) : ?>
+        <option value="<?= $tab->slug ?>"><?= $tab->name ?></option>
+    <? endforeach; ?>
+</select>
 
 <?= $this->formRow($this->form->get('submit')); ?>
 

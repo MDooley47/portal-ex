@@ -1,6 +1,7 @@
 <?php
 /**
  * @link      http://github.com/zendframework/ZendSkeletonApplication for the canonical source repository
+ *
  * @copyright Copyright (c) 2005-2016 Zend Technologies USA Inc. (http://www.zend.com)
  * @license   http://framework.zend.com/license/new-bsd New BSD License
  */
@@ -8,13 +9,10 @@
 namespace Application\Controller;
 
 use RuntimeException;
-
 use SessionManager\Session;
 use Traits\HasTables;
-
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
 
 class ApplicationController extends AbstractActionController
 {
@@ -29,11 +27,9 @@ class ApplicationController extends AbstractActionController
     {
 
         // activate session if not active
-        if (! Session::isActive())
-        {
+        if (!Session::isActive()) {
             return $this->redirect()->toRoute('login');
-        }
-        else {
+        } else {
             // TODO: SHOW THEIR DASHBOARD
             Session::hasPrivilege('auth');
 
@@ -48,13 +44,11 @@ class ApplicationController extends AbstractActionController
 
     public function loginAction()
     {
-        if ($this->getRequest()->isPost())
-        {
+        if ($this->getRequest()->isPost()) {
             return $this->loginPostAction();
         }
 
-        if (Session::isActive())
-        {
+        if (Session::isActive()) {
             return $this->redirect()->toRoute('home');
         }
 
@@ -100,19 +94,16 @@ class ApplicationController extends AbstractActionController
         $email = $this->params()->fromPost('email');
         $password = $this->params()->fromPost('password');
 
-        if (! Session::isActive())
-        {
-            try
-            {
+        if (!Session::isActive()) {
+            try {
                 $user = $this->getTable('user')->getUser($email, ['type' => 'email']);
 
-                note("Login: Email: " . $email, "INFO");
+                note('Login: Email: '.$email, 'INFO');
                 Session::start();
                 Session::setUser($user);
-            }
-            catch (RuntimeException $e)
-            {
-                note("Login Attempt: Incorrect Email: " . $email, "INFO");
+            } catch (RuntimeException $e) {
+                note('Login Attempt: Incorrect Email: '.$email, 'INFO');
+
                 return $this->redirect()->toRoute('login');
             }
         }
@@ -122,15 +113,11 @@ class ApplicationController extends AbstractActionController
 
     public function logoutAction()
     {
-        if ($this->getRequest()->isPost())
-        {
-            if (Session::isActive())
-            {
+        if ($this->getRequest()->isPost()) {
+            if (Session::isActive()) {
                 Session::end();
             }
-        }
-        else
-        {
+        } else {
             return $this->redirect()->toRoute('home');
         }
     }

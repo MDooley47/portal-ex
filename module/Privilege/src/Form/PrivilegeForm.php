@@ -2,7 +2,6 @@
 
 namespace Privilege\Form;
 
-use Zend\Form\Element;
 use Zend\Form\Form;
 
 class PrivilegeForm extends Form
@@ -10,13 +9,14 @@ class PrivilegeForm extends Form
     /**
      * Constructs PrivilegeForm.
      * * Calls the parent (Zend\Form\Form) constructor
-     * * Calls $this->addElements
+     * * Calls $this->addElements.
      *
-     * @param String $name
+     * @param string     $name
      * @param dictionary $options
+     *
      * @return void
      */
-    public function __construct($name = "privilege", $options = [])
+    public function __construct($name = 'privilege', $options = [])
     {
         parent::__construct($name, $options);
 
@@ -36,24 +36,24 @@ class PrivilegeForm extends Form
         ]);
 
         $this->add([
-            'name' => 'name',
-            'type' => 'text',
+            'name'    => 'name',
+            'type'    => 'text',
             'options' => [
                 'label' => 'Name',
             ],
         ]);
 
         $this->add([
-            'name' => 'description',
-            'type' => 'text',
+            'name'    => 'description',
+            'type'    => 'text',
             'options' => [
                 'label' => 'Description',
             ],
         ]);
 
         $this->add([
-            'name' => 'submit',
-            'type' => 'submit',
+            'name'       => 'submit',
+            'type'       => 'submit',
             'attributes' => [
                'value' => 'Submit',
             ],

@@ -3,17 +3,17 @@
 namespace SessionManager\TableModels;
 
 use SessionManager\Tables;
-
+use Traits\Interfaces\CorrelationInterface;
+use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
+use Zend\Validator\Db\RecordExists;
 
-
-class TabAppsTableGateway extends AbstractTableGateway
+class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
     public function __construct()
     {
-        $this->table      = 'tabApps';
+        $this->table = 'tabApps';
         $this->featureSet = new Feature\FeatureSet();
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
@@ -21,17 +21,12 @@ class TabAppsTableGateway extends AbstractTableGateway
 
     public function getApps($slug, $options = [])
     {
-
-        if (! array_key_exists('type', $options))
-        {
+        if (!array_key_exists('type', $options)) {
             $options['type'] = null;
         }
 
-        $rowset = $this->select(function (Select $select)
-                    use ($slug, $options)
-                {
-                    switch (strtolower($options['type']))
-                    {
+        $rowset = $this->select(function (Select $select) use ($slug, $options) {
+            switch (strtolower($options['type'])) {
                         case 'tab':
                         default:
                             $select->where([
@@ -39,10 +34,41 @@ class TabAppsTableGateway extends AbstractTableGateway
                             ]);
                             break;
                     }
-                });
+        });
 
         return (new Tables())
             ->getTable('app')
             ->getApps(array_column($rowset->toArray(), 'appSlug'));
+    }
+
+    public function addCorrelation($tab, $app, $options = [])
+    {
+        if ($this->correlationExists($tab, $app, $options)) {
+            // correlation already exists
+            return;
+        }
+
+        $data = [
+            'tabSlug' => $tab,
+            'appSlug' => $app,
+        ];
+
+        return $this->insert($data);
+    }
+
+    public function correlationExists($tab, $app, $options = [])
+    {
+        $adapter = $this->getAdapter();
+
+        $clause = '"appSlug"'
+                .' = '
+                ."'$app'";
+
+        return (new RecordExists([
+            'table'   => $this->getTable(),
+            'field'   => 'tabSlug', // change
+            'adapter' => $adapter,
+            'exclude' => $clause,
+        ]))->isValid($tab);
     }
 }

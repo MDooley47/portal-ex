@@ -2,24 +2,16 @@
 
 namespace Attribute\Model;
 
-use DomainException;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
-use Traits\Models\ExchangeArray;
-
 use Attribute\InputFilter\NameFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use DomainException;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
+use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
-class Attribute
+class Attribute implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**
@@ -49,28 +41,29 @@ class Attribute
     ];
 
     /**
-     * Get attribute values as array
+     * Get attribute values as array.
      *
      * @return array
      */
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
-            'slug' => $this->slug,
-            'name' => $this->name,
+            'id'          => $this->id,
+            'slug'        => $this->slug,
+            'name'        => $this->name,
             'description' => $this->description,
-            'data' => $this->data,
+            'data'        => $this->data,
         ];
     }
 
     /**
-     * Gets Attribute's input filter
+     * Gets Attribute's input filter.
      *
      * Returns the app's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return Attribute $this
      */
     public function getInputFilter($options = [])
@@ -84,13 +77,14 @@ class Attribute
     }
 
     /**
-     * Sets Attribute's inputFilter
+     * Sets Attribute's inputFilter.
      *
      * Throws error. Attribute's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return Attribute $this
      * @throws DomainException
+     *
+     * @return Attribute $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

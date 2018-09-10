@@ -2,17 +2,12 @@
 
 namespace Application\Controller;
 
-use SessionManager\Session;
-
-use Traits\HasTables;
 use Traits\Controllers\Tab\AddAction;
 use Traits\Controllers\Tab\DeleteAction;
 use Traits\Controllers\Tab\EditAction;
 use Traits\Controllers\Tab\IndexAction;
-
+use Traits\HasTables;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\View\Model\ViewModel;
-use Zend\Session\Container;
 
 class TabController extends AbstractActionController
 {

@@ -2,27 +2,20 @@
 
 namespace App\Model;
 
-use App\InputFilter\NameFilter;
-use App\InputFilter\URLFilter;
 use App\InputFilter\IconFilter;
 use App\InputFilter\IconPathFilter;
-
+use App\InputFilter\NameFilter;
+use App\InputFilter\TabFilter;
+use App\InputFilter\URLFilter;
 use DomainException;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
-class App
+class App implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**
@@ -60,24 +53,24 @@ class App
     ];
 
     /**
-     * Get app values as array
+     * Get app values as array.
      *
      * @return array
      */
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
-            'slug' => $this->slug,
-            'name' => $this->name,
-            'url' => $this->url,
+            'id'       => $this->id,
+            'slug'     => $this->slug,
+            'name'     => $this->name,
+            'url'      => $this->url,
             'iconPath' => $this->iconPath,
-            'version' => $this->version,
+            'version'  => $this->version,
         ];
     }
 
     /**
-     * Gets App's input filter
+     * Gets App's input filter.
      *
      * Returns the app's inputFilter.
      * Creates the inputFilter if it does not exist.
@@ -86,31 +79,27 @@ class App
      * Adds/Removes the icon filter depending upon
      * the passed in boolean value $options['hasIcon'].
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return App $this
      */
     public function getInputFilter($options = [])
     {
         $tmpFilter = (new InputFilter())
             ->merge(new NameFilter())
-            ->merge(new URLFilter());
+            ->merge(new URLFilter())
+            ->merge(new TabFilter(false));
 
-        if (($options['hasPath']) && (! $tmpFilter->has('iconPath')))
-        {
+        if (($options['hasPath']) && (!$tmpFilter->has('iconPath'))) {
             $tmpFilter->merge(new IconPathFilter());
-        }
-        else if ((! $options['hasPath']) && ($tmpFilter->has('iconPath')))
-        {
-            $tmpFilter->remove("iconPath");
+        } elseif ((!$options['hasPath']) && ($tmpFilter->has('iconPath'))) {
+            $tmpFilter->remove('iconPath');
         }
 
-        if (($options['hasIcon']) && (! $tmpFilter->has('icon')))
-        {
+        if (($options['hasIcon']) && (!$tmpFilter->has('icon'))) {
             $tmpFilter->merge(new IconFilter());
-        }
-        else if ((! $options['hasIcon']) && ($tmpFilter->has('icon')))
-        {
-            $tmpFilter->remove("icon");
+        } elseif ((!$options['hasIcon']) && ($tmpFilter->has('icon'))) {
+            $tmpFilter->remove('icon');
         }
 
         $this->inputFilter = $tmpFilter;
@@ -119,13 +108,14 @@ class App
     }
 
     /**
-     * Sets App's inputFilter
+     * Sets App's inputFilter.
      *
      * Throws error. App's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return App $this
      * @throws DomainException
+     *
+     * @return App $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

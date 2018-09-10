@@ -4,13 +4,12 @@ namespace Traits\Controllers\GroupType;
 
 use GroupType\Form\GroupTypeForm;
 use GroupType\Model\GroupType;
-
 use Zend\View\Model\ViewModel;
 
 trait EditAction
 {
     /**
-     * Edits GroupType
+     * Edits GroupType.
      *
      * @return ViewModel|Redirect
      */
@@ -22,21 +21,17 @@ trait EditAction
         $slug = $this->params()->fromRoute('slug', 0);
 
         // redirect to /grouptype/add if there was no slug provided.
-        if (! $slug)
-        {
+        if (!$slug) {
             return $this->redirect()->toRoute('grouptype', ['action' => 'add']);
         }
 
         // Try to get an grouptype with the provided slug. If there is
         // no grouptype, redirect to /grouptype
-        try
-        {
-              $grouptype = $table->getGroupType($slug);
-         }
-         catch (Exception $ex)
-         {
-             return $this->redirect()->toRoute('grouptype');
-         }
+        try {
+            $grouptype = $table->getGroupType($slug);
+        } catch (Exception $ex) {
+            return $this->redirect()->toRoute('grouptype');
+        }
 
         $form = new GroupTypeForm();
         $form->bind($grouptype);
@@ -48,8 +43,7 @@ trait EditAction
             'form' => $form,
         ];
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -58,8 +52,7 @@ trait EditAction
             $form->setInputFilter($grouptype->getInputFilter());
             $form->setData($post);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 GroupType::sanitizeGuarded($data);
                 $data['slug'] = $slug;

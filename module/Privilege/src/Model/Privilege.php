@@ -3,40 +3,49 @@
 namespace Privilege\Model;
 
 use DomainException;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
-use Traits\Models\ExchangeArray;
-
 use Privilege\InputFilter\NameFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
+use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
-class Privilege
+class Privilege implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**
-     * Int for Privilege's id found in the db.
+     * Privilege's id found in the db.
+     *
+     * @var int
      */
     public $id;
+
     /**
-     * String for Privilege's name.
-     */
-    public $name;
-    /**
-     * String for Privilege's description.
+     * Privilege's description.
+     *
+     * @var string
      */
     public $description;
 
     /**
-     * InputFilter for Privilege's inputFilter.
+     * Privilege's name.
+     *
+     * @var string
+     */
+    public $name;
+
+    /**
+     * Privilege's level.
+     *
+     * @var int
+     */
+    public $level;
+
+    /**
+     * Privilege's inputFilter.
+     *
+     * @var \Zend\InputFilter\InputFilter
      */
     protected $inputFilter;
 
@@ -49,28 +58,29 @@ class Privilege
     ];
 
     /**
-     * Get privilege values as array
+     * Get privilege values as array.
      *
      * @return array
      */
     public function getArrayCopy()
     {
         return [
-            'id' => $this->id,
-            'slug' => $this->slug,
-            'name' => $this->name,
+            'id'          => $this->id,
+            'slug'        => $this->slug,
+            'name'        => $this->name,
             'description' => $this->description,
         ];
     }
 
     /**
-     * Gets Privilege's input filter
+     * Gets Privilege's input filter.
      *
      * Returns the app's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
-     * @return Privilege $this
+     * @param array $options
+     *
+     * @return \Zend\InputFilter\BaseInputFilter
      */
     public function getInputFilter($options = [])
     {
@@ -83,12 +93,11 @@ class Privilege
     }
 
     /**
-     * Sets Privilege's inputFilter
+     * Sets Privilege's inputFilter.
      *
-     * Throws error. Privilege's inputFilter cannot be modifed
-     * by an outside enity.
+     * Throws error. Privilege's inputFilter cannot be modified
+     * by an outside entity.
      *
-     * @return Privilege $this
      * @throws DomainException
      */
     public function setInputFilter(InputFilterInterface $inputFilter)

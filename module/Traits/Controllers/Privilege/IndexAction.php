@@ -7,7 +7,7 @@ use Zend\View\Model\ViewModel;
 trait IndexAction
 {
     /**
-     * Displays the index page for Privilege
+     * Displays the index page for Privilege.
      *
      * @return ViewModel
      */

@@ -2,8 +2,6 @@
 
 namespace Application\Controller;
 
-use Application\Controller\UserController;
-
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -15,6 +13,7 @@ class UserControllerFactory implements FactoryInterface
     {
         $this->container = $container;
         $this->addTables();
+
         return new UserController($this->tables);
     }
 }

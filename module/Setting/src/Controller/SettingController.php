@@ -2,15 +2,12 @@
 
 namespace Setting\Controller;
 
-use Traits\HasTables;
 use Traits\Controllers\Setting\AddAction;
 use Traits\Controllers\Setting\DeleteAction;
 use Traits\Controllers\Setting\EditAction;
 use Traits\Controllers\Setting\IndexAction;
-
+use Traits\HasTables;
 use Zend\Mvc\Controller\AbstractActionController;
-use Zend\Validator\File\IsImage;
-use Zend\View\Model\ViewModel;
 
 class SettingController extends AbstractActionController
 {
@@ -18,7 +15,7 @@ class SettingController extends AbstractActionController
         IndexAction;
 
     /**
-     * SettingTable to be used to interface with the tableGateway/database
+     * SettingTable to be used to interface with the tableGateway/database.
      */
     private $table;
 
@@ -27,6 +24,7 @@ class SettingController extends AbstractActionController
      * Sets $this->table to the paramater.
      *
      * @param SettingTable $table
+     *
      * @return void
      */
     public function __construct(SettingTable $table)

@@ -2,20 +2,17 @@
 
 namespace SessionManager\TableModels;
 
-use RuntimeException;
-
 use OwnerType\Model\OwnerType;
-
+use RuntimeException;
+use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
-
 
 class OwnerTypeTableGateway extends AbstractTableGateway
 {
     public function __construct()
     {
-        $this->table      = 'ownerTypes';
+        $this->table = 'ownerTypes';
         $this->featureSet = new Feature\FeatureSet();
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
@@ -23,17 +20,12 @@ class OwnerTypeTableGateway extends AbstractTableGateway
 
     public function getType($id, $options = [])
     {
-
-        if (! array_key_exists('type', $options))
-        {
+        if (!array_key_exists('type', $options)) {
             $options['type'] = 'slug';
         }
 
-        $rowset = $this->select(function (Select $select)
-                    use ($id, $options)
-                {
-                    switch (strtolower($options['type']))
-                    {
+        $rowset = $this->select(function (Select $select) use ($id, $options) {
+            switch (strtolower($options['type'])) {
                         case 'name':
                             $select->where([
                                 'name' => $id,
@@ -45,7 +37,7 @@ class OwnerTypeTableGateway extends AbstractTableGateway
                                 'slug' => $id,
                             ]);
                     }
-                });
+        });
 
         return (new OwnerType())
             ->exchangeArray($rowset->current()->getArrayCopy());
@@ -62,26 +54,23 @@ class OwnerTypeTableGateway extends AbstractTableGateway
     }
 
     /**
-     * Selects an OwnerType from the database
+     * Selects an OwnerType from the database.
      *
-     * @param mixed $id The identifier.
+     * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
      * @return OwnerType
      */
     public function getOwnerType($id, $options = ['type' => 'slug'])
     {
-        if ($options['type'] == 'slug')
-        {
+        if ($options['type'] == 'slug') {
             $rowset = $this->select(['slug' => $id]);
-        }
-        else if ($options['type'] == 'id')
-        {
+        } elseif ($options['type'] == 'id') {
             $rowset = $this->select(['id' => $id]);
         }
         $row = $rowset->current();
-        if (! $row)
-        {
+        if (!$row) {
             throw new RuntimeException(sprintf(
                 'Could not Find Row with identifier %d of type %s',
                 $id, $options['type']
@@ -94,16 +83,17 @@ class OwnerTypeTableGateway extends AbstractTableGateway
     /**
      * Checks if an ownerType exists in the database.
      *
-     * @param mixed $id The identifier.
+     * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     * identifier $id is. Default value is 'type' => 'id'.
-     * @return boolean If value exists
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
+     * @return bool If value exists
      */
     public function ownerTypeExists($id, $options = ['type' => 'id'])
     {
         return (new RecordExists([
-            'table' => $this->getTable(),
-            'field' => $options['type'],
+            'table'   => $this->getTable(),
+            'field'   => $options['type'],
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
@@ -114,35 +104,32 @@ class OwnerTypeTableGateway extends AbstractTableGateway
      * If $ownerType->slug is not null then attempts to update an ownerType with that slug
      *
      * @param OwnerType $ownerType
-     * @return void
+     *
      * @throws RuntimeException OwnerType does not exist
+     *
+     * @return void
      */
     public function saveOwnerType(OwnerType $ownerType)
     {
         $data = [
-            'name' => $ownerType->name,
-            'description' => $ownerType->description
+            'name'        => $ownerType->name,
+            'description' => $ownerType->description,
         ];
 
         $slug = $ownerType->slug;
 
-        if ($slug == NULL)
-        {
-            do
-            {
+        if ($slug == null) {
+            do {
                 $data['slug'] = OwnerType::generateSlug();
-            }
-            while ($this->ownerTypeExists($data['slug'], ['type' => 'slug']));
+            } while ($this->ownerTypeExists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
+
             return;
         }
 
-        if ($dbOwnerType = $this->getOwnerType($slug))
-        {
+        if ($dbOwnerType = $this->getOwnerType($slug)) {
             $this->update($data, ['slug' => $slug]);
-        }
-        else
-        {
+        } else {
             throw new RuntimeException(springf(
                 'Cannot update ownerType with identifier %d; does not exist',
                 $id
@@ -153,7 +140,8 @@ class OwnerTypeTableGateway extends AbstractTableGateway
     /**
      * Deletes OwnerType and deletes the OwnerType's icon.
      *
-     * @param String $slug OwnerType's slug.
+     * @param string $slug OwnerType's slug.
+     *
      * @return void
      */
     public function deleteOwnerType($slug)

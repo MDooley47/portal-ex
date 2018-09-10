@@ -3,26 +3,15 @@
 namespace User\Model;
 
 use DomainException;
-use Symfony\Component\Routing\Loader\Configurator\Traits\AddTrait;
-
 use SessionManager\Tables;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
-
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use User\InputFilter\NameFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
-use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
-class User
+class User implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
     /**
@@ -52,30 +41,31 @@ class User
     ];
 
     /**
-     * Get app values as array
+     * Get app values as array.
      *
      * @return array
      */
     public function getArrayCopy()
     {
         return [
-            'slug' => $this->slug,
-            'name' => $this->name,
-            'email' => $this->email,
-            'codist' => $this->codist,
-            'county' => $this->county(),
+            'slug'     => $this->slug,
+            'name'     => $this->name,
+            'email'    => $this->email,
+            'codist'   => $this->codist,
+            'county'   => $this->county(),
             'district' => $this->district(),
             'building' => $this->building(),
         ];
     }
 
     /**
-     * Gets User's input filter
+     * Gets User's input filter.
      *
      * Returns the app's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return User $this
      */
     public function getInputFilter($options = [])
@@ -91,15 +81,15 @@ class User
     public function defaultTab()
     {
         return (new Tables())
-            ->getTable('tab')
-            ->getTab($this->district());
-            //->getTab($this->codist);
+            ->getTable('ownerTabs')
+            ->getTabs($this->district())[0];
+        //->getTab($this->codist);
     }
 
     /**
      *   COUNTY CODE 2 DIGITS
      * DISTRICT CODE 4 DIGITS
-     * BUILDING CODE 3 DIGITS
+     * BUILDING CODE 3 DIGITS.
      *
      *  EXAMPLE: 06-8473-729
      *   COUNTY: 06
@@ -108,23 +98,20 @@ class User
      *
      * note: hyphen's are assumed to be part of the codist.
      */
-
     public function county(): String
     {
-        return explode("-", $this->codist)[0];
+        return explode('-', $this->codist)[0];
     }
 
     public function district($options = []): String
     {
-        arrayValueDefault("composite-key", $options, true);
+        arrayValueDefault('composite-key', $options, true);
 
-        $codist = explode("-", $this->codist);
+        $codist = explode('-', $this->codist);
 
-        if ($options["composite-key"])
-        {
-            $out = $codist[0] . "-" . $codist[1];
-        }
-        else {
+        if ($options['composite-key']) {
+            $out = $codist[0].'-'.$codist[1];
+        } else {
             $out = $codist[1];
         }
 
@@ -133,27 +120,26 @@ class User
 
     public function building($options = []): String
     {
-        arrayValueDefault("composite-key", $options, true);
+        arrayValueDefault('composite-key', $options, true);
 
-        if ($options["composite-key"])
-        {
+        if ($options['composite-key']) {
             $out = $this->codist;
-        }
-        else {
-            $out = explode("-", $this->codist)[2];
+        } else {
+            $out = explode('-', $this->codist)[2];
         }
 
         return $out;
     }
 
     /**
-     * Sets User's inputFilter
+     * Sets User's inputFilter.
      *
      * Throws error. User's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return User $this
      * @throws DomainException
+     *
+     * @return User $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

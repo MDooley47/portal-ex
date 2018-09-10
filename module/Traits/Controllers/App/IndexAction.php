@@ -5,7 +5,7 @@ namespace Traits\Controllers\App;
 trait IndexAction
 {
     /**
-     * Displays the index page for App
+     * Displays the index page for App.
      *
      * @return ViewModel
      */
@@ -14,7 +14,9 @@ trait IndexAction
         $basePath = array_values(array_filter(
             explode('/', $this->getRequest()->getUri()->getPath())))[0];
 
-        if ($basePath == 'app') $this->redirect()->toUrl('/');
+        if ($basePath == 'app') {
+            $this->redirect()->toUrl('/');
+        }
 
         $table = $this->getTable('app');
 

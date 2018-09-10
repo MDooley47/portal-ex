@@ -3,25 +3,16 @@
 namespace Group\Model;
 
 use DomainException;
-
-use SessionManager\Tables;
-
-use Traits\Models\HasSlug;
-use Traits\Models\HasGuarded;
-use Traits\Models\ExchangeArray;
-
 use Group\InputFilter\NameFilter;
-
-use Zend\Filter\StringTrim;
-use Zend\Filter\StripTags;
-use Zend\Filter\ToInt;
-use Zend\InputFilter\FileInput;
+use SessionManager\Tables;
+use Traits\Interfaces\HasSlug as HasSlugInterface;
+use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
+use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
-use Zend\InputFilter\InputFilterAwareInterface;
 use Zend\InputFilter\InputFilterInterface;
-use Zend\Validator\StringLength;
 
-class Group
+class Group implements HasSlugInterface
 {
     use HasSlug, HasGuarded, ExchangeArray;
 
@@ -46,41 +37,60 @@ class Group
         'slug',
     ];
 
+    /**
+     * Get associated tabs.
+     *
+     * @return array
+     */
     public function getTabs()
     {
         $tables = new Tables();
+
+        //dd($tables->getTable('ownerType'));
 
         return $tables
             ->getTable('ownerTabs')
             ->getTabs($this->slug, [
                 'type' => $tables
-                    ->getTable('ownerTypes')
-                    ->getType('group', ['type' => 'name']),
+                    ->getTable('ownerType')
+                    ->getType('group', ['type' => 'name'])
+                    ->name,
             ]);
     }
 
     /**
-     * Get group values as array
+     * Boolean representation of if the group has at least one tab.
+     *
+     * @return bool
+     */
+    public function hasTab(): bool
+    {
+        return !empty($this->getTabs());
+    }
+
+    /**
+     * Get group values as array.
      *
      * @return array
      */
     public function getArrayCopy()
     {
         return [
-            'slug' => $this->slug,
-            'name' => $this->name,
+            'slug'        => $this->slug,
+            'name'        => $this->name,
             'description' => $this->description,
-            'grouptype' => $this->grouptype,
+            'grouptype'   => $this->grouptype,
         ];
     }
 
     /**
-     * Gets Group's input filter
+     * Gets Group's input filter.
      *
      * Returns the group's inputFilter.
      * Creates the inputFilter if it does not exist.
      *
-     * @param Array $options
+     * @param array $options
+     *
      * @return Group $this
      */
     public function getInputFilter($options = [])
@@ -94,13 +104,14 @@ class Group
     }
 
     /**
-     * Sets Group's inputFilter
+     * Sets Group's inputFilter.
      *
      * Throws error. Group's inputFilter cannot be modifed
      * by an outside enity.
      *
-     * @return Group $this
      * @throws DomainException
+     *
+     * @return Group $this
      */
     public function setInputFilter(InputFilterInterface $inputFilter)
     {

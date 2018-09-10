@@ -1,6 +1,6 @@
 <?php
 /**
- * Global Configuration Override
+ * Global Configuration Override.
  *
  * You can use this file for overriding configuration values from modules, etc.
  * You would place values in here that are agnostic to the environment and not
@@ -14,6 +14,6 @@
 return [
     'db' => [
         'driver' => 'Pdo',
-        'dsn' => 'pgsql:dbname=' . getenv('db_name') . ';host=' . getenv('db_host')
-    ]
+        'dsn'    => 'pgsql:dbname='.getenv('db_name').';host='.getenv('db_host'),
+    ],
 ];

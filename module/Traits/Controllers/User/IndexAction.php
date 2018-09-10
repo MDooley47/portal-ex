@@ -7,7 +7,7 @@ use Zend\View\Model\ViewModel;
 trait IndexAction
 {
     /**
-     * Displays the index page for User
+     * Displays the index page for User.
      *
      * @return ViewModel
      */

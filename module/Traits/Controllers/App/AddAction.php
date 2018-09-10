@@ -2,15 +2,14 @@
 
 namespace Traits\Controllers\App;
 
-use App\Model\App;
 use App\Form\AppForm;
+use App\Model\App;
 use Zend\View\Model\ViewModel;
-
 
 trait AddAction
 {
     /**
-     * Adds App
+     * Adds App.
      *
      * On a get request, addAction() will display
      * a form for adding a new App.
@@ -27,8 +26,7 @@ trait AddAction
 
         $request = $this->getRequest();
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -40,8 +38,7 @@ trait AddAction
 
             // Checks if the form data is valid with the icon (image file)
             $form->setInputFilter($app->getInputFilter(['hasIcon' => true]));
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
 
                 $data['iconPath'] = removeBasePath($data['icon']['tmp_name']);
@@ -56,8 +53,7 @@ trait AddAction
             // Checks if the form data is valid with the iconPath
             // (path to image file)
             $form->setInputFilter($app->getInputFilter(['hasPath' => true]));
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 App::sanitizeGuarded($data);
                 $app->exchangeArray($data);
@@ -65,12 +61,11 @@ trait AddAction
 
                 return $this->redirect()->toRoute('app', ['action' => 'add']);
             }
-
         }
 
         // if not post request, return with viewModel
-        return (new ViewModel([
+        return new ViewModel([
             'form' => $form,
-        ]));
+        ]);
     }
 }

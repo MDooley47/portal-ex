@@ -10,13 +10,14 @@ class UserForm extends Form
     /**
      * Constructs UserForm.
      * * Calls the parent (Zend\Form\Form) constructor
-     * * Calls $this->addElements
+     * * Calls $this->addElements.
      *
-     * @param String $name
+     * @param string     $name
      * @param dictionary $options
+     *
      * @return void
      */
-    public function __construct($name = "user", $options = [])
+    public function __construct($name = 'user', $options = [])
     {
         parent::__construct($name, $options);
 
@@ -36,24 +37,24 @@ class UserForm extends Form
         ]);
 
         $this->add([
-            'name' => 'name',
-            'type' => 'text',
+            'name'    => 'name',
+            'type'    => 'text',
             'options' => [
                 'label' => 'Name',
             ],
         ]);
 
         $this->add([
-            'name' => 'email',
-            'type' => Element\Email::class,
+            'name'    => 'email',
+            'type'    => Element\Email::class,
             'options' => [
                 'label' => 'Email',
             ],
         ]);
 
         $this->add([
-            'name' => 'submit',
-            'type' => 'submit',
+            'name'       => 'submit',
+            'type'       => 'submit',
             'attributes' => [
                'value' => 'Submit',
             ],

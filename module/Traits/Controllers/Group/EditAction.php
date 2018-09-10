@@ -4,13 +4,12 @@ namespace Traits\Controllers\Group;
 
 use Group\Form\GroupForm;
 use Group\Model\Group;
-
 use Zend\View\Model\ViewModel;
 
 trait EditAction
 {
     /**
-     * Edits Group
+     * Edits Group.
      *
      * @return ViewModel|Redirect
      */
@@ -22,21 +21,17 @@ trait EditAction
         $slug = $this->params()->fromRoute('slug', 0);
 
         // redirect to /group/add if there was no slug provided.
-        if (! $slug)
-        {
+        if (!$slug) {
             return $this->redirect()->toRoute('group', ['action' => 'add']);
         }
 
         // Try to get an group with the provided slug. If there is
         // no group, redirect to /group
-        try
-        {
-              $group = $table->getGroup($slug);
-         }
-         catch (Exception $ex)
-         {
-             return $this->redirect()->toRoute('group');
-         }
+        try {
+            $group = $table->getGroup($slug);
+        } catch (Exception $ex) {
+            return $this->redirect()->toRoute('group');
+        }
 
         $form = new GroupForm();
         $form->bind($group);
@@ -48,8 +43,7 @@ trait EditAction
             'form' => $form,
         ];
 
-        if ($request->isPost())
-        {
+        if ($request->isPost()) {
             $post = array_merge_recursive(
                 $request->getPost()->toArray(),
                 $request->getFiles()->toArray()
@@ -58,8 +52,7 @@ trait EditAction
             $form->setInputFilter($group->getInputFilter());
             $form->setData($post);
 
-            if ($form->isValid())
-            {
+            if ($form->isValid()) {
                 $data = $form->getData();
                 Group::sanitizeGuarded($data);
                 $data['slug'] = $slug;
