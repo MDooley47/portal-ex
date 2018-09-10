@@ -1,5 +1,11 @@
 <?php
 
+// echo "<br><br>index.php cookie: ";
+// var_dump($_COOKIE);
+// echo "<br><br>";
+// $e = new \Exception;
+// echo nl2br($e->getTraceAsString());
+
 use Dotenv\Dotenv;
 
 use Zend\Log\Logger;

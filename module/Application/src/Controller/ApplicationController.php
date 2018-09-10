@@ -61,6 +61,40 @@ class ApplicationController extends AbstractActionController
         return new ViewModel();
     }
 
+    public function loginssoAction()
+    {
+        // initiates SAML SSO login using SimpleSAMLphp SP
+        //   7/16/2018 SI
+
+        // echo "<br><br>cookie: ";
+        // var_dump($_COOKIE);
+        // echo "<br><br>";
+        // $e = new \Exception;
+        // echo nl2br($e->getTraceAsString());
+        // exit();
+
+        $as = new \SimpleSAML\Auth\Simple('default-sp');
+        $as->requireAuth();
+        $attributes = $as->getAttributes();
+
+        if (Session::isActive())
+        {
+            return $this->redirect()->toRoute('home');
+        }
+        else {
+          echo "<br>Session not active";
+          $email = $attributes['mail'][0];
+          echo "<br>email from attributes: <br>";
+          var_dump($email);
+          $user = $this->getTable('user')->getUser($email, ['type' => 'email']);
+          echo "<br>Retrieved user: <br>";
+          var_dump($user);
+          exit();
+        }
+
+
+    }
+
     public function loginPostAction()
     {
         $email = $this->params()->fromPost('email');

@@ -15,8 +15,7 @@ services:
           - db
         build: .
         ports:
-            - "80:80"
-            - "443:443"
+            - "8080:80"
         volumes:
             - .:/var/www
             - data:/volumes/storage
