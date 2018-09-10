@@ -2,25 +2,21 @@ FROM php:7.1-apache
 
 # Install dependencies from apt
 RUN apt-get update
-# Allows postgresql-client to install without issues
-RUN mkdir -p /usr/share/man/man1 \
-    && mkdir -p /usr/share/man/man7
-
 RUN apt-get install -y \
     git \
     wget \
+    postgresql-client \
     zlib1g-dev \
     libgmp-dev \
     libicu-dev \
     libpq-dev \
-    apache2-dev \
-    postgresql-client
+    apache2-dev
 
 # Install php extensions from docker-php-ext-install
 RUN docker-php-ext-install zip \
     && docker-php-ext-install gmp \
     && docker-php-ext-install intl \
-    && docker-php-ext-install pdo pdo_pgsql pgsql
+    && docker-php-ext-install pdo pdo_pgsql
 
 # install mod_xsendfile
 RUN wget -O /tmp/mod_xsendfile.tar.gz https://tn123.org/mod_xsendfile/mod_xsendfile-0.12.tar.gz \

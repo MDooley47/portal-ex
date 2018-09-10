@@ -21,9 +21,8 @@
         "zendframework/zend-log" : "^2.9",
         "zendframework/zend-session" : "^2.7.1",
         "zendframework/zend-escaper": "^2.5",
-        "esucc/simplesamlphp" : "dev-develop",
         "vlucas/phpdotenv" : "^2.4",
-        "psy/psysh": "@stable"
+        "simplesamlphp/simplesamlphp": "^1.15"
     },
     "autoload" : {
         "psr-4" : {
@@ -40,8 +39,7 @@
             "Setting\\" : "module/Setting/src/",
             "Tab\\" : "module/Tab/src/",
             "Traits\\" : "module/Traits/",
-            "User\\" : "module/User/src/",
-            "Model\\": "module/Model"
+            "User\\" : "module/User/src/"
         }
     },
     "autoload-dev" : {
@@ -58,13 +56,5 @@
         "post-create-project-cmd" : "@development-enable",
         "serve" : "php -S 0.0.0.0:8080 -t public/ public/index.php",
         "test" : "phpunit"
-    },
-    "repositories" : [{
-        "type" : "git",
-        "url" : "https://github.com/ESUCC/simplesamlphp-1.git",
-        "name" : "simplesaml"
-    }
-    ],
-    "require-dev": {
     }
 }

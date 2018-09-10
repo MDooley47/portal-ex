@@ -34,6 +34,16 @@ return [
                     ],
                 ],
             ],
+            'loginsso' => [
+                'type' => Segment::class,
+                'options' => [
+                    'route'    => '/loginsso[/]',
+                    'defaults' => [
+                        'controller' => Controller\ApplicationController::class,
+                        'action'     => 'loginsso',
+                    ],
+                ],
+            ],
             'logout' => [
                 'type'    => Segment::class,
                 'options' => [
