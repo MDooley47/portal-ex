@@ -141,7 +141,7 @@ class Session
             return false;
         }
 
-        $table = (new Tables())->getTable('user');
+        $table = (new Tables())->getTable('users');
 
         return $table->getUser(self::get('userSlug'));
     }
@@ -171,7 +171,6 @@ class Session
     {
         self::start();
         //self::start(['start_active_time' => false]);
-
         if (self::isSet('activeTime')
             && self::isSet('userSlug')) {
             // note('both are set');

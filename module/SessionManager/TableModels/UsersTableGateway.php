@@ -6,8 +6,9 @@ use RuntimeException;
 use User\Model\User;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Validator\Db\RecordExists;
 
-class UserTableGateway extends AbstractTableGateway
+class UsersTableGateway extends AbstractTableGateway
 {
     public function __construct()
     {
@@ -46,10 +47,11 @@ class UserTableGateway extends AbstractTableGateway
 
         $row = $rowset->current();
         if (!$row) {
-            throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
-                $id, $options['type']
-            ));
+            // throw new RuntimeException(sprintf(
+            //     'Could not Find Row with identifier %d of type %s',
+            //     $id, $options['type']
+            // ));
+            return (null);
         }
 
         return (new User())->exchangeArray($row->getArrayCopy());
@@ -89,6 +91,7 @@ class UserTableGateway extends AbstractTableGateway
         $data = [
             'name'  => $user->name,
             'email' => $user->email,
+            'codist' => $user->codist,
         ];
 
         $slug = $user->slug;
@@ -99,11 +102,12 @@ class UserTableGateway extends AbstractTableGateway
             } while ($this->userExists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
 
-            return;
+            return ($data['slug']);
         }
 
         if ($dbUser = $this->getUser($slug)) {
             $this->update($data, ['slug' => $slug]);
+            return ($slug);
         } else {
             throw new RuntimeException(springf(
                 'Cannot update user with identifier %d; does not exist',

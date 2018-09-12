@@ -8,7 +8,7 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 use Zend\Validator\Db\RecordExists;
 
-class TabTableGateway extends AbstractTableGateway
+class TabsTableGateway extends AbstractTableGateway
 {
     public function __construct()
     {

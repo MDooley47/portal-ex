@@ -28,6 +28,11 @@ class User implements HasSlugInterface
     public $email;
 
     /**
+     * String for the Nebraska county-district number (CO-DST-BLDG format)
+     */
+    public $codist;
+
+    /**
      * InputFilter for User's inputFilter.
      */
     protected $inputFilter;
@@ -37,7 +42,6 @@ class User implements HasSlugInterface
      */
     protected static $guarded = [
         'slug',
-        'codist',
     ];
 
     /**
@@ -80,9 +84,10 @@ class User implements HasSlugInterface
 
     public function defaultTab()
     {
-        return (new Tables())
-            ->getTable('ownerTabs')
-            ->getTabs($this->district())[0];
+      $tables = new Tables();
+      $ownerTabs = $tables->getTable('ownerTabs');
+      $tab = $ownerTabs->getTabs($this->district())[0];
+      return ($tab);
         //->getTab($this->codist);
     }
 
