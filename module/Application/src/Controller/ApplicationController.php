@@ -18,8 +18,10 @@ use Privilege\Form\PrivilegeForm;
 use RuntimeException;
 use SessionManager\Session;
 use Tab\Form\TabForm;
+use SessionManager\Tables;
 use Traits\HasTables;
 use User\Form\UserForm;
+use User\Model\User;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -34,7 +36,6 @@ class ApplicationController extends AbstractActionController
 
     public function indexAction()
     {
-
         // activate session if not active
         if (!Session::isActive()) {
             return $this->redirect()->toRoute('login');
@@ -42,8 +43,8 @@ class ApplicationController extends AbstractActionController
             // TODO: SHOW THEIR HOME TAB
             Session::hasPrivilege('auth');
 
-            $tab = Session::getUser()->defaultTab();
-
+            $user = Session::getUser();
+            $tab = $user->defaultTab();
             return (new ViewModel([
                 'apps' => $tab->getApps(),
             ]))
@@ -86,34 +87,38 @@ class ApplicationController extends AbstractActionController
     {
         // initiates SAML SSO login using SimpleSAMLphp SP
         //   7/16/2018 SI
-
-        // echo "<br><br>cookie: ";
-        // var_dump($_COOKIE);
-        // echo "<br><br>";
-        // $e = new \Exception;
-        // echo nl2br($e->getTraceAsString());
-        // exit();
-
         $as = new \SimpleSAML\Auth\Simple('default-sp');
         $as->requireAuth();
         $attributes = $as->getAttributes();
+
+        $tables = new Tables();
+
+        $user = $tables->getTable('users')->getUser($attributes['mail'][0], ['type' => 'email']);
+        if (!$user)
+        {
+          // add user, privilege, and group
+          $user = new User();
+          $user->email = $attributes['mail'][0];
+          $user->name = $attributes['givenName'][0] . " " . $attributes['sn'][0];
+          $user->codist = $attributes['esucc-cdn'][0];
+          $usersTable = $tables->getTable('users');
+          $userSlug = $usersTable->saveUser($user);
+          $tables->getTable('userPrivileges')->addCorrelation($userSlug,'auth');
+          $tables->getTable('userGroups')
+            ->addCorrelation($userSlug, substr($user->codist,0,7));
+
+        }
+        // make session active
+        note('Login: Email: '.$email, 'INFO');
+        Session::start();
+        Session::setUser($user);
+        Session::setActiveTime();
 
         if (Session::isActive())
         {
             return $this->redirect()->toRoute('home');
         }
-        else {
-          echo "<br>Session not active";
-          $email = $attributes['mail'][0];
-          echo "<br>email from attributes: <br>";
-          var_dump($email);
-          $user = $this->getTable('user')->getUser($email, ['type' => 'email']);
-          echo "<br>Retrieved user: <br>";
-          var_dump($user);
-          exit();
-        }
-
-
+        return new ViewModel();
     }
 
     public function loginPostAction()
@@ -123,7 +128,8 @@ class ApplicationController extends AbstractActionController
 
         if (!Session::isActive()) {
             try {
-                $user = $this->getTable('user')->getUser($email, ['type' => 'email']);
+                $tables = new Tables();
+                $user = $tables->getTable('users')->getUser($email, ['type' => 'email']);
 
                 note('Login: Email: '.$email, 'INFO');
                 Session::start();

@@ -33,10 +33,9 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
             $options['type'] = 'group';
         }
 
-        $options['type'] = $tables
-            ->getTable('ownerType')
-            ->getType($options['type'], ['type' => 'name'])
-            ->slug;
+        $ownerTypeTable = $tables->getTable('ownerType');
+        $typeOption = $ownerTypeTable->getType($options['type'], ['type' => 'name']);
+        $options['type'] = $typeOption->slug;
 
         $rowset = $this->select(function (Select $select) use ($slug, $options) {
             $select->where([
@@ -45,9 +44,10 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
                 ]);
         });
 
-        return $tables
-            ->getTable('tab')
-            ->getTabs(array_column($rowset->toArray(), 'tabSlug'));
+        $tabsTable = $tables->getTable('tabs');
+        $tabset = $tabsTable->getTabs(array_column($rowset->toArray(), 'tabSlug'));
+
+        return ($tabset);
     }
 
     public function getOwner($slug)

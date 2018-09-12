@@ -50,6 +50,11 @@ class User extends Model implements HasSlugInterface, Bootable
     }
 
     /**
+     * String for the Nebraska county-district number (CO-DST-BLDG format)
+     */
+    public $codist;
+
+    /**
      * InputFilter for User's inputFilter.
      */
     protected $inputFilter;
@@ -59,7 +64,6 @@ class User extends Model implements HasSlugInterface, Bootable
      */
     protected static $guarded = [
         'slug',
-        'codist',
     ];
 
     /**
@@ -99,9 +103,10 @@ class User extends Model implements HasSlugInterface, Bootable
 
     public function defaultTab()
     {
-        return (new Tables())
-            ->getTable('ownerTabs')
-            ->getTabs($this->district())[0];
+      $tables = new Tables();
+      $ownerTabs = $tables->getTable('ownerTabs');
+      $tab = $ownerTabs->getTabs($this->district())[0];
+      return ($tab);
         //->getTab($this->codist);
     }
 
