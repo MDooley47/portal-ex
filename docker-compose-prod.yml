@@ -10,6 +10,9 @@ services:
             # Exposes the PostgreSQL port (5432) so that
             # you may connect to it from the host machine.
             # See github.com/MDooley47/pgweb
+        volumes:
+            - portal-db:/var/lib/postgresql/data
+            - .:/var/www
     zf:
         depends_on:
           - db
@@ -19,18 +22,21 @@ services:
             - "443:443"
         volumes:
             - .:/var/www
-            - data:/volumes/storage
+            - portal-files:/volumes/storage
         links:
             - db
     migration:
         build: .
-        command: ["./docker-scripts/wait-for-postgres.sh", "db", "php", "data/load_db.php"]
+    #    command: ["./docker-scripts/wait-for-postgres.sh", "db", "php", "data/load_db.php"]
         volumes:
             - .:/var/www
         depends_on:
             - db
             - zf
 volumes:
-    data:
+    portal-files:
         external:
             name: portal-ex-data
+    portal-db:
+        external:
+            name: portal-pgdata
