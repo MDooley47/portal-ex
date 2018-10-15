@@ -3,6 +3,7 @@ vendor/
 config/development.config.php
 data/cache/*
 !data/cache/.gitkeep
+docker-compose.yml
 phpunit.xml
 ubuntu-xenial-16.04-cloudimg-console.log
 *.lock
