@@ -32,21 +32,21 @@
             <section>
                 <div id="brand">
                     <a href="http://esucc.org" target="_blank">
-                        <span id="logo" class="float-left">
-                            55px x 55px
+                        <span id="logo" class="pull-left">
+                            <img src="/images/esucc-logo-square.png" height="55" width="55" />
                         </span>
-                        <span id="brandName" class="float-left">
-                            Sample Brand
+                        <span id="brandName" class="pull-left">
+                            ESUCC
                         </span>
                     </a>
                 </div>
-                <div id="account-action" class="float-right">
+                <div id="account-action" class="pull-right">
                     <?
                         include APPLICATION_PATH . '/module/Traits/partials/signin-out.php'
                     ?>
                 </div>
             </section>
-            <nav class="navbar navbar-expand-lg" role="navigation">
+            <nav class="navbar navbar-inverse navbar-top" role="navigation">
                 <div class="container">
                     <div class="navbar-header">
                         <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -77,7 +77,7 @@
                                             'type' => 'group'
                                             ]) as $tab) :
                             ?>
-                                    <li class="nav-item">
+                                    <li class="nav_tab">
                                         <a href="<?= $this->url('tab', ['slug' => $tab->slug]) ?>">
                                             <?= $tab->name ?>
                                         </a>
