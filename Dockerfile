@@ -1,6 +1,7 @@
 FROM php:7.1-apache
 
 # Install dependencies from apt
+RUN mkdir -p /usr/share/man/man1 /usr/share/man/man7
 RUN apt-get update
 RUN apt-get install -y \
     git \
