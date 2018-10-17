@@ -16,6 +16,6 @@ RESULT=$?
 rm composer-setup.php
 
 php ./composer.phar install --no-dev --no-scripts
-rm composer.phar
+mv ./composer.phar /usr/local/bin/composer
 
 exit $RESULT
