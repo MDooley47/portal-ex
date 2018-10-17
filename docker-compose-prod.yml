@@ -18,11 +18,15 @@ services:
           - db
         build: .
         ports:
-            - "80:80"
-            - "443:443"
+            - "162.127.3.50:80:80"
+            - "162.127.3.50:443:443"
         volumes:
             - .:/var/www
             - portal-files:/volumes/storage
+            - ./simplesamlphp/cert:/var/www/vendor/simplesamlphp/simplesamlphpcert/
+            - ./simplesamlphp/config:/var/www/vendor/simplesamlphp/simplesamlphp/config
+            - ./simplesamlphp/metadata:/var/www/vendor/simplesamlphp/simplesamlphp/metadata
+            - ./data/logs:/var/www/vendor/simplesamlphp/simplesamlphp/log
         links:
             - db
     migration:
