@@ -4,17 +4,25 @@ $title = "All Apps";
 $escaper = new Zend\Escaper\Escaper('utf-8');
 $this->headTitle($title);
 
+
 $i = 0;
 $data = [];
-foreach ($apps as $app) {
+if ($apps)
+{
+  foreach ($apps as $app)
+  {
     $data[$i++] = $app;
+  }
 }
 
 ?>
 
-<h1><?= $escaper->escapeHTML($title) ?></h1>
-
 <?php
+    if ($portalError)
+    {
+      printf("<h2>%s</h2>", $portalErrorMessage);
+    }
+
     $i = 0;
     $opened = false;
     foreach ($data as $app) :
@@ -45,6 +53,7 @@ foreach ($apps as $app) {
         echo "</div>";
     }
 ?>
+<!--
 <hr>
 <span class="text-center">Below is a view of what is in the db</span>
 <hr>
@@ -77,3 +86,4 @@ foreach ($apps as $app) {
 <p>
     <a href="<?= $this->url('app', ['action' => 'add']) ?>">Add new app</a>
 </p>
+-->

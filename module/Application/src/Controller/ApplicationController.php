@@ -44,7 +44,31 @@ class ApplicationController extends AbstractActionController
             Session::hasPrivilege('auth');
 
             $user = Session::getUser();
-            $tab = $user->defaultTab();
+            if ($user)
+            {
+              $tab = $user->defaultTab();
+              if ($tab)
+              {
+                $apps = $tab->getApps();
+              }
+              else
+              {
+                $portalError = true;
+                $portalErrorMessage = 'No applications could be located for you. Please contact your technology support staff.';
+              }
+            }
+            else
+            {
+              $portalError = true;
+              $portalErrorMessage = 'We cannot find your user profile. Please contact your technology support staff.';
+            }
+            if ($portalError)
+            {
+              return (new ViewModel([
+                'portalError' => $portalError,
+                'portalErrorMessage' => $portalErrorMessage,
+              ]));
+            }
             return (new ViewModel([
                 'apps' => $tab->getApps(),
             ]))
@@ -70,7 +94,7 @@ class ApplicationController extends AbstractActionController
         ->setTemplate('application/dashboard/index');
     }
 
-    public function loginAction()
+    public function loginoldAction()
     {
         if ($this->getRequest()->isPost()) {
             return $this->loginPostAction();
@@ -83,7 +107,7 @@ class ApplicationController extends AbstractActionController
         return new ViewModel();
     }
 
-    public function loginssoAction()
+    public function loginAction()
     {
         // initiates SAML SSO login using SimpleSAMLphp SP
         //   7/16/2018 SI
