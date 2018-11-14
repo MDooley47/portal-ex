@@ -138,11 +138,8 @@ class ApplicationController extends AbstractActionController
         Session::setUser($user);
         Session::setActiveTime();
 
-        if (Session::isActive())
-        {
-            return $this->redirect()->toRoute('home');
-        }
-        return new ViewModel();
+        return $this->redirect()->toRoute('home');
+        
     }
 
     public function loginPostAction()
