@@ -110,9 +110,10 @@ class ApplicationController extends AbstractActionController
         Session::start();
         Session::setUser($user);
         Session::setActiveTime();
-
-        return $this->redirect()->toRoute('home');
+        Session::set('attributes',$attributes);
         
+        return $this->redirect()->toRoute('home');
+
     }
 
     public function loginPostAction()
