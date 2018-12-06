@@ -38,6 +38,21 @@ class Group extends Model implements HasSlugInterface
     ];
 
     /**
+     * String for district's logo file.
+     */
+    public $logoFilename;
+
+    /**
+     * String for Group's brand/header color.
+     */
+    public $themeColor;
+
+    /**
+     * String for Group's background color.
+     */
+    public $backgroundColor;
+
+    /**
      * InputFilter for Group's inputFilter.
      */
     protected $inputFilter;
@@ -97,6 +112,9 @@ class Group extends Model implements HasSlugInterface
             'name'        => $this->name,
             'description' => $this->description,
             'grouptype'   => $this->grouptype,
+            'logoFilename' => $this->logoFilename,
+            'themeColor'  => $this->themeColor,
+            'backgroundColor' => $this->backgroundColor,
         ];
     }
 

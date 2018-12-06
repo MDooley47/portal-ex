@@ -69,6 +69,7 @@ class ApplicationController extends AbstractActionController
                 'portalErrorMessage' => $portalErrorMessage,
               ]));
             }
+            $this->layout()->setVariable('themeColor',$user->getThemeColor());
             return (new ViewModel([
                 'apps' => $tab->getApps(),
             ]))
@@ -138,7 +139,7 @@ class ApplicationController extends AbstractActionController
         Session::setUser($user);
         Session::setActiveTime();
         Session::set('attributes',$attributes);
-        
+
         return $this->redirect()->toRoute('home');
 
     }
