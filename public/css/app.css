@@ -8516,9 +8516,6 @@ div.container a.navbar-brand > img {
 .nav a:hover,
 .navbar-inverse .navbar-nav > .active > a:hover,
 .navbar-inverse .navbar-nav > li > a:hover {
-  -webkit-filter: brightness(150%);
-          filter: brightness(150%);
-  text-decoration: underline;
   background-color: var(--color-brand-primary-lightened);
 }
 

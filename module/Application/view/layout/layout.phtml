@@ -26,6 +26,66 @@
         <?= $this->headScript()
             ->prependFile($this->basePath('js/app.js?v=0.2.1'))
         ?>
+
+        <script>
+          // themeColor comes from the database group record
+          // highlight/"lightened" and text colors are calculated based on
+          //   lightness or darkness of the themeColor
+          var myE = document.documentElement;
+          var themeColor = "<?php echo $this->themeColor; ?>";
+          myE.style.setProperty("--color-brand-primary", themeColor);
+
+          // find intensity value of themeColor
+            // break color value into RGB components
+          var red = "0x" + themeColor.substr(1,2);
+          var green = "0x" + themeColor.substr(3,2);
+          var blue = "0x" + themeColor.substr(5,2);
+
+          var redInt = parseInt(red);
+          var greenInt = parseInt(green);
+          var blueInt = parseInt(blue);
+          var lumChange = 0.1;
+          var textColor = "#ffffff";
+
+          var intensity = (redInt*0.299 + greenInt*0.587 + blueInt*0.114);
+          if (intensity > 186)
+          {
+            lumChange = -0.1;
+            textColor = "#000000";
+          } else if (intensity < 140)
+          {
+            lumChange = 0.5;
+          }
+
+          if (intensity > 49)
+          {
+            if (redInt > 231 || greenInt > 231 || blueInt > 231)
+            {
+              // if any one color component is high, darken instead of lighten
+              lumChange = -0.2;
+            }
+            redInt = Math.round(Math.min(Math.max(0, redInt + (redInt * lumChange)), 255)).toString(16);
+            greenInt = Math.round(Math.min(Math.max(0, greenInt + (greenInt * lumChange)), 255)).toString(16);
+            blueInt = Math.round(Math.min(Math.max(0, blueInt + (blueInt * lumChange)), 255)).toString(16);
+          }
+          else
+          {
+            // extra help if the color is really dark (add absolute value instead of percentage)
+            lumChange = 64;
+            redInt = Math.round(Math.min(Math.max(0, redInt + lumChange), 255)).toString(16);
+            greenInt = Math.round(Math.min(Math.max(0, greenInt + lumChange), 255)).toString(16);
+            blueInt = Math.round(Math.min(Math.max(0, blueInt + lumChange), 255)).toString(16);
+          }
+
+          var lightenedColor = "#" +
+            ("00" + redInt).substr(redInt.length) +
+            ("00" + greenInt).substr(greenInt.length) +
+            ("00" + blueInt).substr(blueInt.length);
+          myE.style.setProperty("--color-brand-primary-lightened", lightenedColor);
+          myE.style.setProperty("--color-brand-accent", textColor);
+
+        </script>
+
     </head>
     <body>
         <header>

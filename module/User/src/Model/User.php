@@ -45,6 +45,60 @@ class User implements HasSlugInterface
     ];
 
     /**
+     *   COUNTY CODE 2 DIGITS
+     * DISTRICT CODE 4 DIGITS
+     * BUILDING CODE 3 DIGITS.
+     *
+     *  EXAMPLE: 06-8473-729
+     *   COUNTY: 06
+     * DISTRICT: 8473
+     * BUILDING: 729
+     *
+     * note: hyphen's are assumed to be part of the codist.
+     */
+    public function building($options = []): String
+    {
+        arrayValueDefault('composite-key', $options, true);
+
+        if ($options['composite-key']) {
+            $out = $this->codist;
+        } else {
+            $out = explode('-', $this->codist)[2];
+        }
+
+        return $out;
+    }
+
+    public function county(): String
+    {
+        return explode('-', $this->codist)[0];
+    }
+
+    public function defaultTab()
+    {
+      $tables = new Tables();
+      $ownerTabs = $tables->getTable('ownerTabs');
+      $tab = $ownerTabs->getTabs($this->district())[0];
+      return ($tab);
+        //->getTab($this->codist);
+    }
+
+    public function district($options = []): String
+    {
+        arrayValueDefault('composite-key', $options, true);
+
+        $codist = explode('-', $this->codist);
+
+        if ($options['composite-key']) {
+            $out = $codist[0].'-'.$codist[1];
+        } else {
+            $out = $codist[1];
+        }
+
+        return $out;
+    }
+
+    /**
      * Get app values as array.
      *
      * @return array
@@ -60,6 +114,26 @@ class User implements HasSlugInterface
             'district' => $this->district(),
             'building' => $this->building(),
         ];
+    }
+
+    /**
+     *  Returns the background brand/header color to use for this user in
+     *  6-digit hex format (example: #FF7700)
+    */
+    public function getThemeColor()
+    {
+      $color = "";
+      // look up the group based on the user's CDN
+      $tables = new Tables();
+      $groupsTable = $tables->getTable('group');
+      $group = $groupsTable->getGroup($this->district());
+
+      if ($group)
+      {
+        $color = $group->themeColor;
+      }
+
+      return ($color);
     }
 
     /**
@@ -80,60 +154,6 @@ class User implements HasSlugInterface
         $this->inputFilter = $tmpFilter;
 
         return $tmpFilter;
-    }
-
-    public function defaultTab()
-    {
-      $tables = new Tables();
-      $ownerTabs = $tables->getTable('ownerTabs');
-      $tab = $ownerTabs->getTabs($this->district())[0];
-      return ($tab);
-        //->getTab($this->codist);
-    }
-
-    /**
-     *   COUNTY CODE 2 DIGITS
-     * DISTRICT CODE 4 DIGITS
-     * BUILDING CODE 3 DIGITS.
-     *
-     *  EXAMPLE: 06-8473-729
-     *   COUNTY: 06
-     * DISTRICT: 8473
-     * BUILDING: 729
-     *
-     * note: hyphen's are assumed to be part of the codist.
-     */
-    public function county(): String
-    {
-        return explode('-', $this->codist)[0];
-    }
-
-    public function district($options = []): String
-    {
-        arrayValueDefault('composite-key', $options, true);
-
-        $codist = explode('-', $this->codist);
-
-        if ($options['composite-key']) {
-            $out = $codist[0].'-'.$codist[1];
-        } else {
-            $out = $codist[1];
-        }
-
-        return $out;
-    }
-
-    public function building($options = []): String
-    {
-        arrayValueDefault('composite-key', $options, true);
-
-        if ($options['composite-key']) {
-            $out = $this->codist;
-        } else {
-            $out = explode('-', $this->codist)[2];
-        }
-
-        return $out;
     }
 
     /**
