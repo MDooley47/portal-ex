@@ -29,14 +29,14 @@ services:
             - ./data/logs:/var/www/vendor/simplesamlphp/simplesamlphp/log
         links:
             - db
-    migration:
-        build: .
+#    migration:
+#        build: .
     #    command: ["./docker-scripts/wait-for-postgres.sh", "db", "php", "data/load_db.php"]
-        volumes:
-            - .:/var/www
-        depends_on:
-            - db
-            - zf
+#        volumes:
+#            - .:/var/www
+#        depends_on:
+#            - db
+#            - zf
 volumes:
     portal-files:
         external:
