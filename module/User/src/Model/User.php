@@ -136,26 +136,6 @@ class User extends Model implements HasSlugInterface, Bootable
     }
 
     /**
-     *  Returns the background brand/header color to use for this user in
-     *  6-digit hex format (example: #FF7700)
-    */
-    public function getThemeColor()
-    {
-      $color = "";
-      // look up the group based on the user's CDN
-      $tables = new Tables();
-      $groupsTable = $tables->getTable('group');
-      $group = $groupsTable->getGroup($this->district());
-
-      if ($group)
-      {
-        $color = $group->themeColor;
-      }
-
-      return ($color);
-    }
-
-    /**
      * Gets User's input filter.
      *
      * Returns the app's inputFilter.
@@ -173,6 +153,45 @@ class User extends Model implements HasSlugInterface, Bootable
         $this->inputFilter = $tmpFilter;
 
         return $tmpFilter;
+    }
+
+    /**
+     *  Returns the relative path (string) to the user's group logo.
+    */
+    public function getLogoFilename()
+    {
+      $fn = "";
+      // look up the group based on the user's CDN
+      $tables = new Tables();
+      $groupsTable = $tables->getTable('group');
+      $group = $groupsTable->getGroup($this->district());
+
+      if ($group)
+      {
+        $fn = $group->logoFilename;
+      }
+
+      return ($fn);
+    }
+
+    /**
+     *  Returns the background brand/header color to use for this user in
+     *  6-digit hex format (example: #FF7700)
+    */
+    public function getThemeColor()
+    {
+      $color = "";
+      // look up the group based on the user's CDN
+      $tables = new Tables();
+      $groupsTable = $tables->getTable('group');
+      $group = $groupsTable->getGroup($this->district());
+
+      if ($group)
+      {
+        $color = $group->themeColor;
+      }
+
+      return ($color);
     }
 
     /**

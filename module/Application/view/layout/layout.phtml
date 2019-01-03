@@ -91,14 +91,12 @@
         <header>
             <section>
                 <div id="brand">
-                    <a href="http://esucc.org" target="_blank">
-                        <span id="logo" class="pull-left">
-                            <img src="/images/esucc-logo-square.png" height="55" width="55" />
-                        </span>
-                        <span id="brandName" class="pull-left">
-                            ESUCC
-                        </span>
-                    </a>
+                  <span id="logo" class="pull-left">
+                      <img id="district-logo" src="/images/nebraskacloud-logo.png" height="55" />
+                  </span>
+                  <!-- <span id="brandName" class="pull-left">
+                      ESUCC
+                  </span> -->
                 </div>
                 <div id="account-action" class="pull-right">
                     <?
@@ -156,5 +154,12 @@
             <?= $this->content ?>
         </div>
         <?= $this->inlineScript() ?>
+        <script>
+          var logoFilename = "<?php echo $this->logoFilename; ?>";
+          if (logoFilename.length > 1)
+          {
+            document.getElementById("district-logo").src= logoFilename;
+          }
+        </script>
     </body>
 </html>

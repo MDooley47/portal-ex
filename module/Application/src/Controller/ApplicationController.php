@@ -70,6 +70,7 @@ class ApplicationController extends AbstractActionController
               ]));
             }
             $this->layout()->setVariable('themeColor',$user->getThemeColor());
+            $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
             return (new ViewModel([
                 'apps' => $tab->getApps(),
             ]))
