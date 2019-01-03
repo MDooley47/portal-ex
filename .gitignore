@@ -14,6 +14,7 @@ phpunit.xml
 simplesamlphp/cert/saml.pem
 simplesamlphp/config/config.php
 ubuntu-xenial-16.04-cloudimg-console.log
+**/.DS_Store
 *.lock
 .env
 *.log
