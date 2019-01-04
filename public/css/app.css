@@ -8407,8 +8407,10 @@ body {
 .app-tile img,
 .app-image {
   margin-top: 5px;
-  height: 90px;
-  width: 90px;
+  height: auto;
+  width: auto;
+  max-height: 90px;
+  max-width: 90px;
 }
 
 .app-tile .app-name {

@@ -32,13 +32,13 @@ if ($apps)
         endif;
 ?>
         <div class="col-xs-6 col-sm-3 col-md-2">
+          <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
             <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
-                <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
-                    <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
+                                    <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
                     "?v=" . (int) $app->version ?>" alt="">
                     <span class="app-name"><?= $escaper->escapeHtml($app->name) ?></span>
-                </a>
             </div>
+          </a>
         </div>
 <?php
         if ((($i) % 6) == 0 && $opened) :
