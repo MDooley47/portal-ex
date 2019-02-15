@@ -8,9 +8,18 @@
 
 namespace Application\Controller;
 
+use App\Form\AppForm;
+use Attribute\Form\AttributeForm;
+use Group\Form\GroupForm;
+use GroupType\Form\GroupTypeForm;
+use IpAddress\Form\IpAddressForm;
+use OwnerType\Form\OwnerTypeForm;
+use Privilege\Form\PrivilegeForm;
 use RuntimeException;
 use SessionManager\Session;
+use Tab\Form\TabForm;
 use Traits\HasTables;
+use User\Form\UserForm;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
@@ -30,7 +39,7 @@ class ApplicationController extends AbstractActionController
         if (!Session::isActive()) {
             return $this->redirect()->toRoute('login');
         } else {
-            // TODO: SHOW THEIR DASHBOARD
+            // TODO: SHOW THEIR HOME TAB
             Session::hasPrivilege('auth');
 
             $tab = Session::getUser()->defaultTab();
@@ -40,6 +49,24 @@ class ApplicationController extends AbstractActionController
             ]))
             ->setTemplate('application/tab/index');
         }
+    }
+
+    public function dashboardAction()
+    {
+        return (new ViewModel([
+            'forms' => [
+                'user' => new UserForm(),
+                'group' => new GroupForm(),
+                'tab' => new TabForm(),
+                'app' => new AppForm(),
+                'attribute' => new AttributeForm(),
+                'grouptype' => new GroupTypeForm(),
+                'ipaddress' => new IpAddressForm(),
+                'ownertype' => new OwnerTypeForm(),
+                'privilege' => new PrivilegeForm(),
+            ],
+        ]))
+        ->setTemplate('application/dashboard/index');
     }
 
     public function loginAction()
