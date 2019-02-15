@@ -1,50 +1,15 @@
-window.jQuery = window.$ = require('jquery');
-require('bootstrap'); // bootstrap is dependent on jquery
-require('select2');
+window.jQuery      = window.$ = require('jquery');
+                                require('bootstrap'); // bootstrap is dependent on jquery
+                                require('select2');
+window.bootbox     =            require('bootbox'); // bootbox is dependent on bootstrap
+window.pluralize   =            require('pluralize');
+window.PortalAPI   =            require('./PortalAPI.js');
+window.FormBuilder =            require('./FormBuilder.js');
+
+import Setup from "./Setup.js";
+
+window.DEBUG = true;
 
 $(document).ready(function() {
-    setupPostLinks();
-    setupSelect2();
+    new Setup();
 });
-
-/**
- * Sends post request before following links
- * with the class .post
- * Sends slug to action assuming /action[/:slug]
- *
- * @return void
- */
-function setupPostLinks() {
-    $('.post').click(e => {
-        href = $(this).attr('href');
-        hrefArr = href.split('/');
-        slug = hrefArr[hrefArr.length - 2];
-        action = href.substring(0, href.length - (slug.length + 1));
-
-        $.post(action, { 'slug': slug });
-    });
-
-    $('.post-noslug').click(e => {
-        $.post($(this).attr('href'));
-    });
-}
-
-/**
- * Enables the .select2 jQuery extension
- * for forms that use it.
- *
- * @return void
- */
-function setupSelect2() {
-    $('.select2.single.grouptype').select2({
-        placeholder: 'Please select a grouptype',
-        allowClear: true,
-        width: '20em'
-    });
-
-    $('.select2.single.tab').select2({
-        placeholder: 'Please select a tab',
-        allowClear: true,
-        width: '20em'
-    });
-}
