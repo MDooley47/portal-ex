@@ -1,9 +1,5 @@
 <?php
 
-use Dotenv\Dotenv;
-use Traits\Interfaces\HasSlug;
-use Zend\Log\Logger;
-use Zend\Log\Writer\Stream;
 use Zend\Mvc\Application;
 use Zend\Stdlib\ArrayUtils;
 
@@ -14,7 +10,6 @@ use Zend\Stdlib\ArrayUtils;
 chdir(dirname(__DIR__));
 
 defined('APPLICATION_PATH') || define('APPLICATION_PATH', realpath(dirname(__DIR__).''));
-
 
 require_once __DIR__.'/../vendor/autoload.php';
 

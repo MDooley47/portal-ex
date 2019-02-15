@@ -33,18 +33,20 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
      *
      * @return Setting
      */
-    public function addSetting($data) {
+    public function addSetting($data)
+    {
         return $this->add($data);
     }
 
     /**
-     * Adds Setting to database from array
+     * Adds Setting to database from array.
      *
      * @param array $data
      *
      * @return Setting
      */
-    public function add($data) {
+    public function add($data)
+    {
         $app = new Setting($data);
 
         return $this->save($app);
@@ -73,7 +75,7 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
      *
      * Selects an Settings from the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options
      *
      * @return Setting
@@ -86,7 +88,7 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
     /**
      * Selects an Settings from the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id The identifier.
      *
      * @return Setting
      */
@@ -105,15 +107,14 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
         return $row;
     }
 
-
     /**
      * @deprecated Please use the exists method.
      *
      * Checks if an setting exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -125,9 +126,9 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
     /**
      * Checks if an setting exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -139,7 +140,6 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
-
 
     /**
      * @deprecated Please use the save method.
@@ -183,7 +183,7 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
                 $data['slug'] = Setting::generateSlug();
             } while ($this->exists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
-        } else if ($dbSetting = $this->get($slug)) {
+        } elseif ($dbSetting = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(
@@ -222,5 +222,4 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
     {
         parent::delete(['slug' => $slug]);
     }
-
 }

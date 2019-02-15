@@ -24,15 +24,15 @@ class Attribute extends Model implements HasSlugInterface, Bootable
     protected static $table = 'attributes';
     public static $form = [
         'name' => [
-            'type' => 'text',
+            'type'     => 'text',
             'required' => false,
         ],
         'description' => [
-            'type' => 'textarea',
+            'type'     => 'textarea',
             'required' => false,
         ],
         'data' => [
-            'type' => 'textarea',
+            'type'     => 'textarea',
             'required' => true,
         ],
     ];

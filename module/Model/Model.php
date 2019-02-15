@@ -28,11 +28,12 @@ abstract class Model
     }
 
     /**
-     * Get all rows
+     * Get all rows.
      *
      * @return array
      */
-    public static function all() {
+    public static function all()
+    {
         $query = new Sql(databaseAdapter());
         $select = $query->select(self::$table);
         $statement = $query->prepareStatementForSqlObject($select);
@@ -40,9 +41,9 @@ abstract class Model
 
         $resultSet = (new ResultSet())->initialize($result);
 
-        $models = array();
+        $models = [];
 
-        foreach($resultSet as $row) {
+        foreach ($resultSet as $row) {
             $models[] = self::cast($row->getArrayCopy());
         }
 
@@ -50,13 +51,15 @@ abstract class Model
     }
 
     /**
-     * Finds a model
+     * Finds a model.
      *
      * @param $ids
      * @param null $primaryKey
+     *
      * @return mixed
      */
-    public static function find($ids, $primaryKey = null) {
+    public static function find($ids, $primaryKey = null)
+    {
         $primaryKey = $primaryKey ?? self::$primaryKey;
 
         $query = new Sql(databaseAdapter());
@@ -68,13 +71,13 @@ abstract class Model
 
         $resultSet = (new ResultSet())->initialize($result);
 
-        $models = array();
+        $models = [];
 
-        foreach($resultSet as $row) {
+        foreach ($resultSet as $row) {
             $models[] = self::cast($row->getArrayCopy());
         }
 
-        if (sizeof($models) == 1) {
+        if (count($models) == 1) {
             $models = $models[0];
         }
 
@@ -82,7 +85,7 @@ abstract class Model
     }
 
     /**
-     * Saves model
+     * Saves model.
      *
      * @return $this
      */
@@ -101,39 +104,44 @@ abstract class Model
         return $this;
     }
 
-    public function update($data) {
+    public function update($data)
+    {
         $this->exchangeArray($data);
 
         $this->save();
     }
 
-    public static function add(array $attributes) {
+    public static function add(array $attributes)
+    {
         return self::cast($attributes)->save();
     }
 
-    public abstract function getArrayCopy();
+    abstract public function getArrayCopy();
 
-    public static function cast(array $attributes) {
+    public static function cast(array $attributes)
+    {
         return castModel(self::$table, $attributes);
     }
 
-    public static function buildMultiPKWhere($identifiers) {
+    public static function buildMultiPKWhere($identifiers)
+    {
         $where = '';
-        if (! is_array($identifiers)) {
+        if (!is_array($identifiers)) {
             $where .= self::buildPKWhere($identifiers);
         } else {
             $ids = array_shift($identifiers);
             $where .= self::buildPKWhere($ids);
             unset($ids);
-            foreach($identifiers as $ids) {
-                $where .= ' OR ' . self::buildPKWhere($ids);
+            foreach ($identifiers as $ids) {
+                $where .= ' OR '.self::buildPKWhere($ids);
             }
         }
 
         return $where;
     }
 
-    public static function buildPKWhere($pk) {
-        return self::$primaryKey . "='" . $pk . "'";
+    public static function buildPKWhere($pk)
+    {
+        return self::$primaryKey."='".$pk."'";
     }
 }

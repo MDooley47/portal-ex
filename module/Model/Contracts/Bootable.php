@@ -2,6 +2,7 @@
 
 namespace Model\Contracts;
 
-interface Bootable {
+interface Bootable
+{
     public static function boot();
 }

@@ -57,11 +57,11 @@ return [
             'api' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'    => '/api/v1[/]',
+                    'route'       => '/api/v1[/]',
                     'constraints' => [
-                        'model'   => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'model'    => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[a-zA-Z0-9]+',
+                        'id'       => '[a-zA-Z0-9]+',
                     ],
                     'defaults' => [
                         'controller' => Controller\APIController::class,

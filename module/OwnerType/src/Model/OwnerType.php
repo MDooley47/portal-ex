@@ -23,11 +23,11 @@ class OwnerType extends Model implements HasSlugInterface, Bootable
     protected static $table = 'ownerTypes';
     public static $form = [
         'name' => [
-            'type' => 'text',
+            'type'     => 'text',
             'required' => true,
         ],
         'description' => [
-            'type' => 'textarea',
+            'type'     => 'textarea',
             'required' => false,
         ],
     ];

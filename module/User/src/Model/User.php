@@ -25,23 +25,23 @@ class User extends Model implements HasSlugInterface, Bootable
     protected static $table = 'users';
     public static $form = [
         'name' => [
-            'type' => 'text',
+            'type'     => 'text',
             'required' => true,
         ],
         'email' => [
-            'type' => 'email',
+            'type'     => 'email',
             'required' => true,
         ],
         'codist' => [
-            'type' => 'text',
-            'label' => 'County District Number',
+            'type'     => 'text',
+            'label'    => 'County District Number',
             'required' => false,
         ],
     ];
 
-
     /**
      * User constructor.
+     *
      * @param array $attributes
      */
     public function __construct(array $attributes = [])

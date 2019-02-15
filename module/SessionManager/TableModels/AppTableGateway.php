@@ -34,18 +34,20 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      *
      * @return App
      */
-    public function addApp($data) {
+    public function addApp($data)
+    {
         return $this->add($data);
     }
 
     /**
-     * Adds App to database from array
+     * Adds App to database from array.
      *
      * @param array $data
      *
      * @return App
      */
-    public function add($data) {
+    public function add($data)
+    {
         $app = new App($data);
 
         return $this->save($app);
@@ -85,8 +87,8 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      *
      * Selects an App from the database.
      *
-     * @param mixed   $id      The identifier.
-     * @param array   $options
+     * @param mixed $id      The identifier.
+     * @param array $options
      *
      * @return App
      */
@@ -98,7 +100,7 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
     /**
      * Selects an App from the database.
      *
-     * @param mixed   $id      The identifier.
+     * @param mixed $id The identifier.
      *
      * @return App
      */
@@ -122,9 +124,9 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      *
      * Checks if an app exists in the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -136,9 +138,9 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
     /**
      * Checks if an app exists in the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options Contains 'type' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -150,7 +152,6 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
-
 
     /**
      * @deprecated Please use the save method instead.
@@ -181,7 +182,8 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      *
      * @return App
      */
-    public function save($app) {
+    public function save($app)
+    {
         $data = [
             'name'     => $app->name,
             'url'      => $app->url,
@@ -201,7 +203,7 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
                     ->getTable('tabApps')
                     ->addCorrelation($app->tab, $data['slug']);
             }
-        } else if ($dbApp = $this->get($slug)) {
+        } elseif ($dbApp = $this->get($slug)) {
             if ($data['iconPath'] != $dbApp->iconPath) {
                 if (file_exists(addBasePath($file = $dbApp->iconPath))) {
                     unlink($file);

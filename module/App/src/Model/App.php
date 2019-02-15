@@ -9,9 +9,9 @@ use App\InputFilter\TabFilter;
 use App\InputFilter\URLFilter;
 use DomainException;
 use Model\Concerns\HasCast;
+use Model\Concerns\QueryBuilder;
 use Model\Concerns\QuickModelBoot as Boot;
 use Model\Contracts\Bootable;
-use Model\Concerns\QueryBuilder;
 use Model\Model;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
@@ -27,15 +27,15 @@ class App extends Model implements HasSlugInterface, Bootable
     protected static $table = 'apps';
     public static $form = [
         'name' => [
-            'type' => 'text',
+            'type'     => 'text',
             'required' => true,
         ],
         'url' => [
-            'type' => 'url',
+            'type'     => 'url',
             'required' => true,
         ],
         'icon' => [
-            'type' => 'file',
+            'type'     => 'file',
             'required' => true,
         ],
     ];
@@ -47,6 +47,7 @@ class App extends Model implements HasSlugInterface, Bootable
 
     /**
      * App constructor.
+     *
      * @param array $attributes
      */
     public function __construct(array $attributes = [])
@@ -81,6 +82,7 @@ class App extends Model implements HasSlugInterface, Bootable
      * the passed in boolean value $options['hasIcon'].
      *
      * @param array $options
+     *
      * @return \Zend\InputFilter\BaseInputFilter
      */
     public function getInputFilter($options = [])

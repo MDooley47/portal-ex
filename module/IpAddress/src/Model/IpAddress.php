@@ -23,16 +23,16 @@ class IpAddress extends Model implements HasSlugInterface, Bootable
     protected static $table = 'ipAddresses';
     public static $form = [
         'name' => [
-            'type' => 'text',
+            'type'     => 'text',
             'required' => false,
         ],
         'description' => [
-            'type' => 'textarea',
+            'type'     => 'textarea',
             'required' => false,
         ],
         'ip' => [
-            'type' => 'ip',
-            'label' => 'IP Address',
+            'type'     => 'ip',
+            'label'    => 'IP Address',
             'required' => true,
         ],
     ];

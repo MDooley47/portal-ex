@@ -5,15 +5,15 @@ use Traits\Interfaces\HasSlug;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 
-/**
+/*
  * Loads .env file.
  */
 (new Dotenv(APPLICATION_PATH.'/'))->load();
 
-/**
+/*
  * Adds the function dd if not already declared
  */
-if (! function_exists('dd')) {
+if (!function_exists('dd')) {
     /**
      * Dump and Die.
      *
@@ -25,7 +25,6 @@ if (! function_exists('dd')) {
         die();
     }
 }
-
 
 /**
  * From laravel/framework
@@ -188,13 +187,14 @@ function arrayValueDefault($key, &$search, $default = null)
  * Check if the data is an array.
  * If it is not, put the data into an array.
  *
- * @param mixed  $data
+ * @param mixed $data
  *
  * @return array
  */
-function guaranteeArray(&$data) {
-    if (! is_array($data)) {
-        $data = [ $data ];
+function guaranteeArray(&$data)
+{
+    if (!is_array($data)) {
+        $data = [$data];
     }
 
     return $data;
@@ -205,15 +205,19 @@ function guaranteeArray(&$data) {
  * Otherwise, if the datum is not an array, it will return the datum.
  *
  * @param string $key
- * @param mixed $possibleArray
+ * @param mixed  $possibleArray
+ *
  * @return mixed
  */
-function schrodingerArrayValue($key, $possibleArray) {
-    if (is_array($possibleArray) && array_key_exists($key, $possibleArray))
+function schrodingerArrayValue($key, $possibleArray)
+{
+    if (is_array($possibleArray) && array_key_exists($key, $possibleArray)) {
         return $possibleArray[$key];
-    else if (is_array($possibleArray))
-        return null;
-    else return $possibleArray;
+    } elseif (is_array($possibleArray)) {
+        return;
+    } else {
+        return $possibleArray;
+    }
 }
 
 /**
@@ -221,19 +225,22 @@ function schrodingerArrayValue($key, $possibleArray) {
  *
  * @author laravel/framework
  *
- * @param  mixed  $value
- * @param  callable $callback
+ * @param mixed    $value
+ * @param callable $callback
+ *
  * @return mixed
  */
 function tap($value, $callback)
 {
     $callback($value);
+
     return $value;
 }
 
 /**
  * @param $haystack
  * @param $needles
+ *
  * @return bool
  */
 function StrContains($haystack, $needles)
@@ -243,21 +250,24 @@ function StrContains($haystack, $needles)
             return true;
         }
     }
+
     return false;
 }
 
-function databaseAdapter() {
-    return new Zend\Db\Adapter\Adapter(array(
-        'driver' => env('db_driver') ?? 'pgsql',
+function databaseAdapter()
+{
+    return new Zend\Db\Adapter\Adapter([
+        'driver'   => env('db_driver') ?? 'pgsql',
         'database' => env('db_name'),
         'hostname' => env('db_host'),
-        'port' => env('db_port') ?? 5432,
+        'port'     => env('db_port') ?? 5432,
         'username' => env('db_username'),
         'password' => env('db_password'),
-    ));
+    ]);
 }
 
-function boot() {
+function boot()
+{
     \User\Model\User::boot();
     \App\Model\App::boot();
     \Attribute\Model\Attribute::boot();
@@ -270,22 +280,24 @@ function boot() {
     \Tab\Model\Tab::boot();
 }
 
-function castModel($table, array $attributes) {
+function castModel($table, array $attributes)
+{
     $model = null;
 
-    switch(strtolower($table)) {
+    switch (strtolower($table)) {
         case 'apps':
             $model = \App\Model\App::cast($attributes);
             break;
         case 'users':
             $model = \User\Model\User::cast($attributes);
-            break;    }
+            break; }
 
     return $model;
 }
 
-function resolveModel($model_name) {
-    switch(strtolower($model_name)) {
+function resolveModel($model_name)
+{
+    switch (strtolower($model_name)) {
         case 'app':
             return \App\Model\App::class;
         case 'user':
@@ -309,8 +321,9 @@ function resolveModel($model_name) {
     }
 }
 
-function guaranteeUniversalTableGateway(\Zend\Db\TableGateway\AbstractTableGateway $gateway) {
-    if (! $gateway instanceof \Traits\Tables\UniversalTableGatewayInterface) {
+function guaranteeUniversalTableGateway(\Zend\Db\TableGateway\AbstractTableGateway $gateway)
+{
+    if (!$gateway instanceof \Traits\Tables\UniversalTableGatewayInterface) {
         $gateway = new \SessionManager\TableModels\UniversalTableGatewayDecorator($gateway);
     }
 

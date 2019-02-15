@@ -31,11 +31,13 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
      *
      * @return User
      */
-    public function addUser($data) {
+    public function addUser($data)
+    {
         return $this->add($data);
     }
 
-    public function add($data) {
+    public function add($data)
+    {
         $model = new User($data);
 
         return $this->save($model);
@@ -58,7 +60,8 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
      *
      * @return User[]
      */
-    public function all() {
+    public function all()
+    {
         return $this->select();
     }
 
@@ -111,9 +114,9 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
      *
      * Checks if an user exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -125,9 +128,9 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
     /**
      * Checks if an user exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -141,7 +144,6 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
     }
 
     /**
-     *
      * @deprecated Please use the save method instead.
      *
      * Saves an User to the database.
@@ -184,7 +186,7 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
                 $data['slug'] = User::generateSlug();
             } while ($this->exists($data['slug'], ['field' => 'slug']));
             $this->insert($data);
-        } else if ($dbUser = $this->get($slug)) {
+        } elseif ($dbUser = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(

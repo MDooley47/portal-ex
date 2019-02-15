@@ -33,23 +33,24 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * @return Privilege
      */
-    public function addPrivilege($data) {
+    public function addPrivilege($data)
+    {
         return $this->add($data);
     }
 
     /**
-     * Adds Privilege to database from array
+     * Adds Privilege to database from array.
      *
      * @param array $data
      *
      * @return Privilege
      */
-    public function add($data) {
+    public function add($data)
+    {
         $privilege = new Privilege($data);
 
         return $this->save($privilege);
     }
-
 
     /**
      * @deprecated Please use the all method.
@@ -87,7 +88,7 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Selects an Privilege from the database.
      *
-     * @param mixed $id      The identifier.
+     * @param mixed $id The identifier.
      *
      * @return Privilege
      */
@@ -111,9 +112,9 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * Checks if an privilege exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -125,9 +126,9 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Checks if an privilege exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -139,7 +140,6 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
-
 
     /**
      * @deprecated Please use the save method.
@@ -173,8 +173,8 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
     public function save($privilege)
     {
         $data = [
-            'name'        => $privilege->name,
-            'description' => $privilege->description,
+            'name'         => $privilege->name,
+            'description'  => $privilege->description,
             'level'        => $privilege->level,
         ];
 
@@ -185,7 +185,7 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
                 $data['slug'] = Privilege::generateSlug();
             } while ($this->exists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
-        } else if ($dbPrivilege = $this->get($slug)) {
+        } elseif ($dbPrivilege = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(

@@ -55,10 +55,10 @@ class ApplicationController extends AbstractActionController
     {
         return (new ViewModel([
             'forms' => [
-                'user' => new UserForm(),
-                'group' => new GroupForm(),
-                'tab' => new TabForm(),
-                'app' => new AppForm(),
+                'user'      => new UserForm(),
+                'group'     => new GroupForm(),
+                'tab'       => new TabForm(),
+                'app'       => new AppForm(),
                 'attribute' => new AttributeForm(),
                 'grouptype' => new GroupTypeForm(),
                 'ipaddress' => new IpAddressForm(),

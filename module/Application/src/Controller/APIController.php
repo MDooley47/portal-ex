@@ -22,7 +22,8 @@ class APIController extends AbstractActionController
         $this->addTableArray($tables);
     }
 
-    public function indexAction() {
+    public function indexAction()
+    {
         $response = new Response();
         $headers = new Headers();
         $headers->addHeaderLine('Content-Type', 'text/json');
@@ -32,19 +33,20 @@ class APIController extends AbstractActionController
             return $this->handlePost($response);
 
             return $this->handleGet($response);
-        }
-        else if ($this->getRequest()->isPost()) {
+        } elseif ($this->getRequest()->isPost()) {
             return $this->handlePost($response);
         }
     }
 
-    public function handleGet($response) {
+    public function handleGet($response)
+    {
         $response->setContent('{"r_type": "get"}');
 
         return $response;
     }
 
-    public function handlePost($response) {
+    public function handlePost($response)
+    {
         $model = strtolower($this->getRequest()->getQuery('m'));
         $action = strtolower($this->getRequest()->getQuery('a'));
         $id = $this->getRequest()->getQuery('id');
@@ -52,22 +54,23 @@ class APIController extends AbstractActionController
 
         $content = [];
 
-        if (empty($model))
+        if (empty($model)) {
             return 400;
+        }
 
-        if (empty($action) && empty($id))
+        if (empty($action) && empty($id)) {
             $this->listModels($content, $model);
-        else if (empty($action) && isset($id))
+        } elseif (empty($action) && isset($id)) {
             $this->viewModel($content, $model, $id);
-        else if (isset($action) && $action == 'add')
+        } elseif (isset($action) && $action == 'add') {
             $this->addModel($content, $model, $data);
-        else if (isset($action) && $action == 'edit')
+        } elseif (isset($action) && $action == 'edit') {
             $this->editModel($content, $model, $id, $data);
-        else if (isset($action) && $action == 'form')
+        } elseif (isset($action) && $action == 'form') {
             $this->formModel($content, $model);
-        else if (isset($action) && $action == 'delete')
+        } elseif (isset($action) && $action == 'delete') {
             $this->deleteModel($content, $model, $id);
-
+        }
 
         if (empty($content)) {
             return 404;
@@ -78,7 +81,8 @@ class APIController extends AbstractActionController
         return $response;
     }
 
-    public function listModels(&$content, $m) {
+    public function listModels(&$content, $m)
+    {
         $content[$this->plural($m)] = [];
 
         $models = $this->getTable($m)->fetchAll();
@@ -88,7 +92,8 @@ class APIController extends AbstractActionController
         }
     }
 
-    public function viewModel(&$content, $model, $id) {
+    public function viewModel(&$content, $model, $id)
+    {
         $table = $this->getTable($model);
 
         if ($table->exists($id)) {
@@ -96,7 +101,8 @@ class APIController extends AbstractActionController
         }
     }
 
-    public function addModel(&$content, $model, $data) {
+    public function addModel(&$content, $model, $data)
+    {
         $content['success'] = true;
 
         try {
@@ -105,14 +111,17 @@ class APIController extends AbstractActionController
             $content[$model] = $added->getArrayCopy();
         } catch (\Exception $e) {
             $content['success'] = false;
-            if (env('debug')) $content['exception'] = [
+            if (env('debug')) {
+                $content['exception'] = [
                 'message' => $e->getMessage(),
-                'code' => $e->getCode(),
+                'code'    => $e->getCode(),
             ];
+            }
         }
     }
 
-    public function editModel(&$content, $m, $id, $data) {
+    public function editModel(&$content, $m, $id, $data)
+    {
         $model = $this->getTable($m)->get($id);
 
         $model->update($data);
@@ -120,37 +129,45 @@ class APIController extends AbstractActionController
         $content[$m] = $model->getArrayCopy();
     }
 
-    public function formModel(&$content, $m) {
+    public function formModel(&$content, $m)
+    {
         $content['success'] = true;
+
         try {
             $model = resolveModel($m);
             $content[$m] = $model::$form;
         } catch (\Exception $e) {
             $content['success'] = false;
 
-            if (env('debug')) $content['exception'] = [
+            if (env('debug')) {
+                $content['exception'] = [
                 'message' => $e->getMessage(),
-                'code' => $e->getCode(),
+                'code'    => $e->getCode(),
             ];
+            }
         }
     }
 
-    public function deleteModel(&$content, $model, $id) {
+    public function deleteModel(&$content, $model, $id)
+    {
         $content['success'] = true;
 
         try {
             $this->getTable($model)->delete($id);
         } catch (\Exception $e) {
             $content['success'] = false;
-            if (env('debug')) $content['exception'] = [
+            if (env('debug')) {
+                $content['exception'] = [
                 'message' => $e->getMessage(),
-                'code' => $e->getCode(),
+                'code'    => $e->getCode(),
             ];
+            }
         }
     }
 
-    public function plural($model) {
-        switch(strtolower($model)) {
+    public function plural($model)
+    {
+        switch (strtolower($model)) {
             case 'user':
                 return 'users';
             case 'group':

@@ -23,11 +23,10 @@ class Setting extends Model implements HasSlugInterface, Bootable
     protected static $table = 'settings';
     public static $form = [
         'data' => [
-            'type' => 'json',
+            'type'     => 'json',
             'required' => true,
         ],
     ];
-
 
     /**
      * InputFilter for Setting's inputFilter.

@@ -24,11 +24,11 @@ class Tab extends Model implements HasSlugInterface, Bootable
     protected static $table = 'tabs';
     public static $form = [
         'name' => [
-            'type' => 'text',
+            'type'     => 'text',
             'required' => true,
         ],
         'description' => [
-            'type' => 'textarea',
+            'type'     => 'textarea',
             'required' => false,
         ],
     ];

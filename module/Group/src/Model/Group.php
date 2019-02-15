@@ -23,20 +23,19 @@ class Group extends Model implements HasSlugInterface
     protected static $table = 'groups';
     public static $form = [
         'name' => [
-            'type' => 'text',
+            'type'     => 'text',
             'required' => true,
         ],
         'description' => [
-            'type' => 'textarea',
+            'type'     => 'textarea',
             'required' => false,
         ],
         'grouptype' => [
-            'type' => 'grouptype',
-            'label' => 'GroupType',
+            'type'     => 'grouptype',
+            'label'    => 'GroupType',
             'required' => true,
         ],
     ];
-
 
     /**
      * InputFilter for Group's inputFilter.
@@ -54,7 +53,6 @@ class Group extends Model implements HasSlugInterface
     {
         parent::__construct($attributes);
     }
-
 
     /**
      * Get associated tabs.

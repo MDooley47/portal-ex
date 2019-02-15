@@ -33,18 +33,20 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
      *
      * @return Tab
      */
-    public function addTab($data) {
+    public function addTab($data)
+    {
         return $this->add($data);
     }
 
     /**
-     * Adds Tab to database from array
+     * Adds Tab to database from array.
      *
      * @param array $data
      *
      * @return Tab
      */
-    public function add($data) {
+    public function add($data)
+    {
         $tab = new Tab($data);
 
         return $this->save($tab);
@@ -73,8 +75,8 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
      *
      * Selects an Tab from the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options
+     * @param mixed $id      The identifier.
+     * @param array $options
      *
      * @return Tab
      */
@@ -86,7 +88,7 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
     /**
      * Selects an Tab from the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id The identifier.
      *
      * @return Tab
      */
@@ -105,7 +107,6 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
         return new Tab($row->getArrayCopy());
     }
 
-
     public function getTabs($tabSlugs)
     {
         $tabs = [];
@@ -122,9 +123,9 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
      *
      * Checks if an tab exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -136,9 +137,9 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
     /**
      * Checks if an tab exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -194,7 +195,7 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
                 $data['slug'] = Tab::generateSlug();
             } while ($this->exists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
-        } else if ($dbTab = $this->get($slug)) {
+        } elseif ($dbTab = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(
