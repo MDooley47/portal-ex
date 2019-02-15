@@ -3,6 +3,10 @@
 namespace Setting\Model;
 
 use DomainException;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use Setting\InputFilter\DataFilter;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
@@ -11,21 +15,19 @@ use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Setting implements HasSlugInterface
+class Setting extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
-    /**
-     * Int for Setting's id found in the db.
-     */
-    public $id;
-    /**
-     * String for Setting's name.
-     */
-    public $name;
-    /**
-     * String for Setting's description.
-     */
-    public $description;
+    use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'settings';
+    public static $form = [
+        'data' => [
+            'type' => 'json',
+            'required' => true,
+        ],
+    ];
+
 
     /**
      * InputFilter for Setting's inputFilter.

@@ -3,6 +3,10 @@
 namespace Tab\Model;
 
 use DomainException;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use SessionManager\Tables;
 use Tab\InputFilter\NameFilter;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
@@ -12,17 +16,22 @@ use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Tab implements HasSlugInterface
+class Tab extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
-    /**
-     * String for Tab's name.
-     */
-    public $name;
-    /**
-     * String for Tab's description.
-     */
-    public $description;
+    use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'tabs';
+    public static $form = [
+        'name' => [
+            'type' => 'text',
+            'required' => true,
+        ],
+        'description' => [
+            'type' => 'textarea',
+            'required' => false,
+        ],
+    ];
 
     /**
      * InputFilter for Tab's inputFilter.

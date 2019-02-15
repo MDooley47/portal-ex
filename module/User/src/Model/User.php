@@ -3,6 +3,11 @@
 namespace User\Model;
 
 use DomainException;
+use Model\Concerns\HasCast;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use SessionManager\Tables;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
@@ -10,22 +15,39 @@ use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
 use User\InputFilter\NameFilter;
 use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
-class User implements HasSlugInterface
+class User extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
+    use Boot, HasCast, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'users';
+    public static $form = [
+        'name' => [
+            'type' => 'text',
+            'required' => true,
+        ],
+        'email' => [
+            'type' => 'email',
+            'required' => true,
+        ],
+        'codist' => [
+            'type' => 'text',
+            'label' => 'County District Number',
+            'required' => false,
+        ],
+    ];
+
+
     /**
-     * Int for User's id found in the db.
+     * User constructor.
+     * @param array $attributes
      */
-    public $id;
-    /**
-     * String for User's name.
-     */
-    public $name;
-    /**
-     * String for User's email.
-     */
-    public $email;
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
 
     /**
      * InputFilter for User's inputFilter.
@@ -52,9 +74,6 @@ class User implements HasSlugInterface
             'name'     => $this->name,
             'email'    => $this->email,
             'codist'   => $this->codist,
-            'county'   => $this->county(),
-            'district' => $this->district(),
-            'building' => $this->building(),
         ];
     }
 
