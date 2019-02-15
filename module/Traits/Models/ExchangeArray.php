@@ -15,8 +15,10 @@ trait ExchangeArray
      */
     public function exchangeArray(array $data)
     {
+        self::sanitizeGuarded($data);
+
         foreach ($data as $key => $value) {
-            $this->{$key} = !empty($value) ? $value : (int) null;
+            $this->{$key} = !empty($value) ? $value : $this->{$key};
         }
 
         return $this;

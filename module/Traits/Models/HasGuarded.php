@@ -15,7 +15,8 @@ trait HasGuarded
      */
     public static function sanitizeGuarded(&$data)
     {
-        if (is_array($data)) {
+        if (property_exists(self::class, '$guarded')) return $data;
+        else if (is_array($data)) {
             foreach ($data as $key => $value) {
                 if (in_array($key, self::$guarded)) {
                     unset($data[$key]);

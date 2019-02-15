@@ -39,6 +39,7 @@ trait AddAction
             $form->setInputFilter($tab->getInputFilter());
             if ($form->isValid()) {
                 $data = $form->getData();
+
                 Tab::sanitizeGuarded($data);
                 $tab->exchangeArray($data);
                 $table->saveTab($tab);
