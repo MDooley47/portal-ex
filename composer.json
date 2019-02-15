@@ -12,7 +12,7 @@
     "minimum-stability" : "dev",
     "prefer-stable" : true,
     "require" : {
-        "php" : "^5.6 || ^7.0",
+        "php" : "^7.1",
         "zendframework/zend-component-installer" : "^1.0 || ^0.7 || ^1.0.0-dev@dev",
         "zendframework/zend-mvc" : "^3.0.1",
         "zfcampus/zf-development-mode" : "^3.0",
@@ -22,7 +22,9 @@
         "zendframework/zend-session" : "^2.7.1",
         "zendframework/zend-escaper": "^2.5",
         "esucc/simplesamlphp" : "dev-develop",
-        "vlucas/phpdotenv" : "^2.4"
+        "vlucas/phpdotenv" : "^2.4",
+        "psy/psysh": "@stable",
+        "ext-json": "^1.6"
     },
     "autoload" : {
         "psr-4" : {
@@ -39,7 +41,8 @@
             "Setting\\" : "module/Setting/src/",
             "Tab\\" : "module/Tab/src/",
             "Traits\\" : "module/Traits/",
-            "User\\" : "module/User/src/"
+            "User\\" : "module/User/src/",
+            "Model\\": "module/Model"
         }
     },
     "autoload-dev" : {
@@ -64,6 +67,5 @@
     }
     ],
     "require-dev": {
-        "psy/psysh": "^0.9.7"
     }
 }
