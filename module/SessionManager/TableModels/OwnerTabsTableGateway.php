@@ -6,6 +6,7 @@ use OwnerType\Model\OwnerType;
 use SessionManager\Tables;
 use Tab\Model\Tab;
 use Traits\Interfaces\CorrelationInterface;
+use Traits\Tables\HasColumns;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
@@ -14,6 +15,8 @@ use Zend\Validator\Db\RecordExists;
 
 class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
+    use HasColumns;
+
     public function __construct()
     {
         $this->table = 'ownerTabs';

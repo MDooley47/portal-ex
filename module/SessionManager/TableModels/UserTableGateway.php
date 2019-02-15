@@ -3,12 +3,19 @@
 namespace SessionManager\TableModels;
 
 use RuntimeException;
+use Traits\Tables\HasColumns;
+use Traits\Tables\UniversalTableGatewayInterface;
 use User\Model\User;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Validator\Db\RecordExists;
 
-class UserTableGateway extends AbstractTableGateway
+class UserTableGateway extends AbstractTableGateway implements UniversalTableGatewayInterface
 {
+    use HasColumns;
+
+    public $model_name = 'User';
+
     public function __construct()
     {
         $this->table = 'users';
@@ -18,13 +25,57 @@ class UserTableGateway extends AbstractTableGateway
     }
 
     /**
+     * @deprecated  Please use the add method.
+     *
+     * Adds Users from the database.
+     *
+     * @return User
+     */
+    public function addUser($data) {
+        return $this->add($data);
+    }
+
+    public function add($data) {
+        $model = new User($data);
+
+        return $this->save($model);
+    }
+
+    /**
+     * @deprecated  Please use the all method.
+     *
      * Selects all Users from the database.
      *
      * @return User[]
      */
     public function fetchAll()
     {
+        return $this->all();
+    }
+
+    /**
+     * Selects all Users from the database.
+     *
+     * @return User[]
+     */
+    public function all() {
         return $this->select();
+    }
+
+    /**
+     * @deprecated Please use the get method instead
+     *
+     * Selects an User from the database.
+     *
+     * @param mixed      $id      The identifier.
+     * @param dictionary $options Contains 'type' which defines what type of
+     *                            identifier $id is. Default value is 'type' => 'id'.
+     *
+     * @return User
+     */
+    public function getUser($id, $options = ['type' => 'slug'])
+    {
+        return $this->get($id, $options);
     }
 
     /**
@@ -36,7 +87,7 @@ class UserTableGateway extends AbstractTableGateway
      *
      * @return User
      */
-    public function getUser($id, $options = ['type' => 'slug'])
+    public function get($id, $options = ['type' => 'slug'])
     {
         if ($options['type'] == 'slug') {
             $rowset = $this->select(['slug' => $id]);
@@ -52,25 +103,60 @@ class UserTableGateway extends AbstractTableGateway
             ));
         }
 
-        return (new User())->exchangeArray($row->getArrayCopy());
+        return new User($row->getArrayCopy());
+    }
+
+    /**
+     * @deprecated Please use the exists method instead.
+     *
+     * Checks if an user exists in the database.
+     *
+     * @param mixed      $id      The identifier.
+     * @param array      $options Contains 'field' which defines what type of
+     *                            identifier $id is. Default value is 'field' => 'slug'.
+     *
+     * @return bool If value exists
+     */
+    public function userExists($id, $options = null)
+    {
+        return $this->exists($id, $options);
     }
 
     /**
      * Checks if an user exists in the database.
      *
      * @param mixed      $id      The identifier.
-     * @param dictionary $options Contains 'type' which defines what type of
-     *                            identifier $id is. Default value is 'type' => 'id'.
+     * @param array      $options Contains 'field' which defines what type of
+     *                            identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
-    public function userExists($id, $options = ['type' => 'id'])
+    public function exists($id, $options = ['field' => 'slug'])
     {
         return (new RecordExists([
             'table'   => $this->getTable(),
-            'field'   => $options['type'],
+            'field'   => $options['field'] ?? User::$primaryKey,
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
+    }
+
+    /**
+     *
+     * @deprecated Please use the save method instead.
+     *
+     * Saves an User to the database.
+     *
+     * If $user->slug is not null then attempts to update an user with that slug
+     *
+     * @param User $user
+     *
+     * @throws RuntimeException User does not exist
+     *
+     * @return User
+     */
+    public function saveUser(User $user)
+    {
+        return $this->save($user);
     }
 
     /**
@@ -82,9 +168,9 @@ class UserTableGateway extends AbstractTableGateway
      *
      * @throws RuntimeException User does not exist
      *
-     * @return void
+     * @return User
      */
-    public function saveUser(User $user)
+    public function save($user)
     {
         $data = [
             'name'  => $user->name,
@@ -96,20 +182,34 @@ class UserTableGateway extends AbstractTableGateway
         if ($slug == null) {
             do {
                 $data['slug'] = User::generateSlug();
-            } while ($this->userExists($data['slug'], ['type' => 'slug']));
+            } while ($this->exists($data['slug'], ['field' => 'slug']));
             $this->insert($data);
-
-            return;
-        }
-
-        if ($dbUser = $this->getUser($slug)) {
+        } else if ($dbUser = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
-            throw new RuntimeException(springf(
-                'Cannot update user with identifier %d; does not exist',
-                $id
+            throw new RuntimeException(sprintf(
+                'Cannot update user with identifier %s; does not exist',
+                $slug
             ));
         }
+
+        $user->slug = $data['slug'] ?? $slug;
+
+        return $user;
+    }
+
+    /**
+     * @deprecated Please use the delete method
+     *
+     * Deletes User and deletes the User's icon.
+     *
+     * @param string $slug User's slug.
+     *
+     * @return void
+     */
+    public function deleteUser($slug)
+    {
+        $this->delete($slug);
     }
 
     /**
@@ -119,8 +219,8 @@ class UserTableGateway extends AbstractTableGateway
      *
      * @return void
      */
-    public function deleteUser($slug)
+    public function delete($slug)
     {
-        $this->delete(['slug' => $slug]);
+        parent::delete([User::$primaryKey => $slug]);
     }
 }
