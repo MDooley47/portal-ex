@@ -16,7 +16,7 @@ RUN apt-get install -y \
 RUN docker-php-ext-install zip \
     && docker-php-ext-install gmp \
     && docker-php-ext-install intl \
-    && docker-php-ext-install pdo pdo_pgsql
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 
 # install mod_xsendfile
 RUN wget -O /tmp/mod_xsendfile.tar.gz https://tn123.org/mod_xsendfile/mod_xsendfile-0.12.tar.gz \
