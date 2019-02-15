@@ -1,0 +1,12 @@
+.tab-content {
+  padding-top: 1em;
+  form {
+    label > span {
+      margin-right: 1em;
+    }
+  }
+}
+
+.selected-row, .selected-row td {
+  background-color: #B4D5FE !important;
+}

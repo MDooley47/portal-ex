@@ -5,8 +5,9 @@
 @import "variables";
 
 // Bootstrap
-@import "~bootstrap-sass/assets/stylesheets/bootstrap";
+@import "~bootstrap/scss/bootstrap";
 
 @import "global";
 @import "app";
 @import "header";
+@import "dashboard";
