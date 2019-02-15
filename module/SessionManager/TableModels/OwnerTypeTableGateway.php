@@ -34,18 +34,20 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * @return OwnerType
      */
-    public function addOwnerType($data) {
+    public function addOwnerType($data)
+    {
         return $this->add($data);
     }
 
     /**
-     * Adds OwnerType to database from array
+     * Adds OwnerType to database from array.
      *
      * @param array $data
      *
      * @return OwnerType
      */
-    public function add($data) {
+    public function add($data)
+    {
         $ownerType = new OwnerType($data);
 
         return $this->save($ownerType);
@@ -64,7 +66,8 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Selects all OwnerTypes from the database.
      */
-    public function all() {
+    public function all()
+    {
         return $this->select();
     }
 
@@ -73,6 +76,7 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * @param $id
      * @param array $options
+     *
      * @return OwnerType
      */
     public function getType($id, $options = [])
@@ -99,8 +103,8 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Selects an OwnerType from the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options
+     * @param mixed $id      The identifier.
+     * @param array $options
      *
      * @return OwnerType
      */
@@ -123,7 +127,6 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
             }
         });
 
-
         $row = $rowset->current();
 
         if (!$row) {
@@ -136,15 +139,14 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
         return new OwnerType($rowset->toArray());
     }
 
-
     /**
      * @deprecated Please use the exists method.
      *
      * Checks if an ownerType exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -156,9 +158,9 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Checks if an ownerType exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -170,7 +172,6 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
-
 
     /**
      * @deprecated Please use the save method.
@@ -215,7 +216,7 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
                 $data['slug'] = OwnerType::generateSlug();
             } while ($this->exists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
-        } else if ($dbOwnerType = $this->get($slug)) {
+        } elseif ($dbOwnerType = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(

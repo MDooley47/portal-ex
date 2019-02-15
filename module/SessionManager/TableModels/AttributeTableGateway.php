@@ -51,28 +51,29 @@ class AttributeTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * @return Attribute
      */
-    public function addAttribute($data) {
+    public function addAttribute($data)
+    {
         return $this->add($data);
     }
 
     /**
-     * Adds Attribute to database from array
+     * Adds Attribute to database from array.
      *
      * @param $data
      *
      * @return Attribute
      */
-    public function add($data) {
+    public function add($data)
+    {
         $attribute = new Attribute($data);
 
         return $this->save($attribute);
     }
 
-
     /**
      * Selects an Attribute from the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options
      *
      * @return Attribute
@@ -85,7 +86,7 @@ class AttributeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Selects an Attribute from the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id The identifier.
      *
      * @return Attribute
      */
@@ -109,9 +110,9 @@ class AttributeTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * Checks if an attribute exists in the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -123,9 +124,9 @@ class AttributeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Checks if an attribute exists in the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -137,7 +138,6 @@ class AttributeTableGateway extends AbstractTableGateway implements UniversalTab
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
-
 
     /**
      * @deprecated Please use the save method.
@@ -183,7 +183,7 @@ class AttributeTableGateway extends AbstractTableGateway implements UniversalTab
                 $data['slug'] = Attribute::generateSlug();
             } while ($this->exists($data['slug']));
             $this->insert($data);
-        } else if ($dbAttribute = $this->getAttribute($slug)) {
+        } elseif ($dbAttribute = $this->getAttribute($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(
@@ -196,7 +196,6 @@ class AttributeTableGateway extends AbstractTableGateway implements UniversalTab
 
         return $attribute;
     }
-
 
     /**
      * @deprecated Please use the delete method.
@@ -223,5 +222,4 @@ class AttributeTableGateway extends AbstractTableGateway implements UniversalTab
     {
         parent::delete([Attribute::$primaryKey => $slug]);
     }
-
 }

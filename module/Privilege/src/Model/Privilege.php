@@ -23,15 +23,15 @@ class Privilege extends Model implements HasSlugInterface, Bootable
     protected static $table = 'privileges';
     public static $form = [
         'name' => [
-            'type' => 'text',
+            'type'     => 'text',
             'required' => true,
         ],
         'description' => [
-            'type' => 'textarea',
+            'type'     => 'textarea',
             'required' => false,
         ],
         'level' => [
-            'type' => 'number',
+            'type'     => 'number',
             'required' => true,
         ],
     ];

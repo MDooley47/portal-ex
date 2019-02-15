@@ -3,13 +3,14 @@
 namespace Model\Concerns;
 
 /**
- * Trait HasAttributes
+ * Trait HasAttributes.
  *
  * @author laravel/framework
  *         As noted most of this file is a modified version
  *         of a part of laravel/framework
  */
-trait HasAttributes {
+trait HasAttributes
+{
     /**
      * The model's attributes.
      *
@@ -40,7 +41,8 @@ trait HasAttributes {
     /**
      * Get an attribute from the model.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getAttribute($key)
@@ -57,13 +59,14 @@ trait HasAttributes {
         if (method_exists(self::class, $key)) {
             return;
         }
-        return; //$this->getRelationValue($key);
+        //$this->getRelationValue($key);
     }
 
     /**
      * Get a plain attribute (not a relationship).
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function getAttributeValue($key)
@@ -83,7 +86,8 @@ trait HasAttributes {
     /**
      * Get an attribute from the $attributes array.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     protected function getAttributeFromArray($key)
@@ -96,8 +100,9 @@ trait HasAttributes {
     /**
      * Cast an attribute to a native PHP type.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return mixed
      */
     protected function castAttribute($key, $value)
@@ -133,8 +138,9 @@ trait HasAttributes {
     /**
      * Determine whether an attribute should be cast to a native type.
      *
-     * @param  string  $key
-     * @param  array|string|null  $types
+     * @param string            $key
+     * @param array|string|null $types
+     *
      * @return bool
      */
     public function hasCast($key, $types = null)
@@ -142,6 +148,7 @@ trait HasAttributes {
         if (array_key_exists($key, $this->getCasts())) {
             return $types ? in_array($this->getCastType($key), (array) $types, true) : true;
         }
+
         return false;
     }
 
@@ -158,7 +165,8 @@ trait HasAttributes {
     /**
      * Get the type of cast for a model attribute.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return string
      */
     protected function getCastType($key)
@@ -166,13 +174,15 @@ trait HasAttributes {
         if ($this->isDecimalCast($this->getCasts()[$key])) {
             return 'decimal';
         }
+
         return trim(strtolower($this->getCasts()[$key]));
     }
 
     /**
      * Determine if the cast type is a decimal cast.
      *
-     * @param  string  $cast
+     * @param string $cast
+     *
      * @return bool
      */
     protected function isDecimalCast($cast)
@@ -183,7 +193,8 @@ trait HasAttributes {
     /**
      * Decode the given float.
      *
-     * @param  mixed  $value
+     * @param mixed $value
+     *
      * @return mixed
      */
     public function fromFloat($value)
@@ -203,20 +214,22 @@ trait HasAttributes {
     /**
      * Decode the given JSON back into an array or object.
      *
-     * @param  string  $value
-     * @param  bool  $asObject
+     * @param string $value
+     * @param bool   $asObject
+     *
      * @return mixed
      */
     public function fromJson($value, $asObject = false)
     {
-        return json_decode($value, ! $asObject);
+        return json_decode($value, !$asObject);
     }
 
     /**
      * Return a decimal as string.
      *
-     * @param  float  $value
-     * @param  int  $decimals
+     * @param float $value
+     * @param int   $decimals
+     *
      * @return string
      */
     protected function asDecimal($value, $decimals)
@@ -227,13 +240,14 @@ trait HasAttributes {
     /**
      * Set a given attribute on the model.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return mixed
      */
     public function setAttribute($key, $value)
     {
-        if ($this->isJsonCastable($key) && ! is_null($value)) {
+        if ($this->isJsonCastable($key) && !is_null($value)) {
             $value = $this->castAttributeAsJson($key, $value);
         }
         // If this attribute contains a JSON ->, we'll set the proper value in the
@@ -243,13 +257,15 @@ trait HasAttributes {
             return $this->fillJsonAttribute($key, $value);
         }
         $this->attributes[$key] = $value;
+
         return $this;
     }
 
     /**
      * Determine whether a value is JSON castable for inbound manipulation.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
     protected function isJsonCastable($key)
@@ -260,8 +276,9 @@ trait HasAttributes {
     /**
      * Cast the given attribute to JSON.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return string
      */
     protected function castAttributeAsJson($key, $value)
@@ -274,8 +291,9 @@ trait HasAttributes {
     /**
      * Set a given JSON attribute on the model.
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return $this
      */
     public function fillJsonAttribute($key, $value)
@@ -284,13 +302,15 @@ trait HasAttributes {
         $this->attributes[$key] = $this->asJson($this->getArrayAttributeWithValue(
             $path, $key, $value
         ));
+
         return $this;
     }
 
     /**
      * Encode the given value as JSON.
      *
-     * @param  mixed  $value
+     * @param mixed $value
+     *
      * @return string
      */
     protected function asJson($value)
@@ -301,9 +321,10 @@ trait HasAttributes {
     /**
      * Get an array attribute with the given key and value set.
      *
-     * @param  string  $path
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $path
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return $this
      */
     protected function getArrayAttributeWithValue($path, $key, $value)
@@ -316,7 +337,8 @@ trait HasAttributes {
     /**
      * Get an array attribute or return an empty array if it is not set.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return array
      */
     protected function getArrayAttributeByKey($key)
@@ -330,9 +352,10 @@ trait HasAttributes {
      *
      * If no key is given to the method, the entire array will be replaced.
      *
-     * @param  array   $array
-     * @param  string  $key
-     * @param  mixed   $value
+     * @param array  $array
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return array
      */
     public static function ArrSet(&$array, $key, $value)
@@ -346,20 +369,22 @@ trait HasAttributes {
             // If the key doesn't exist at this depth, we will just create an empty array
             // to hold the next value, allowing us to create the arrays to hold final
             // values at the correct depth. Then we'll keep digging into the array.
-            if (! isset($array[$key]) || ! is_array($array[$key])) {
+            if (!isset($array[$key]) || !is_array($array[$key])) {
                 $array[$key] = [];
             }
             $array = &$array[$key];
         }
         $array[array_shift($keys)] = $value;
+
         return $array;
     }
 
     /**
      * Determine if a given string contains a given substring.
      *
-     * @param  string  $haystack
-     * @param  string|array  $needles
+     * @param string       $haystack
+     * @param string|array $needles
+     *
      * @return bool
      */
     public static function StrContains($haystack, $needles)
@@ -369,6 +394,7 @@ trait HasAttributes {
                 return true;
             }
         }
+
         return false;
     }
 
@@ -377,7 +403,8 @@ trait HasAttributes {
      *
      * @author laravel/framework
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return mixed
      */
     public function __get($key)
@@ -390,8 +417,9 @@ trait HasAttributes {
      *
      * @author laravel/framework
      *
-     * @param  string  $key
-     * @param  mixed  $value
+     * @param string $key
+     * @param mixed  $value
+     *
      * @return void
      */
     public function __set($key, $value)
@@ -404,12 +432,13 @@ trait HasAttributes {
      *
      * @author laravel/framework
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
+     *
      * @return bool
      */
     public function offsetExists($offset)
     {
-        return ! is_null($this->getAttribute($offset));
+        return !is_null($this->getAttribute($offset));
     }
 
     /**
@@ -417,7 +446,8 @@ trait HasAttributes {
      *
      * @author laravel/framework
      *
-     * @param  mixed  $offset
+     * @param mixed $offset
+     *
      * @return mixed
      */
     public function offsetGet($offset)
@@ -428,9 +458,11 @@ trait HasAttributes {
     /**
      * Fill the model with an array of attributes.
      *
-     * @param  array  $attributes
-     * @return $this
+     * @param array $attributes
+     *
      * @throws Exception
+     *
+     * @return $this
      */
     public function fill(array $attributes)
     {
@@ -450,31 +482,35 @@ trait HasAttributes {
                 ));
             }
         }
+
         return $this;
     }
 
     /**
      * Fill the model with an array of attributes.
      *
-     * @param  array  $attributes
-     * @return $this
+     * @param array $attributes
+     *
      * @throws Exception
+     *
+     * @return $this
      */
     protected function protectedFill(array $attributes)
     {
         $this->attributes = array_merge($this->attributes, $attributes);
+
         return $this;
     }
 
     /**
      * Remove the table name from a given key.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return string
      */
     protected function removeTableFromKey($key)
     {
         return StrContains($key, '.') ? end(explode('.', $key)) : $key;
     }
-
 }

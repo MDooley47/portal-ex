@@ -3,13 +3,14 @@
 namespace Model\Concerns;
 
 /**
- * Trait GuardsAttributes
+ * Trait GuardsAttributes.
  *
  * @author laravel/framework
  *         As noted most of this file is a modified version
  *         of a part of laravel/framework
  */
-trait GuardsAttributes {
+trait GuardsAttributes
+{
     /**
      * The attributes that are mass assignable.
      *
@@ -44,12 +45,14 @@ trait GuardsAttributes {
     /**
      * Set the fillable attributes for the model.
      *
-     * @param  array  $fillable
+     * @param array $fillable
+     *
      * @return $this
      */
     public function fillable(array $fillable)
     {
         $this->fillable = $fillable;
+
         return $this;
     }
 
@@ -66,19 +69,22 @@ trait GuardsAttributes {
     /**
      * Set the guarded attributes for the model.
      *
-     * @param  array  $guarded
+     * @param array $guarded
+     *
      * @return $this
      */
     public function guard(array $guarded)
     {
         $this->guarded = $guarded;
+
         return $this;
     }
 
     /**
      * Disable all mass assignable restrictions.
      *
-     * @param  bool  $state
+     * @param bool $state
+     *
      * @return void
      */
     public static function unguard($state = true)
@@ -109,7 +115,8 @@ trait GuardsAttributes {
     /**
      * Run the given callable while being unguarded.
      *
-     * @param  callable  $callback
+     * @param callable $callback
+     *
      * @return mixed
      */
     public static function unguarded(callable $callback)
@@ -118,6 +125,7 @@ trait GuardsAttributes {
             return $callback();
         }
         static::unguard();
+
         try {
             return $callback();
         } finally {
@@ -128,7 +136,8 @@ trait GuardsAttributes {
     /**
      * Determine if the given attribute may be mass assigned.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
     public function isFillable($key)
@@ -148,14 +157,16 @@ trait GuardsAttributes {
         if ($this->isGuarded($key)) {
             return false;
         }
+
         return empty($this->getFillable()) &&
-            ! substr( $key, 0, 1 ) === '_';
+            !substr($key, 0, 1) === '_';
     }
 
     /**
      * Determine if the given key is guarded.
      *
-     * @param  string  $key
+     * @param string $key
+     *
      * @return bool
      */
     public function isGuarded($key)
@@ -183,14 +194,16 @@ trait GuardsAttributes {
     /**
      * Get the fillable attributes of a given array.
      *
-     * @param  array  $attributes
+     * @param array $attributes
+     *
      * @return array
      */
     protected function fillableFromArray(array $attributes)
     {
-        if (count($this->getFillable()) > 0 && ! static::$unguarded) {
+        if (count($this->getFillable()) > 0 && !static::$unguarded) {
             return array_intersect_key($attributes, array_flip($this->getFillable()));
         }
+
         return $attributes;
     }
 }

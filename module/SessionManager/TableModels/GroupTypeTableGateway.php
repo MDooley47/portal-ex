@@ -30,19 +30,23 @@ class GroupTypeTableGateway extends AbstractTableGateway implements UniversalTab
      * Adds GroupType to database from array
      *
      * @param $data
+     *
      * @return GroupType
      */
-    public function addGroupType($data) {
+    public function addGroupType($data)
+    {
         return $this->add($data);
     }
 
     /**
-     * Adds GroupType to database from array
+     * Adds GroupType to database from array.
      *
      * @param $data
+     *
      * @return GroupType
      */
-    public function add($data) {
+    public function add($data)
+    {
         $groupType = new GroupType($data);
 
         return $this->save($groupType);
@@ -71,8 +75,8 @@ class GroupTypeTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * Selects an GroupType from the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options
+     * @param mixed $id      The identifier.
+     * @param array $options
      *
      * @return GroupType
      */
@@ -84,7 +88,7 @@ class GroupTypeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Selects an GroupType from the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id The identifier.
      *
      * @return GroupType
      */
@@ -103,15 +107,14 @@ class GroupTypeTableGateway extends AbstractTableGateway implements UniversalTab
         return $row;
     }
 
-
     /**
      * @deprecated Please use the exists method.
      *
      * Checks if an groupType exists in the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -123,9 +126,9 @@ class GroupTypeTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Checks if an groupType exists in the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -182,7 +185,7 @@ class GroupTypeTableGateway extends AbstractTableGateway implements UniversalTab
                 $data['slug'] = GroupType::generateSlug();
             } while ($this->exists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
-        } else if ($dbGroupType = $this->get($slug)) {
+        } elseif ($dbGroupType = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(
@@ -195,7 +198,6 @@ class GroupTypeTableGateway extends AbstractTableGateway implements UniversalTab
 
         return $groupType;
     }
-
 
     /**
      * @deprecated Please use the delete method.

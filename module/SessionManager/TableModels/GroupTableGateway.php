@@ -51,18 +51,20 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
      *
      * @return Group
      */
-    public function addGroup($data) {
+    public function addGroup($data)
+    {
         return $this->add($data);
     }
+
     /**
-     * Adds Group to database from array
+     * Adds Group to database from array.
      *
      * @param $data
      *
      * @return Group
      */
-
-    public function add($data) {
+    public function add($data)
+    {
         $model = new Group($data);
 
         return $this->save($model);
@@ -73,8 +75,8 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
      *
      * Selects an Group from the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options
+     * @param mixed $id      The identifier.
+     * @param array $options
      *
      * @return Group
      */
@@ -86,7 +88,7 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
     /**
      * Selects an Group from the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id The identifier.
      *
      * @return Group
      */
@@ -105,15 +107,14 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
         return $row;
     }
 
-
     /**
      * @deprecated Please use the exists method.
      *
      * Checks if an group exists in the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options Contains 'type' which defines what type of
-     *                            identifier $id is. Default value is 'type' => 'id'.
+     *                       identifier $id is. Default value is 'type' => 'id'.
      *
      * @return bool If value exists
      */
@@ -129,9 +130,9 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
     /**
      * Checks if an group exists in the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id      The identifier.
      * @param array $options Contains 'type' which defines what type of
-     *                            identifier $id is. Default value is 'type' => 'id'.
+     *                       identifier $id is. Default value is 'type' => 'id'.
      *
      * @return bool If value exists
      */
@@ -173,7 +174,8 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
      *
      * @return Group
      */
-    public function save($group) {
+    public function save($group)
+    {
         $data = [
             'name'        => $group->name,
             'description' => $group->description,
@@ -187,7 +189,7 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
                 $data['slug'] = Group::generateSlug();
             } while ($this->groupExists($data['slug']));
             $this->insert($data);
-        } else if ($dbGroup = $this->getGroup($slug)) {
+        } elseif ($dbGroup = $this->getGroup($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(
@@ -226,5 +228,4 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
     {
         parent::delete(['slug' => $slug]);
     }
-
 }

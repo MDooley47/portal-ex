@@ -33,18 +33,20 @@ class IpAddressTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * @return IpAddress
      */
-    public function addIpAddress($data) {
+    public function addIpAddress($data)
+    {
         return $this->add($data);
     }
 
     /**
-     * Adds IpAddress to database from array
+     * Adds IpAddress to database from array.
      *
      * @param $data
      *
      * @return IpAddress
      */
-    public function add($data) {
+    public function add($data)
+    {
         $ipAddress = new IpAddress($data);
 
         return $this->save($ipAddress);
@@ -73,8 +75,8 @@ class IpAddressTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * Selects an IpAddress from the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options
+     * @param mixed $id      The identifier.
+     * @param array $options
      *
      * @return IpAddress
      */
@@ -86,7 +88,7 @@ class IpAddressTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Selects an IpAddress from the database.
      *
-     * @param mixed      $id      The identifier.
+     * @param mixed $id The identifier.
      *
      * @return IpAddress
      */
@@ -105,15 +107,14 @@ class IpAddressTableGateway extends AbstractTableGateway implements UniversalTab
         return $row;
     }
 
-
     /**
      * @deprecated Please use the exists method.
      *
      * Checks if an ipAddress exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -125,9 +126,9 @@ class IpAddressTableGateway extends AbstractTableGateway implements UniversalTab
     /**
      * Checks if an ipAddress exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param array      $options Contains 'field' which defines what type of
-     *                            identifier $id is. Default value is 'field' => 'slug'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
@@ -139,7 +140,6 @@ class IpAddressTableGateway extends AbstractTableGateway implements UniversalTab
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
     }
-
 
     /**
      * @deprecated Please use the save method.
@@ -185,7 +185,7 @@ class IpAddressTableGateway extends AbstractTableGateway implements UniversalTab
                 $data['slug'] = IpAddress::generateSlug();
             } while ($this->exists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
-        } else if ($dbIpAddress = $this->get($slug)) {
+        } elseif ($dbIpAddress = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(
