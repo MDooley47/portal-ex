@@ -250,4 +250,17 @@ export default class DatatableManager {
 
         return str.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
     }
+
+    static getRowValues(table, slug) {
+        const row = $('#' + table.toLowerCase() + '-' + slug);
+        const cells = row.children().toArray();
+        let data = {};
+
+        for (let i in cells) {
+            const key = $(cells[i]).attr('class').split(' ')[0].replace(table + '-', '');
+            data[key] = $(cells[i]).text();
+        }
+
+        return data;
+    }
 }
