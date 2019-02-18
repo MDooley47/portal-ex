@@ -60,6 +60,7 @@ class FormBuilder {
         let value = (elem.hasOwnProperty('value')) ? elem.value : '';
         let placeholder = (elem.hasOwnProperty('placeholder')) ? elem.placeholder : '';
         let required = (elem.required) ? 'required' : '';
+        const classes = 'input_data form-control';
         html += "<div class='input-group mb-2 " + class_name + "'>";
             html += "<div class='input-group-prepend mr-2 pt-1'>";
                 html += "<label for='" + name + "'>" + label + "</label>";
@@ -67,22 +68,14 @@ class FormBuilder {
 
 
         switch(type) {
-            case 'checkbox':
-            case 'color':
-            case 'date':
-            case 'email':
-            case 'file':
-            case 'hidden':
-            case 'image':
-            case 'month':
-            case 'number':
-            case 'radio':
-            case 'range':
-            case 'reset':
-            case 'text':
-            case 'time':
-            case 'url':
-            case 'week':
+            case 'checkbox': case 'color':
+            case 'date':     case 'email':
+            case 'file':     case 'hidden':
+            case 'image':    case 'month':
+            case 'number':   case 'radio':
+            case 'range':    case 'reset':
+            case 'text':     case 'time':
+            case 'url':      case 'week':
                 html +=
                     "<input " +
                         "type='" + type + "' " +
@@ -90,7 +83,7 @@ class FormBuilder {
                         "name='" + name + "' " +
                         "value='" + value + "' " +
                         "placeholder='" + placeholder + "' " +
-                        " class='input_data' " +
+                        "class='" + classes + "' " +
                         required +
                     "/>";
                 break;
@@ -99,7 +92,7 @@ class FormBuilder {
                     "<textarea " +
                         "id='" + name + "' " +
                         "name='" + name + "' " +
-                        " class='input_data' " +
+                        "class='" + classes + "' " +
                         required +
                     ">" +
                         value +
@@ -114,7 +107,7 @@ class FormBuilder {
                         "value='" + value + "' " +
                         "placeholder='" + placeholder + "' " +
                         "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$' " +
-                        "class='input_data'" +
+                        "class='" + classes + "' " +
                         required +
                     "/>";
                 break;
@@ -124,7 +117,7 @@ class FormBuilder {
                         "class='select2 single grouptype' " +
                         "name='" + name + "' " +
                         "id='" + name + "' " +
-                        "class='input_data' " +
+                        "class='" + classes + "' " +
                         required +
                     ">" +
                         "<option></option>";
