@@ -31,7 +31,7 @@ class FormBuilder {
         });
     }
 
-    static html(model) {
+    static html(model, values) {
         if (! FormBuilder.forms.hasOwnProperty(model))
             throw Error(model + ' does not have a form.');
 
@@ -40,7 +40,10 @@ class FormBuilder {
         let html = "<div class='" + model + "-form'>";
 
         for (let i in keys) {
-            html += FormBuilder.htmlElement(model, keys[i], form[keys[i]]);
+            let element = form[keys[i]];
+            if (values !== undefined && values.hasOwnProperty(keys[i]))
+                element.value = values[keys[i]];
+            html += FormBuilder.htmlElement(model, keys[i], element);
         }
 
         html += "</div>";
