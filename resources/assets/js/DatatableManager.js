@@ -47,8 +47,8 @@ export default class DatatableManager {
 
     addAddButton(table) {
         $('button#' + table + '-add').on('click', (e) => {
-            let title = DatatableManager.titleCase('add ' + table);
-            let message = window.FormBuilder.html(table);
+            const title = DatatableManager.titleCase('add ' + table);
+            const message = window.FormBuilder.html(table);
 
             bootbox.dialog({
                 'title': title,
@@ -64,14 +64,34 @@ export default class DatatableManager {
                         'callback': () => {
                             let data = {};
 
-                            let inputs = $("." + table + "-input .input_data").toArray();
+                            const inputs = $("." + table + "-input .input_data").toArray();
+
+                            let valid = true;
 
                             for (let i in inputs) {
-                                let key = $(inputs[i]).attr('id').replace(table + '-input-', '');
-                                data[key] = $(inputs[i]).val();
+                                const elem = $(inputs[i]);
+                                let key = elem.attr('id').replace(table + '-input-', '');
+                                data[key] = elem.val();
+
+                                if (! elem[0].checkValidity()) {
+                                    valid = false;
+
+                                    elem.addClass('is-invalid');
+                                } else if (elem.hasClass('is-invalid')) {
+                                    elem.removeClass('is-invalid');
+                                }
                             }
 
-                            console.log(data);
+                            if (valid) {
+                                window.PortalAPI.add(table, data, (response, data) => {
+                                    if (window.DEBUG === true) {
+                                        console.log({
+                                            'response': response,
+                                            'data': data
+                                        });
+                                    }
+                                });
+                            } else return false;
                         }
                     }
                 }
