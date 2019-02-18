@@ -25012,14 +25012,16 @@ function () {
     }
   }, {
     key: "html",
-    value: function html(model) {
+    value: function html(model, values) {
       if (!FormBuilder.forms.hasOwnProperty(model)) throw Error(model + ' does not have a form.');
       var form = FormBuilder.forms[model];
       var keys = Object.keys(form);
       var html = "<div class='" + model + "-form'>";
 
       for (var i in keys) {
-        html += FormBuilder.htmlElement(model, keys[i], form[keys[i]]);
+        var element = form[keys[i]];
+        if (values !== undefined && values.hasOwnProperty(keys[i])) element.value = values[keys[i]];
+        html += FormBuilder.htmlElement(model, keys[i], element);
       }
 
       html += "</div>";
@@ -25036,6 +25038,7 @@ function () {
       var value = elem.hasOwnProperty('value') ? elem.value : '';
       var placeholder = elem.hasOwnProperty('placeholder') ? elem.placeholder : '';
       var required = elem.required ? 'required' : '';
+      var classes = 'input_data form-control';
       html += "<div class='input-group mb-2 " + class_name + "'>";
       html += "<div class='input-group-prepend mr-2 pt-1'>";
       html += "<label for='" + name + "'>" + label + "</label>";
@@ -25058,19 +25061,19 @@ function () {
         case 'time':
         case 'url':
         case 'week':
-          html += "<input " + "type='" + type + "' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + " class='input_data' " + required + "/>";
+          html += "<input " + "type='" + type + "' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + "class='" + classes + "' " + required + "/>";
           break;
 
         case 'textarea':
-          html += "<textarea " + "id='" + name + "' " + "name='" + name + "' " + " class='input_data' " + required + ">" + value + "</textarea>";
+          html += "<textarea " + "id='" + name + "' " + "name='" + name + "' " + "class='" + classes + "' " + required + ">" + value + "</textarea>";
           break;
 
         case 'ip':
-          html += "<input " + "type='text' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$' " + "class='input_data'" + required + "/>";
+          html += "<input " + "type='text' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$' " + "class='" + classes + "' " + required + "/>";
           break;
 
         case 'grouptype':
-          html += "<select " + "class='select2 single grouptype' " + "name='" + name + "' " + "id='" + name + "' " + "class='input_data' " + required + ">" + "<option></option>";
+          html += "<select " + "class='select2 single grouptype' " + "name='" + name + "' " + "id='" + name + "' " + "class='" + classes + "' " + required + ">" + "<option></option>";
           var types = FormBuilder.groupTypes;
 
           for (var i in types) {
@@ -25163,6 +25166,7 @@ function () {
         dt.toggleSelection(table, data[slug]);
       });
       this.addAddButton(table);
+      this.addEditButton(table);
       this.addSelectButton(table, dt);
       this.addDeleteButton(table);
       this.selections[table] = [];
@@ -25187,13 +25191,87 @@ function () {
               'callback': function callback() {
                 var data = {};
                 var inputs = $("." + table + "-input .input_data").toArray();
+                var valid = true;
 
                 for (var i in inputs) {
-                  var key = $(inputs[i]).attr('id').replace(table + '-input-', '');
-                  data[key] = $(inputs[i]).val();
+                  var elem = $(inputs[i]);
+                  var key = elem.attr('id').replace(table + '-input-', '');
+                  data[key] = elem.val();
+
+                  if (!elem[0].checkValidity()) {
+                    valid = false;
+                    elem.addClass('is-invalid');
+                  } else if (elem.hasClass('is-invalid')) {
+                    elem.removeClass('is-invalid');
+                  }
                 }
 
-                console.log(data);
+                if (valid) {
+                  window.PortalAPI.add(table, data, function (response, data) {
+                    if (window.DEBUG === true) {
+                      console.log({
+                        'response': response,
+                        'data': data
+                      });
+                    }
+                  });
+                } else return false;
+              }
+            }
+          }
+        }).find(".modal-dialog").addClass("modal-dialog-centered");
+        if (message.includes('select2')) __WEBPACK_IMPORTED_MODULE_0__Setup_js__["a" /* default */].setupSelect2();
+      });
+    }
+  }, {
+    key: "addEditButton",
+    value: function addEditButton(table) {
+      var _this = this;
+
+      $('button#' + table + '-edit').on('click', function (e) {
+        var title = DatatableManager.titleCase('edit ' + table);
+        var slug = _this.selections[table][0];
+        var values = DatatableManager.getRowValues(table, slug);
+        var message = window.FormBuilder.html(table, values);
+        bootbox.dialog({
+          'title': title,
+          'message': message,
+          buttons: {
+            'cancel': {
+              'label': 'Cancel',
+              'className': 'btn-danger'
+            },
+            'ok': {
+              'label': title,
+              'className': 'btn-success',
+              'callback': function callback() {
+                var data = {};
+                var inputs = $("." + table + "-input .input_data").toArray();
+                var valid = true;
+
+                for (var i in inputs) {
+                  var elem = $(inputs[i]);
+                  var key = elem.attr('id').replace(table + '-input-', '');
+                  data[key] = elem.val();
+
+                  if (!elem[0].checkValidity()) {
+                    valid = false;
+                    elem.addClass('is-invalid');
+                  } else if (elem.hasClass('is-invalid')) {
+                    elem.removeClass('is-invalid');
+                  }
+                }
+
+                if (valid) {
+                  window.PortalAPI.edit(table, slug, data, function (response, data) {
+                    if (window.DEBUG === true) {
+                      console.log({
+                        'response': response,
+                        'data': data
+                      });
+                    }
+                  });
+                } else return false;
               }
             }
           }
@@ -25204,15 +25282,15 @@ function () {
   }, {
     key: "addDeleteButton",
     value: function addDeleteButton(table) {
-      var _this = this;
+      var _this2 = this;
 
       $('button#' + table + '-delete').on('click', function (e) {
         var title = DatatableManager.titleCase(table + ' deletion');
         var message = "Are you sure you wish to delete the following " + window.pluralize(table) + "?";
         var list = "<ul>";
 
-        for (var i in _this.selections[table]) {
-          var slug = _this.selections[table][i];
+        for (var i in _this2.selections[table]) {
+          var slug = _this2.selections[table][i];
           var name = $('#' + table + '-' + slug + ' .' + table + '-name').text();
           list += "<li>";
           list += "<strong>" + slug + "</strong> ";
@@ -25393,6 +25471,20 @@ function () {
       return str.replace(/\w\S*/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
+    }
+  }, {
+    key: "getRowValues",
+    value: function getRowValues(table, slug) {
+      var row = $('#' + table.toLowerCase() + '-' + slug);
+      var cells = row.children().toArray();
+      var data = {};
+
+      for (var i in cells) {
+        var key = $(cells[i]).attr('class').split(' ')[0].replace(table + '-', '');
+        data[key] = $(cells[i]).text();
+      }
+
+      return data;
     }
   }]);
 
