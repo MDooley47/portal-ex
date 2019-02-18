@@ -122,9 +122,12 @@ class APIController extends AbstractActionController
 
     public function editModel(&$content, $m, $id, $data)
     {
-        $model = $this->getTable($m)->get($id);
+        $table = $this->getTable($m);
+        $model = $table->get($id);
 
-        $model->update($data);
+        $model->exchangeArray($data);
+
+        $table->save($model);
 
         $content[$m] = $model->getArrayCopy();
     }
