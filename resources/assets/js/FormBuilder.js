@@ -80,30 +80,61 @@ class FormBuilder {
             case 'time':
             case 'url':
             case 'week':
-                html += "<input type='" + type + "' id='" + name + "' " +
-                    "name='" + name + "' value='" + value + "' " +
-                    "placeholder='" + placeholder + "' " + required + " class='input_data'/>";
+                html +=
+                    "<input " +
+                        "type='" + type + "' " +
+                        "id='" + name + "' " +
+                        "name='" + name + "' " +
+                        "value='" + value + "' " +
+                        "placeholder='" + placeholder + "' " +
+                        " class='input_data' " +
+                        required +
+                    "/>";
                 break;
             case 'textarea':
-                html += "<textarea id='" + name + "' name='" + name + "' " + required +
-                    " class='input_data'>" + value + "</textarea>";
+                html +=
+                    "<textarea " +
+                        "id='" + name + "' " +
+                        "name='" + name + "' " +
+                        " class='input_data' " +
+                        required +
+                    ">" +
+                        value +
+                    "</textarea>";
                 break;
             case 'ip':
-                html += "<input type='text' id='" + name + "' " +
-                    "name='" + name + "' value='" + value + "' " +
-                    "placeholder='" + placeholder + "' " +
-                    "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$'" +
-                    required + " class='input_data'/>";
+                html +=
+                    "<input " +
+                        "type='text' " +
+                        "id='" + name + "' " +
+                        "name='" + name + "' " +
+                        "value='" + value + "' " +
+                        "placeholder='" + placeholder + "' " +
+                        "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$' " +
+                        "class='input_data'" +
+                        required +
+                    "/>";
                 break;
             case 'grouptype':
-                html += "<select class='select2 single grouptype' name='" +
-                    name + "' id='" + name + "' class='input_data'>";
-                    html += "<option></option>";
-                    let types = FormBuilder.groupTypes;
-                    for (let i in types) {
-                        html += "<option value='" + types[i].slug + "'>";
-                        html += types[i].name + "</option>";
-                    }
+                html +=
+                    "<select " +
+                        "class='select2 single grouptype' " +
+                        "name='" + name + "' " +
+                        "id='" + name + "' " +
+                        "class='input_data' " +
+                        required +
+                    ">" +
+                        "<option></option>";
+                let types = FormBuilder.groupTypes;
+                for (let i in types) {
+                    html +=
+                        "<option " +
+                            "value='" + types[i].slug + "' " +
+                        ">" +
+                            types[i].name +
+                        "</option>";
+                }
+                html += "</select>";
                 break;
         }
 

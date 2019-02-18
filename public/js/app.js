@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 1);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10436,31 +10436,122 @@ return jQuery;
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-__webpack_require__(2);
-module.exports = __webpack_require__(11);
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Setup; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DatatableManager__ = __webpack_require__(12);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+var Setup =
+/*#__PURE__*/
+function () {
+  function Setup(additional) {
+    _classCallCheck(this, Setup);
+
+    Setup.setupPostLinks();
+    Setup.setupSelect2();
+    Setup.setupDataTable();
+    if (additional !== undefined) additional();
+  }
+  /**
+   * Sends post request before following links
+   * with the class .post
+   * Sends slug to action assuming /action[/:slug]
+   *
+   * @return void
+   */
+
+
+  _createClass(Setup, null, [{
+    key: "setupPostLinks",
+    value: function setupPostLinks() {
+      var _this = this;
+
+      $('.post').click(function (e) {
+        var href = $(_this).attr('href');
+        var hrefArr = href.split('/');
+        var slug = hrefArr[hrefArr.length - 2];
+        var action = href.substring(0, href.length - (slug.length + 1));
+        $.post(action, {
+          'slug': slug
+        });
+      });
+      $('.post-noslug').click(function (e) {
+        $.post($(_this).attr('href'));
+      });
+    }
+    /**
+     * Enables the .select2 jQuery extension
+     * for forms that use it.
+     *
+     * @return void
+     */
+
+  }, {
+    key: "setupSelect2",
+    value: function setupSelect2() {
+      $('.select2.single.grouptype').select2({
+        placeholder: 'Please select a grouptype',
+        allowClear: true,
+        width: '20em'
+      });
+      $('.select2.single.tab').select2({
+        placeholder: 'Please select a tab',
+        allowClear: true,
+        width: '20em'
+      });
+      $('.select2.single.group').select2({
+        placeholder: 'Please select a group',
+        allowClear: true,
+        width: '20em'
+      });
+    }
+  }, {
+    key: "setupDataTable",
+    value: function setupDataTable() {
+      window.DM = new __WEBPACK_IMPORTED_MODULE_0__DatatableManager__["a" /* default */]([['user'], ['group', 2], ['tab'], ['app', 2], ['attribute'], ['grouptype'], ['ipaddress'], ['ownertype'], ['privilege', 3]]);
+    }
+  }]);
+
+  return Setup;
+}();
+
 
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(3);
+module.exports = __webpack_require__(13);
+
+
+/***/ }),
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Setup_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Setup_js__ = __webpack_require__(1);
 window.jQuery = window.$ = __webpack_require__(0);
 
-__webpack_require__(3); // bootstrap is dependent on jquery
+__webpack_require__(4); // bootstrap is dependent on jquery
 
 
-__webpack_require__(6);
+__webpack_require__(7);
 
-window.bootbox = __webpack_require__(7); // bootbox is dependent on bootstrap
+window.bootbox = __webpack_require__(8); // bootbox is dependent on bootstrap
 
-window.pluralize = __webpack_require__(8);
-window.PortalAPI = __webpack_require__(9);
-window.FormBuilder = __webpack_require__(16);
+window.pluralize = __webpack_require__(9);
+window.PortalAPI = __webpack_require__(10);
+window.FormBuilder = __webpack_require__(11);
 
 window.DEBUG = true;
 $(document).ready(function () {
@@ -10468,7 +10559,7 @@ $(document).ready(function () {
 });
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -10477,7 +10568,7 @@ $(document).ready(function () {
   * Licensed under MIT (https://github.com/twbs/bootstrap/blob/master/LICENSE)
   */
 (function (global, factory) {
-   true ? factory(exports, __webpack_require__(4), __webpack_require__(0)) :
+   true ? factory(exports, __webpack_require__(5), __webpack_require__(0)) :
   typeof define === 'function' && define.amd ? define(['exports', 'popper.js', 'jquery'], factory) :
   (factory((global.bootstrap = {}),global.Popper,global.jQuery));
 }(this, (function (exports,Popper,$) { 'use strict';
@@ -14723,7 +14814,7 @@ $(document).ready(function () {
 
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -17310,10 +17401,10 @@ Popper.Defaults = Defaults;
 /* harmony default export */ __webpack_exports__["default"] = (Popper);
 //# sourceMappingURL=popper.js.map
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(5)))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(6)))
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports) {
 
 var g;
@@ -17340,7 +17431,7 @@ module.exports = g;
 
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;var require;var require;/*!
@@ -23196,7 +23287,7 @@ S2.define('jquery.select2',[
 
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -24190,7 +24281,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* global define */
@@ -24686,7 +24777,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports) {
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -24873,12 +24964,147 @@ PortalAPI.debug = window.DEBUG;
 module.exports = PortalAPI;
 
 /***/ }),
-/* 10 */
+/* 11 */
+/***/ (function(module, exports) {
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FormBuilder =
+/*#__PURE__*/
+function () {
+  function FormBuilder(models) {
+    _classCallCheck(this, FormBuilder);
+
+    FormBuilder.addForms(models);
+    FormBuilder.getGroupTypes();
+  }
+
+  _createClass(FormBuilder, null, [{
+    key: "addForms",
+    value: function addForms(models) {
+      for (var i in models) {
+        var model = models[i];
+        if (Array.isArray(model)) model = model[0];
+        FormBuilder.addForm(model);
+      }
+    }
+  }, {
+    key: "addForm",
+    value: function addForm(response, data) {
+      if (data !== undefined) {
+        this.forms[data.m] = response.jqXHR.responseJSON[data.m];
+      } else {
+        window.PortalAPI.form(response, function (response, data) {
+          FormBuilder.addForm(response, data);
+        });
+      }
+    }
+  }, {
+    key: "getGroupTypes",
+    value: function getGroupTypes() {
+      window.PortalAPI.list('grouptype', function (response, data) {
+        FormBuilder.groupTypes = response.jqXHR.responseJSON.grouptypes;
+      });
+    }
+  }, {
+    key: "html",
+    value: function html(model) {
+      if (!FormBuilder.forms.hasOwnProperty(model)) throw Error(model + ' does not have a form.');
+      var form = FormBuilder.forms[model];
+      var keys = Object.keys(form);
+      var html = "<div class='" + model + "-form'>";
+
+      for (var i in keys) {
+        html += FormBuilder.htmlElement(model, keys[i], form[keys[i]]);
+      }
+
+      html += "</div>";
+      return html;
+    }
+  }, {
+    key: "htmlElement",
+    value: function htmlElement(model, key, elem) {
+      var html = "";
+      var type = elem.type.toLowerCase();
+      var name = model + '-input-' + key;
+      var class_name = model + '-input';
+      var label = elem.hasOwnProperty('label') ? elem.label : FormBuilder.ucfirst(key);
+      var value = elem.hasOwnProperty('value') ? elem.value : '';
+      var placeholder = elem.hasOwnProperty('placeholder') ? elem.placeholder : '';
+      var required = elem.required ? 'required' : '';
+      html += "<div class='input-group mb-2 " + class_name + "'>";
+      html += "<div class='input-group-prepend mr-2 pt-1'>";
+      html += "<label for='" + name + "'>" + label + "</label>";
+      html += "</div>";
+
+      switch (type) {
+        case 'checkbox':
+        case 'color':
+        case 'date':
+        case 'email':
+        case 'file':
+        case 'hidden':
+        case 'image':
+        case 'month':
+        case 'number':
+        case 'radio':
+        case 'range':
+        case 'reset':
+        case 'text':
+        case 'time':
+        case 'url':
+        case 'week':
+          html += "<input " + "type='" + type + "' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + " class='input_data' " + required + "/>";
+          break;
+
+        case 'textarea':
+          html += "<textarea " + "id='" + name + "' " + "name='" + name + "' " + " class='input_data' " + required + ">" + value + "</textarea>";
+          break;
+
+        case 'ip':
+          html += "<input " + "type='text' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$' " + "class='input_data'" + required + "/>";
+          break;
+
+        case 'grouptype':
+          html += "<select " + "class='select2 single grouptype' " + "name='" + name + "' " + "id='" + name + "' " + "class='input_data' " + required + ">" + "<option></option>";
+          var types = FormBuilder.groupTypes;
+
+          for (var i in types) {
+            html += "<option " + "value='" + types[i].slug + "' " + ">" + types[i].name + "</option>";
+          }
+
+          html += "</select>";
+          break;
+      }
+
+      html += "</div>";
+      return html;
+    }
+  }, {
+    key: "ucfirst",
+    value: function ucfirst(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
+  }]);
+
+  return FormBuilder;
+}();
+
+FormBuilder.forms = {};
+FormBuilder.groupTypes = {};
+module.exports = FormBuilder;
+
+/***/ }),
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return DatatableManager; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Setup_js__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__Setup_js__ = __webpack_require__(1);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
@@ -25176,241 +25402,10 @@ function () {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */
-/***/ (function(module, exports) {
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var FormBuilder =
-/*#__PURE__*/
-function () {
-  function FormBuilder(models) {
-    _classCallCheck(this, FormBuilder);
-
-    FormBuilder.addForms(models);
-    FormBuilder.getGroupTypes();
-  }
-
-  _createClass(FormBuilder, null, [{
-    key: "addForms",
-    value: function addForms(models) {
-      for (var i in models) {
-        var model = models[i];
-        if (Array.isArray(model)) model = model[0];
-        FormBuilder.addForm(model);
-      }
-    }
-  }, {
-    key: "addForm",
-    value: function addForm(response, data) {
-      if (data !== undefined) {
-        this.forms[data.m] = response.jqXHR.responseJSON[data.m];
-      } else {
-        window.PortalAPI.form(response, function (response, data) {
-          FormBuilder.addForm(response, data);
-        });
-      }
-    }
-  }, {
-    key: "getGroupTypes",
-    value: function getGroupTypes() {
-      window.PortalAPI.list('grouptype', function (response, data) {
-        FormBuilder.groupTypes = response.jqXHR.responseJSON.grouptypes;
-      });
-    }
-  }, {
-    key: "html",
-    value: function html(model) {
-      if (!FormBuilder.forms.hasOwnProperty(model)) throw Error(model + ' does not have a form.');
-      var form = FormBuilder.forms[model];
-      var keys = Object.keys(form);
-      var html = "<div class='" + model + "-form'>";
-
-      for (var i in keys) {
-        html += FormBuilder.htmlElement(model, keys[i], form[keys[i]]);
-      }
-
-      html += "</div>";
-      return html;
-    }
-  }, {
-    key: "htmlElement",
-    value: function htmlElement(model, key, elem) {
-      var html = "";
-      var type = elem.type.toLowerCase();
-      var name = model + '-input-' + key;
-      var class_name = model + '-input';
-      var label = elem.hasOwnProperty('label') ? elem.label : FormBuilder.ucfirst(key);
-      var value = elem.hasOwnProperty('value') ? elem.value : '';
-      var placeholder = elem.hasOwnProperty('placeholder') ? elem.placeholder : '';
-      var required = elem.required ? 'required' : '';
-      html += "<div class='input-group mb-2 " + class_name + "'>";
-      html += "<div class='input-group-prepend mr-2 pt-1'>";
-      html += "<label for='" + name + "'>" + label + "</label>";
-      html += "</div>";
-
-      switch (type) {
-        case 'checkbox':
-        case 'color':
-        case 'date':
-        case 'email':
-        case 'file':
-        case 'hidden':
-        case 'image':
-        case 'month':
-        case 'number':
-        case 'radio':
-        case 'range':
-        case 'reset':
-        case 'text':
-        case 'time':
-        case 'url':
-        case 'week':
-          html += "<input type='" + type + "' id='" + name + "' " + "name='" + name + "' value='" + value + "' " + "placeholder='" + placeholder + "' " + required + " class='input_data'/>";
-          break;
-
-        case 'textarea':
-          html += "<textarea id='" + name + "' name='" + name + "' " + required + " class='input_data'>" + value + "</textarea>";
-          break;
-
-        case 'ip':
-          html += "<input type='text' id='" + name + "' " + "name='" + name + "' value='" + value + "' " + "placeholder='" + placeholder + "' " + "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$'" + required + " class='input_data'/>";
-          break;
-
-        case 'grouptype':
-          html += "<select class='select2 single grouptype' name='" + name + "' id='" + name + "' class='input_data'>";
-          html += "<option></option>";
-          var types = FormBuilder.groupTypes;
-
-          for (var i in types) {
-            html += "<option value='" + types[i].slug + "'>";
-            html += types[i].name + "</option>";
-          }
-
-          break;
-      }
-
-      html += "</div>";
-      return html;
-    }
-  }, {
-    key: "ucfirst",
-    value: function ucfirst(str) {
-      return str.charAt(0).toUpperCase() + str.slice(1);
-    }
-  }]);
-
-  return FormBuilder;
-}();
-
-FormBuilder.forms = {};
-FormBuilder.groupTypes = {};
-module.exports = FormBuilder;
-
-/***/ }),
-/* 17 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Setup; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__DatatableManager__ = __webpack_require__(10);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-var Setup =
-/*#__PURE__*/
-function () {
-  function Setup(additional) {
-    _classCallCheck(this, Setup);
-
-    Setup.setupPostLinks();
-    Setup.setupSelect2();
-    Setup.setupDataTable();
-    if (additional !== undefined) additional();
-  }
-  /**
-   * Sends post request before following links
-   * with the class .post
-   * Sends slug to action assuming /action[/:slug]
-   *
-   * @return void
-   */
-
-
-  _createClass(Setup, null, [{
-    key: "setupPostLinks",
-    value: function setupPostLinks() {
-      var _this = this;
-
-      $('.post').click(function (e) {
-        var href = $(_this).attr('href');
-        var hrefArr = href.split('/');
-        var slug = hrefArr[hrefArr.length - 2];
-        var action = href.substring(0, href.length - (slug.length + 1));
-        $.post(action, {
-          'slug': slug
-        });
-      });
-      $('.post-noslug').click(function (e) {
-        $.post($(_this).attr('href'));
-      });
-    }
-    /**
-     * Enables the .select2 jQuery extension
-     * for forms that use it.
-     *
-     * @return void
-     */
-
-  }, {
-    key: "setupSelect2",
-    value: function setupSelect2() {
-      $('.select2.single.grouptype').select2({
-        placeholder: 'Please select a grouptype',
-        allowClear: true,
-        width: '20em'
-      });
-      $('.select2.single.tab').select2({
-        placeholder: 'Please select a tab',
-        allowClear: true,
-        width: '20em'
-      });
-      $('.select2.single.group').select2({
-        placeholder: 'Please select a group',
-        allowClear: true,
-        width: '20em'
-      });
-    }
-  }, {
-    key: "setupDataTable",
-    value: function setupDataTable() {
-      window.DM = new __WEBPACK_IMPORTED_MODULE_0__DatatableManager__["a" /* default */]([['user'], ['group', 2], ['tab'], ['app', 2], ['attribute'], ['grouptype'], ['ipaddress'], ['ownertype'], ['privilege', 3]]);
-    }
-  }]);
-
-  return Setup;
-}();
-
-
 
 /***/ })
 /******/ ]);
