@@ -163,7 +163,7 @@ export default class DatatableManager {
 
     addDeleteButton(table) {
         $('button#' + table + '-delete').on('click', (e) => {
-            let title = DatatableManager.titleCase(table + ' deletion');
+            const title = DatatableManager.titleCase(table + ' deletion');
             let message = "Are you sure you wish to delete the following " + window.pluralize(table) + "?";
             let list = "<ul>";
             for (let i in this.selections[table]) {
