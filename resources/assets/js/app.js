@@ -5,6 +5,7 @@ window.bootbox     =            require('bootbox'); // bootbox is dependent on b
 window.pluralize   =            require('pluralize');
 window.PortalAPI   =            require('./PortalAPI.js');
 window.FormBuilder =            require('./FormBuilder.js');
+window.clonedeep   =            require('lodash.clonedeep');
 
 import Setup from "./Setup.js";
 

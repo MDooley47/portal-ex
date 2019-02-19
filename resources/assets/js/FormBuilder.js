@@ -35,7 +35,7 @@ class FormBuilder {
         if (! FormBuilder.forms.hasOwnProperty(model))
             throw Error(model + ' does not have a form.');
 
-        let form = FormBuilder.forms[model];
+        let form = window.clonedeep(FormBuilder.forms[model]);
         let keys = Object.keys(form);
         let html = "<div class='" + model + "-form'>";
 
