@@ -23,7 +23,11 @@ export default class DatatableManager {
                 direction = (tables[i].length >= 4) ? tables[i][3] : undefined;
             }
 
-            this.addTable(name, sort, slug, direction);
+            window.PortalAPI.list(name, (response, request) => {
+               if (window.DEBUG) console.log({'response': response, 'request': request});
+                $('#' + name + '-list table tbody').html(DatatableManager.buildTable(name, response.jqXHR.responseJSON));
+               this.addTable(name, sort, slug, direction);
+            });
         }
     }
 
@@ -342,5 +346,75 @@ export default class DatatableManager {
         }
 
         return data;
+    }
+
+    static buildTable(name, data) {
+        let html = "";
+        const table = name.toLowerCase();
+        name = window.pluralize(name);
+        let keys = Object.keys(data[name]);
+        let order;
+
+        for (let i in  keys) {
+            switch (table) {
+                case 'group':
+                    order = ['slug', 'groupType', 'name', 'description'];
+                    break;
+                case 'app':
+                    delete data[name][keys[i]].version;
+                    delete data[name][keys[i]].iconPath;
+                    data[name][keys[i]].icon = "/dashboard/app/icon/" + data[name][keys[i]].slug;
+                    order = ['slug', 'icon', 'name', 'url'];
+                    break;
+            }
+
+            html += DatatableManager.buildTableRow(table, data[name][keys[i]], order);
+        }
+
+        return html;
+    }
+
+    static buildTableRow(table, data, order) {
+        let html = "";
+
+        html += "<tr " +
+            "id='" + table + "-" + data.slug + "' " +
+            "class='" + table + "-row'>";
+        if (order === undefined) {
+            const keys = Object.keys(data);
+
+            for (let i in keys) {
+                const value = (data[keys[i]] !== null && data[keys[i]] !== undefined) ? data[keys[i]] : '';
+
+                html +=
+                    "<td class='" + table + "-" + keys[i] + "'>" +
+                    value +
+                    "</td>";
+            }
+        } else {
+            for(let i in order) {
+                const value = (data[order[i]] !== null && data[order[i]] !== undefined) ? data[order[i]] : '';
+                html +=
+                    "<td class='" + table + "-" + order[i] + "'>";
+                switch(order[i].toLowerCase()) {
+                    case 'grouptype':
+                        html +=
+                            "<span class='grouptype-slug-" + data.groupType + "'>" +
+                            FormBuilder.getGroupType(data.groupType) +
+                            "</span>";
+                        break;
+                    case 'icon':
+                        html += "<img src='" + value + "' alt='' height='30px' width='30px'/>";
+                        break;
+                    default:
+                        html += value;
+                }
+                html += "</td>";
+            }
+        }
+
+        html += "</tr>";
+
+        return html;
     }
 }
