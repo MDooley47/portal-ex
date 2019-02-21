@@ -47,14 +47,14 @@
                 </thead>
                 <tbody>
                     <?php
-                        foreach($tables->getTable('user')->fetchAll() as $user) {
+/*                        foreach($tables->getTable('user')->fetchAll() as $user) {
                             echo "<tr id='user-$user->slug' class='user-row'>";
                                 echo "<td class='user-slug'>$user->slug</td>";
                                 echo "<td class='user-name'>$user->name</td>";
                                 echo "<td class='user-email'>$user->email</td>";
                                 echo "<td class='user-codist'>$user->codist</td>";
                             echo "</tr>";
-                        }
+                        }*/
                     ?>
                 </tbody>
                 <tfoot>
@@ -92,15 +92,14 @@
                 </thead>
                 <tbody>
                     <?php
-
-                        foreach($tables->getTable('group')->fetchAll() as $group) {
+/*                        foreach($tables->getTable('group')->fetchAll() as $group) {
                             echo "<tr id='group-$group->slug' class='group-row'>";
                             echo "<td class='group-slug'>$group->slug</td>";
                             echo "<td class='group-grouptype'>$group->groupType</td>";
                             echo "<td class='group-name'>$group->name</td>";
                             echo "<td class='group-description'>$group->description</td>";
                             echo "</tr>";
-                        }
+                        }*/
                     ?>
                 </tbody>
                 <tfoot>
@@ -136,13 +135,13 @@
                 </thead>
                 <tbody>
                 <?php
-                foreach($tables->getTable('tab')->fetchAll() as $tab) {
-                    echo "<tr id='tab-$tab->slug' class='tab-row'>";
-                    echo "<td class='tab-slug'>$tab->slug</td>";
-                    echo "<td class='tab-name'>$tab->name</td>";
-                    echo "<td class='tab-description'>$tab->description</td>";
-                    echo "</tr>";
-                }
+/*                    foreach($tables->getTable('tab')->fetchAll() as $tab) {
+                        echo "<tr id='tab-$tab->slug' class='tab-row'>";
+                        echo "<td class='tab-slug'>$tab->slug</td>";
+                        echo "<td class='tab-name'>$tab->name</td>";
+                        echo "<td class='tab-description'>$tab->description</td>";
+                        echo "</tr>";
+                    }*/
                 ?>
                 </tbody>
                 <tfoot>
@@ -178,16 +177,16 @@
                 </thead>
                 <tbody>
                 <?php
-                foreach($tables->getTable('app')->fetchAll() as $app) {
-                    $icon_url = $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
-                        "?v=" . (int) $app->version;
-                    echo "<tr id='app-$app->slug' class='app-row'>";
-                    echo "<td class='app-slug'>$app->slug</td>";
-                    echo "<td class='app-icon'><img src='$icon_url' alt='' height='30px' width='30px'></td>";
-                    echo "<td class='app-name'>$app->name</td>";
-                    echo "<td class='app-url'>$app->url</td>";
-                    echo "</tr>";
-                }
+/*                    foreach($tables->getTable('app')->fetchAll() as $app) {
+                        $icon_url = $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
+                            "?v=" . (int) $app->version;
+                        echo "<tr id='app-$app->slug' class='app-row'>";
+                        echo "<td class='app-slug'>$app->slug</td>";
+                        echo "<td class='app-icon'><img src='$icon_url' alt='' height='30px' width='30px'></td>";
+                        echo "<td class='app-name'>$app->name</td>";
+                        echo "<td class='app-url'>$app->url</td>";
+                        echo "</tr>";
+                    }*/
                 ?>
                 </tbody>
                 <tfoot>
@@ -224,14 +223,14 @@
                 </thead>
                 <tbody>
                 <?php
-                foreach($tables->getTable('attribute')->fetchAll() as $attribute) {
-                    echo "<tr id='attribute-$attribute->slug' class='attribute-row'>";
-                    echo "<td class='attribute-slug'>$attribute->slug</td>";
-                    echo "<td class='attribute-name'>$attribute->name</td>";
-                    echo "<td class='attribute-description'>$attribute->description</td>";
-                    echo "<td class='attribute-data'>$attribute->data</td>";
-                    echo "</tr>";
-                }
+    /*                foreach($tables->getTable('attribute')->fetchAll() as $attribute) {
+                        echo "<tr id='attribute-$attribute->slug' class='attribute-row'>";
+                        echo "<td class='attribute-slug'>$attribute->slug</td>";
+                        echo "<td class='attribute-name'>$attribute->name</td>";
+                        echo "<td class='attribute-description'>$attribute->description</td>";
+                        echo "<td class='attribute-data'>$attribute->data</td>";
+                        echo "</tr>";
+                    }*/
                 ?>
                 </tbody>
                 <tfoot>
@@ -268,14 +267,14 @@
                 </thead>
                 <tbody>
                 <?php
-                foreach($tables->getTable('grouptype')->fetchAll() as $grouptype) {
-                    echo "<tr id='grouptype-$grouptype->slug' class='grouptype-row'>";
-                    echo "<td class='grouptype-slug'>$grouptype->slug</td>";
-                    echo "<td class='grouptype-name'>$grouptype->name</td>";
-                    echo "<td class='grouptype-description'>$grouptype->description</td>";
-                    echo "<td class='grouptype-level'>$grouptype->level</td>";
-                    echo "</tr>";
-                }
+/*                    foreach($tables->getTable('grouptype')->fetchAll() as $grouptype) {
+                        echo "<tr id='grouptype-$grouptype->slug' class='grouptype-row'>";
+                        echo "<td class='grouptype-slug'>$grouptype->slug</td>";
+                        echo "<td class='grouptype-name'>$grouptype->name</td>";
+                        echo "<td class='grouptype-description'>$grouptype->description</td>";
+                        echo "<td class='grouptype-level'>$grouptype->level</td>";
+                        echo "</tr>";
+                    }*/
                 ?>
                 </tbody>
                 <tfoot>
@@ -312,14 +311,14 @@
                 </thead>
                 <tbody>
                 <?php
-                foreach($tables->getTable('ipaddress')->fetchAll() as $ipaddress) {
-                    echo "<tr id='ipaddress-$ipaddress->slug' class='ipaddress-row'>";
-                    echo "<td class='ipaddress-slug'>$ipaddress->slug</td>";
-                    echo "<td class='ipaddress-name'>$ipaddress->name</td>";
-                    echo "<td class='ipaddress-ip'>$ipaddress->ip</td>";
-                    echo "<td class='ipaddress-description'>$ipaddress->description</td>";
-                    echo "</tr>";
-                }
+/*                    foreach($tables->getTable('ipaddress')->fetchAll() as $ipaddress) {
+                        echo "<tr id='ipaddress-$ipaddress->slug' class='ipaddress-row'>";
+                        echo "<td class='ipaddress-slug'>$ipaddress->slug</td>";
+                        echo "<td class='ipaddress-name'>$ipaddress->name</td>";
+                        echo "<td class='ipaddress-ip'>$ipaddress->ip</td>";
+                        echo "<td class='ipaddress-description'>$ipaddress->description</td>";
+                        echo "</tr>";
+                    }*/
                 ?>
                 </tbody>
                 <tfoot>
@@ -355,13 +354,13 @@
                 </thead>
                 <tbody>
                 <?php
-                foreach($tables->getTable('ownertype')->fetchAll() as $ownertype) {
-                    echo "<tr id='ownertype-$ownertype->slug' class='ownertype-row'>";
-                    echo "<td class='ownertype-slug'>$ownertype->slug</td>";
-                    echo "<td class='ownertype-name'>$ownertype->name</td>";
-                    echo "<td class='ownertype-description'>$ownertype->description</td>";
-                    echo "</tr>";
-                }
+/*                    foreach($tables->getTable('ownertype')->fetchAll() as $ownertype) {
+                        echo "<tr id='ownertype-$ownertype->slug' class='ownertype-row'>";
+                        echo "<td class='ownertype-slug'>$ownertype->slug</td>";
+                        echo "<td class='ownertype-name'>$ownertype->name</td>";
+                        echo "<td class='ownertype-description'>$ownertype->description</td>";
+                        echo "</tr>";
+                    }*/
                 ?>
                 </tbody>
                 <tfoot>
@@ -397,14 +396,14 @@
                 </thead>
                 <tbody>
                 <?php
-                foreach($tables->getTable('privilege')->fetchAll() as $privilege) {
-                    echo "<tr id='privilege-$privilege->slug' class='privilege-row'>";
-                    echo "<td class='privilege-slug'>$privilege->slug</td>";
-                    echo "<td class='privilege-name'>$privilege->name</td>";
-                    echo "<td class='privilege-description'>$privilege->description</td>";
-                    echo "<td class='privilege-level'>$privilege->level</td>";
-                    echo "</tr>";
-                }
+/*                    foreach($tables->getTable('privilege')->fetchAll() as $privilege) {
+                        echo "<tr id='privilege-$privilege->slug' class='privilege-row'>";
+                        echo "<td class='privilege-slug'>$privilege->slug</td>";
+                        echo "<td class='privilege-name'>$privilege->name</td>";
+                        echo "<td class='privilege-description'>$privilege->description</td>";
+                        echo "<td class='privilege-level'>$privilege->level</td>";
+                        echo "</tr>";
+                    }*/
                 ?>
                 </tbody>
                 <tfoot>
