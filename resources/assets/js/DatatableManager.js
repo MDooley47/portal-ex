@@ -44,6 +44,7 @@ export default class DatatableManager {
 
         this.addAddButton(table);
         this.addEditButton(table);
+        this.addInfoButton(table);
         this.addSelectButton(table, dt);
         this.addDeleteButton(table);
 
@@ -159,8 +160,14 @@ export default class DatatableManager {
                     }
                 }
             }).find(".modal-dialog").addClass("modal-dialog-centered");
+    addInfoButton(table) {
+        $('button#' + table + '-info').on('click', (e) => {
+            const slug = this.selections[table][0];
 
-            if (message.includes('select2')) Setup.setupSelect2();
+            window.PortalAPI.view(table, slug, (response, request) => {
+                DatatableManager.displayInfo(table, response.data);
+                if (window.DEBUG) console.log({'response': response, 'request': request});
+            });
         });
     }
 
@@ -414,6 +421,68 @@ export default class DatatableManager {
         }
 
         html += "</tr>";
+
+        return html;
+    }
+
+    static displayInfo(model, data) {
+        const title = DatatableManager.titleCase( model + ' information');
+        const message = DatatableManager.buildInfo(model, data[model]);
+
+        window.bootbox.dialog({
+            'title': title,
+            'message': message,
+            'buttons': {
+                'cancel': {
+                    'label': 'Cancel',
+                    'className': 'btn-danger'
+                },
+                'edit': {
+                    'label': 'Edit',
+                    'className': 'btn-warning',
+                    'callback': () => {
+                        $("button#" + model + "-edit").click();
+                    }
+                },
+                'ok': {
+                    'label': 'Okay',
+                    'className': 'btn-success',
+                }
+            }
+        }).find(".modal-dialog").addClass("modal-dialog-centered");
+    }
+
+    static buildInfo(model, data) {
+        const keys = Object.keys(data);
+        let html = "";
+        if (data.hasOwnProperty('name')) html += "<span class='h4'>" + data.name + "</span>";
+        html +=
+            "<table class='" + model + "-table table'>" +
+                "<tbody>";
+
+        for (let i in keys) {
+            html += DatatableManager.buildInfoElement(model, keys[i], data[keys[i]]);
+        }
+
+        html += "</tbody>" +
+            "</table>";
+
+        return html;
+    }
+
+    static buildInfoElement(model, key, elem) {
+        let html = "";
+        key = window.FormBuilder.ucfirst(key.toLowerCase());
+        if (elem === null || elem === undefined) elem = '';
+        html +=
+            "<tr>" +
+                "<th scope='row'>" +
+                    key +
+                "</th>" +
+                "<td>" +
+                    elem +
+                "</td>" +
+            "</tr>";
 
         return html;
     }
