@@ -31,6 +31,13 @@ class FormBuilder {
         });
     }
 
+    static getGroupType(slug) {
+        return FormBuilder.ucfirst(
+            FormBuilder.groupTypes.filter(
+                type => type.slug === slug
+            )[0].name);
+    }
+
     static html(model, values) {
         if (! FormBuilder.forms.hasOwnProperty(model))
             throw Error(model + ' does not have a form.');
@@ -53,13 +60,13 @@ class FormBuilder {
 
     static htmlElement(model, key, elem) {
         let html = "";
-        let type = elem.type.toLowerCase();
-        let name = model + '-input-' + key;
-        let class_name = model + '-input';
-        let label = (elem.hasOwnProperty('label')) ? elem.label : FormBuilder.ucfirst(key);
-        let value = (elem.hasOwnProperty('value')) ? elem.value : '';
-        let placeholder = (elem.hasOwnProperty('placeholder')) ? elem.placeholder : '';
-        let required = (elem.required) ? 'required' : '';
+        const type = elem.type.toLowerCase();
+        const name = model + '-input-' + key;
+        const class_name = model + '-input';
+        const label = (elem.hasOwnProperty('label')) ? elem.label : FormBuilder.ucfirst(key);
+        const value = (elem.hasOwnProperty('value') && (elem.value !== null) && (elem.value !== undefined)) ? elem.value : '';
+        const placeholder = (elem.hasOwnProperty('placeholder')) ? elem.placeholder : '';
+        const required = (elem.required) ? 'required' : '';
         const classes = 'input_data form-control';
         html += "<div class='input-group mb-2 " + class_name + "'>";
             html += "<div class='input-group-prepend mr-2 pt-1'>";
