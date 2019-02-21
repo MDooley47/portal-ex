@@ -25012,6 +25012,13 @@ function () {
       });
     }
   }, {
+    key: "getGroupType",
+    value: function getGroupType(slug) {
+      return FormBuilder.ucfirst(FormBuilder.groupTypes.filter(function (type) {
+        return type.slug === slug;
+      })[0].name);
+    }
+  }, {
     key: "html",
     value: function html(model, values) {
       if (!FormBuilder.forms.hasOwnProperty(model)) throw Error(model + ' does not have a form.');
@@ -25036,7 +25043,7 @@ function () {
       var name = model + '-input-' + key;
       var class_name = model + '-input';
       var label = elem.hasOwnProperty('label') ? elem.label : FormBuilder.ucfirst(key);
-      var value = elem.hasOwnProperty('value') ? elem.value : '';
+      var value = elem.hasOwnProperty('value') && elem.value !== null && elem.value !== undefined ? elem.value : '';
       var placeholder = elem.hasOwnProperty('placeholder') ? elem.placeholder : '';
       var required = elem.required ? 'required' : '';
       var classes = 'input_data form-control';
@@ -26919,7 +26926,9 @@ function () {
   _createClass(DatatableManager, [{
     key: "addTables",
     value: function addTables(tables) {
-      for (var i = 0; i < tables.length; ++i) {
+      var _this = this;
+
+      var _loop = function _loop(i) {
         var name = tables[i];
         var sort = undefined;
         var slug = undefined;
@@ -26932,7 +26941,19 @@ function () {
           direction = tables[i].length >= 4 ? tables[i][3] : undefined;
         }
 
-        this.addTable(name, sort, slug, direction);
+        window.PortalAPI.list(name, function (response, request) {
+          if (window.DEBUG) console.log({
+            'response': response,
+            'request': request
+          });
+          $('#' + name + '-list table tbody').html(DatatableManager.buildTable(name, response.jqXHR.responseJSON));
+
+          _this.addTable(name, sort, slug, direction);
+        });
+      };
+
+      for (var i = 0; i < tables.length; ++i) {
+        _loop(i);
       }
     }
   }, {
@@ -26951,6 +26972,7 @@ function () {
       });
       this.addAddButton(table);
       this.addEditButton(table);
+      this.addInfoButton(table);
       this.addSelectButton(table, dt);
       this.addDeleteButton(table);
       this.selections[table] = [];
@@ -27010,71 +27032,47 @@ function () {
   }, {
     key: "addEditButton",
     value: function addEditButton(table) {
-      var _this = this;
+      var _this2 = this;
 
       $('button#' + table + '-edit').on('click', function (e) {
-        var title = DatatableManager.titleCase('edit ' + table);
-        var slug = _this.selections[table][0];
-        var values = DatatableManager.getRowValues(table, slug);
-        var message = window.FormBuilder.html(table, values);
-        bootbox.dialog({
-          'title': title,
-          'message': message,
-          buttons: {
-            'cancel': {
-              'label': 'Cancel',
-              'className': 'btn-danger'
-            },
-            'ok': {
-              'label': title,
-              'className': 'btn-success',
-              'callback': function callback() {
-                var data = {};
-                var inputs = $("." + table + "-input .input_data").toArray();
-                var valid = true;
+        var slug = _this2.selections[table][0];
+        window.PortalAPI.view(table, slug, function (response, request) {
+          DatatableManager.displayEdit(table, response.data, request.id);
+          if (window.DEBUG) console.log({
+            'response': response,
+            'request': request
+          });
+        });
+      });
+    }
+  }, {
+    key: "addInfoButton",
+    value: function addInfoButton(table) {
+      var _this3 = this;
 
-                for (var i in inputs) {
-                  var elem = $(inputs[i]);
-                  var key = elem.attr('id').replace(table + '-input-', '');
-                  data[key] = elem.val();
-
-                  if (!elem[0].checkValidity()) {
-                    valid = false;
-                    elem.addClass('is-invalid');
-                  } else if (elem.hasClass('is-invalid')) {
-                    elem.removeClass('is-invalid');
-                  }
-                }
-
-                if (valid) {
-                  window.PortalAPI.edit(table, slug, data, function (response, data) {
-                    if (window.DEBUG === true) {
-                      console.log({
-                        'response': response,
-                        'data': data
-                      });
-                    }
-                  });
-                } else return false;
-              }
-            }
-          }
-        }).find(".modal-dialog").addClass("modal-dialog-centered");
-        if (message.includes('select2')) __WEBPACK_IMPORTED_MODULE_0__Setup_js__["a" /* default */].setupSelect2();
+      $('button#' + table + '-info').on('click', function (e) {
+        var slug = _this3.selections[table][0];
+        window.PortalAPI.view(table, slug, function (response, request) {
+          DatatableManager.displayInfo(table, response.data);
+          if (window.DEBUG) console.log({
+            'response': response,
+            'request': request
+          });
+        });
       });
     }
   }, {
     key: "addDeleteButton",
     value: function addDeleteButton(table) {
-      var _this2 = this;
+      var _this4 = this;
 
       $('button#' + table + '-delete').on('click', function (e) {
         var title = DatatableManager.titleCase(table + ' deletion');
         var message = "Are you sure you wish to delete the following " + window.pluralize(table) + "?";
         var list = "<ul>";
 
-        for (var i in _this2.selections[table]) {
-          var slug = _this2.selections[table][i];
+        for (var i in _this4.selections[table]) {
+          var slug = _this4.selections[table][i];
           var name = $('#' + table + '-' + slug + ' .' + table + '-name').text();
           list += "<li>";
           list += "<strong>" + slug + "</strong> ";
@@ -27212,25 +27210,35 @@ function () {
 
         if (rows === undefined || rows.length === 0) {
           buttons.select.addClass(disabled_class);
+          buttons.select.attr('disabled', 'disabled');
         } else if (buttons.select.hasClass(disabled_class)) {
           buttons.select.removeClass(disabled_class);
+          buttons.select.removeAttr('disabled');
         }
 
         if (this.selections[table] === undefined || this.selections[table].length === 0) {
           buttons.info.addClass(disabled_class);
+          buttons.info.attr('disabled', 'disabled');
           buttons.edit.addClass(disabled_class);
+          buttons.edit.attr('disabled', 'disabled');
           buttons.delete.addClass(disabled_class);
+          buttons.delete.attr('disabled', 'disabled');
         } else {
           if (this.selections[table].length === 1) {
             buttons.info.removeClass(disabled_class);
+            buttons.info.removeAttr('disabled');
             buttons.edit.removeClass(disabled_class);
+            buttons.edit.removeAttr('disabled');
           } else if (this.selections[table].length > 1) {
             buttons.info.addClass(disabled_class);
+            buttons.info.attr('disabled', 'disabled');
             buttons.edit.addClass(disabled_class);
+            buttons.edit.attr('disabled', 'disabled');
           }
 
           if (buttons.delete.hasClass(disabled_class)) {
             buttons.delete.removeClass(disabled_class);
+            buttons.delete.removeAttr('disabled', 'disabled');
           }
         }
       }
@@ -27269,6 +27277,181 @@ function () {
       }
 
       return data;
+    }
+  }, {
+    key: "buildTable",
+    value: function buildTable(name, data) {
+      var html = "";
+      var table = name.toLowerCase();
+      name = window.pluralize(name);
+      var keys = Object.keys(data[name]);
+      var order;
+
+      for (var i in keys) {
+        switch (table) {
+          case 'group':
+            order = ['slug', 'groupType', 'name', 'description'];
+            break;
+
+          case 'app':
+            delete data[name][keys[i]].version;
+            delete data[name][keys[i]].iconPath;
+            data[name][keys[i]].icon = "/dashboard/app/icon/" + data[name][keys[i]].slug;
+            order = ['slug', 'icon', 'name', 'url'];
+            break;
+        }
+
+        html += DatatableManager.buildTableRow(table, data[name][keys[i]], order);
+      }
+
+      return html;
+    }
+  }, {
+    key: "buildTableRow",
+    value: function buildTableRow(table, data, order) {
+      var html = "";
+      html += "<tr " + "id='" + table + "-" + data.slug + "' " + "class='" + table + "-row'>";
+
+      if (order === undefined) {
+        var keys = Object.keys(data);
+
+        for (var i in keys) {
+          var value = data[keys[i]] !== null && data[keys[i]] !== undefined ? data[keys[i]] : '';
+          html += "<td class='" + table + "-" + keys[i] + "'>" + value + "</td>";
+        }
+      } else {
+        for (var _i2 in order) {
+          var _value = data[order[_i2]] !== null && data[order[_i2]] !== undefined ? data[order[_i2]] : '';
+
+          html += "<td class='" + table + "-" + order[_i2] + "'>";
+
+          switch (order[_i2].toLowerCase()) {
+            case 'grouptype':
+              html += "<span class='grouptype-slug-" + data.groupType + "'>" + FormBuilder.getGroupType(data.groupType) + "</span>";
+              break;
+
+            case 'icon':
+              html += "<img src='" + _value + "' alt='' height='30px' width='30px'/>";
+              break;
+
+            default:
+              html += _value;
+          }
+
+          html += "</td>";
+        }
+      }
+
+      html += "</tr>";
+      return html;
+    }
+  }, {
+    key: "displayEdit",
+    value: function displayEdit(table, data, slug) {
+      var title = DatatableManager.titleCase('edit ' + table);
+      var message = window.FormBuilder.html(table, data[table]);
+      bootbox.dialog({
+        'title': title,
+        'message': message,
+        buttons: {
+          'cancel': {
+            'label': 'Cancel',
+            'className': 'btn-danger'
+          },
+          'edit': {
+            'label': 'Info',
+            'className': 'btn-info',
+            'callback': function callback() {
+              $("button#" + table + "-info").click();
+            }
+          },
+          'ok': {
+            'label': title,
+            'className': 'btn-success',
+            'callback': function callback() {
+              var data = {};
+              var inputs = $("." + table + "-input .input_data").toArray();
+              var valid = true;
+
+              for (var i in inputs) {
+                var elem = $(inputs[i]);
+                var key = elem.attr('id').replace(table + '-input-', '');
+                data[key] = elem.val();
+
+                if (!elem[0].checkValidity()) {
+                  valid = false;
+                  elem.addClass('is-invalid');
+                } else if (elem.hasClass('is-invalid')) {
+                  elem.removeClass('is-invalid');
+                }
+              }
+
+              if (valid) {
+                window.PortalAPI.edit(table, slug, data, function (response, data) {
+                  if (window.DEBUG === true) {
+                    console.log({
+                      'response': response,
+                      'data': data
+                    });
+                  }
+                });
+              } else return false;
+            }
+          }
+        }
+      }).find(".modal-dialog").addClass("modal-dialog-centered");
+      if (message.includes('select2')) __WEBPACK_IMPORTED_MODULE_0__Setup_js__["a" /* default */].setupSelect2();
+    }
+  }, {
+    key: "displayInfo",
+    value: function displayInfo(model, data) {
+      var title = DatatableManager.titleCase(model + ' information');
+      var message = DatatableManager.buildInfo(model, data[model]);
+      window.bootbox.dialog({
+        'title': title,
+        'message': message,
+        'buttons': {
+          'cancel': {
+            'label': 'Cancel',
+            'className': 'btn-danger'
+          },
+          'edit': {
+            'label': 'Edit',
+            'className': 'btn-warning',
+            'callback': function callback() {
+              $("button#" + model + "-edit").click();
+            }
+          },
+          'ok': {
+            'label': 'Okay',
+            'className': 'btn-success'
+          }
+        }
+      }).find(".modal-dialog").addClass("modal-dialog-centered");
+    }
+  }, {
+    key: "buildInfo",
+    value: function buildInfo(model, data) {
+      var keys = Object.keys(data);
+      var html = "";
+      if (data.hasOwnProperty('name')) html += "<span class='h4'>" + data.name + "</span>";
+      html += "<table class='" + model + "-table table'>" + "<tbody>";
+
+      for (var i in keys) {
+        html += DatatableManager.buildInfoElement(model, keys[i], data[keys[i]]);
+      }
+
+      html += "</tbody>" + "</table>";
+      return html;
+    }
+  }, {
+    key: "buildInfoElement",
+    value: function buildInfoElement(model, key, elem) {
+      var html = "";
+      key = window.FormBuilder.ucfirst(key.toLowerCase());
+      if (elem === null || elem === undefined) elem = '';
+      html += "<tr>" + "<th scope='row'>" + key + "</th>" + "<td>" + elem + "</td>" + "</tr>";
+      return html;
     }
   }]);
 
