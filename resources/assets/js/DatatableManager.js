@@ -259,25 +259,35 @@ export default class DatatableManager {
 
             if (rows === undefined || rows.length === 0) {
                 buttons.select.addClass(disabled_class);
+                buttons.select.attr('disabled', 'disabled');
             } else if (buttons.select.hasClass(disabled_class)) {
                 buttons.select.removeClass(disabled_class);
+                buttons.select.removeAttr('disabled');
             }
 
             if (this.selections[table] === undefined || this.selections[table].length === 0) {
                 buttons.info.addClass(disabled_class);
+                buttons.info.attr('disabled', 'disabled');
                 buttons.edit.addClass(disabled_class);
+                buttons.edit.attr('disabled', 'disabled');
                 buttons.delete.addClass(disabled_class);
+                buttons.delete.attr('disabled', 'disabled');
             } else {
                 if (this.selections[table].length === 1) {
                     buttons.info.removeClass(disabled_class);
+                    buttons.info.removeAttr('disabled');
                     buttons.edit.removeClass(disabled_class);
+                    buttons.edit.removeAttr('disabled');
                 } else if (this.selections[table].length > 1) {
                     buttons.info.addClass(disabled_class);
+                    buttons.info.attr('disabled', 'disabled');
                     buttons.edit.addClass(disabled_class);
+                    buttons.edit.attr('disabled', 'disabled');
                 }
 
                 if (buttons.delete.hasClass(disabled_class)) {
                     buttons.delete.removeClass(disabled_class);
+                    buttons.delete.removeAttr('disabled', 'disabled');
                 }
             }
         }
