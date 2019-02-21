@@ -109,57 +109,17 @@ export default class DatatableManager {
 
     addEditButton(table) {
         $('button#' + table + '-edit').on('click', (e) => {
-            const title = DatatableManager.titleCase('edit ' + table);
             const slug = this.selections[table][0];
-            const values = DatatableManager.getRowValues(table, slug);
-            const message = window.FormBuilder.html(table, values);
 
-            bootbox.dialog({
-                'title': title,
-                'message': message,
-                buttons: {
-                    'cancel': {
-                        'label': 'Cancel',
-                        'className': 'btn-danger'
-                    },
-                    'ok': {
-                        'label': title,
-                        'className': 'btn-success',
-                        'callback': () => {
-                            let data = {};
+            window.PortalAPI.view(table, slug, (response, request) => {
+                DatatableManager.displayEdit(table, response.data, request.id);
+                if (window.DEBUG) console.log({'response': response, 'request': request});
+            });
 
-                            const inputs = $("." + table + "-input .input_data").toArray();
 
-                            let valid = true;
+        });
+    }
 
-                            for (let i in inputs) {
-                                const elem = $(inputs[i]);
-                                let key = elem.attr('id').replace(table + '-input-', '');
-                                data[key] = elem.val();
-
-                                if (! elem[0].checkValidity()) {
-                                    valid = false;
-
-                                    elem.addClass('is-invalid');
-                                } else if (elem.hasClass('is-invalid')) {
-                                    elem.removeClass('is-invalid');
-                                }
-                            }
-
-                            if (valid) {
-                                window.PortalAPI.edit(table, slug, data, (response, data) => {
-                                    if (window.DEBUG === true) {
-                                        console.log({
-                                            'response': response,
-                                            'data': data
-                                        });
-                                    }
-                                });
-                            } else return false;
-                        }
-                    }
-                }
-            }).find(".modal-dialog").addClass("modal-dialog-centered");
     addInfoButton(table) {
         $('button#' + table + '-info').on('click', (e) => {
             const slug = this.selections[table][0];
@@ -170,7 +130,6 @@ export default class DatatableManager {
             });
         });
     }
-
 
     addDeleteButton(table) {
         $('button#' + table + '-delete').on('click', (e) => {
@@ -423,6 +382,68 @@ export default class DatatableManager {
         html += "</tr>";
 
         return html;
+    }
+
+    static displayEdit(table, data, slug) {
+        const title = DatatableManager.titleCase('edit ' + table);
+        const message = window.FormBuilder.html(table, data[table]);
+
+        bootbox.dialog({
+            'title': title,
+            'message': message,
+            buttons: {
+                'cancel': {
+                    'label': 'Cancel',
+                    'className': 'btn-danger'
+                },
+                'edit': {
+                    'label': 'Info',
+                    'className': 'btn-info',
+                    'callback': () => {
+                        $("button#" + table + "-info").click();
+                    }
+                },
+                'ok': {
+                    'label': title,
+                    'className': 'btn-success',
+                    'callback': () => {
+                        let data = {};
+
+                        const inputs = $("." + table + "-input .input_data").toArray();
+
+                        let valid = true;
+
+                        for (let i in inputs) {
+                            const elem = $(inputs[i]);
+                            const key = elem.attr('id').replace(table + '-input-', '');
+                            data[key] = elem.val();
+
+                            if (! elem[0].checkValidity()) {
+                                valid = false;
+
+                                elem.addClass('is-invalid');
+                            } else if (elem.hasClass('is-invalid')) {
+                                elem.removeClass('is-invalid');
+                            }
+                        }
+
+                        if (valid) {
+                            window.PortalAPI.edit(table, slug, data, (response, data) => {
+                                if (window.DEBUG === true) {
+                                    console.log({
+                                        'response': response,
+                                        'data': data
+                                    });
+                                }
+                            });
+                        } else return false;
+                    }
+                }
+            }
+        }).find(".modal-dialog").addClass("modal-dialog-centered");
+
+        if (message.includes('select2')) Setup.setupSelect2();
+
     }
 
     static displayInfo(model, data) {
