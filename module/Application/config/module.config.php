@@ -34,16 +34,6 @@ return [
                     ],
                 ],
             ],
-            'loginsso' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route'    => '/loginsso[/]',
-                    'defaults' => [
-                        'controller' => Controller\ApplicationController::class,
-                        'action'     => 'loginsso',
-                    ],
-                ],
-            ],
             'logout' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -51,6 +41,31 @@ return [
                     'defaults' => [
                         'controller' => Controller\ApplicationController::class,
                         'action'     => 'logout',
+                    ],
+                ],
+            ],
+            'dashboard' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/dashboard[/]',
+                    'defaults' => [
+                        'controller' => Controller\ApplicationController::class,
+                        'action'     => 'dashboard',
+                    ],
+                ],
+            ],
+            'api' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'       => '/api/v1[/]',
+                    'constraints' => [
+                        'model'    => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'       => '[a-zA-Z0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\APIController::class,
+                        'action'     => 'index',
                     ],
                 ],
             ],

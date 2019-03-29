@@ -22,7 +22,8 @@
         "zendframework/zend-session" : "^2.7.1",
         "zendframework/zend-escaper": "^2.5",
         "vlucas/phpdotenv" : "^2.4",
-        "simplesamlphp/simplesamlphp": "^1.15"
+        "simplesamlphp/simplesamlphp": "^1.15",
+        "psy/psysh": "@stable"
     },
     "autoload" : {
         "psr-4" : {
@@ -33,6 +34,7 @@
             "Group\\" : "module/Group/src/",
             "GroupType\\" : "module/GroupType/src/",
             "IpAddress\\" : "module/IpAddress/src/",
+            "Model\\" : "module/Model/",
             "OwnerType\\" : "module/OwnerType/src/",
             "Privilege\\" : "module/Privilege/src/",
             "SessionManager\\" : "module/SessionManager/",
@@ -58,6 +60,5 @@
         "test" : "phpunit"
     },
     "require-dev": {
-        "psy/psysh": "^0.9.7"
     }
 }

@@ -10,7 +10,6 @@ use Traits\Tables\HasColumns;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Validator\Db\RecordExists;
 
 class UserPrivilegesTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
