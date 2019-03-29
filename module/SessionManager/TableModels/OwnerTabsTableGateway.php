@@ -6,6 +6,7 @@ use OwnerType\Model\OwnerType;
 use SessionManager\Tables;
 use Tab\Model\Tab;
 use Traits\Interfaces\CorrelationInterface;
+use Traits\Tables\HasColumns;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
@@ -14,6 +15,8 @@ use Zend\Validator\Db\RecordExists;
 
 class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
+    use HasColumns;
+
     public function __construct()
     {
         $this->table = 'ownerTabs';
@@ -30,9 +33,10 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
             $options['type'] = 'group';
         }
 
-        $ownerTypeTable = $tables->getTable('ownerType');
-        $typeOption = $ownerTypeTable->getType($options['type'], ['type' => 'name']);
-        $options['type'] = $typeOption->slug;
+        $options['type'] = $tables
+            ->getTable('ownerType')
+            ->getType($options['type'], ['type' => 'name'])
+            ->slug;
 
         $rowset = $this->select(function (Select $select) use ($slug, $options) {
             $select->where([
@@ -41,10 +45,9 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
                 ]);
         });
 
-        $tabsTable = $tables->getTable('tabs');
-        $tabset = $tabsTable->getTabs(array_column($rowset->toArray(), 'tabSlug'));
-
-        return ($tabset);
+        return $tables
+            ->getTable('tabs')
+            ->getTabs(array_column($rowset->toArray(), 'tabSlug'));
     }
 
     public function getOwner($slug)

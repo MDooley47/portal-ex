@@ -1,0 +1,428 @@
+<?php
+    use SessionManager\Tables;
+
+    $fileElement = $forms['app']->get('icon');
+
+
+    $title = "Admin Dashboard";
+    $escaper = new Zend\Escaper\Escaper('utf-8');
+    $this->headTitle($title);
+
+    $this->headLink()
+        ->prependStylesheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css')
+        ->prependStylesheet('https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css');
+
+    $this->headScript()
+        ->prependFile('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js')
+        ->prependFile('https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js');
+
+    $tables = new Tables();
+
+?>
+<div class="nav nav-tabs" id="nav-tabs" role="tablist">
+    <a class="nav-item nav-link active" id="nav-user-tab" data-toggle="tab" href="#nav-user" role="tab" aria-controls="nav-user" aria-selected="true">User</a>
+    <a class="nav-item nav-link" id="nav-group-tab" data-toggle="tab" href="#nav-group" role="tab" aria-controls="nav-group" aria-selected="false">Group</a>
+    <a class="nav-item nav-link" id="nav-tab-tab" data-toggle="tab" href="#nav-tab" role="tab" aria-controls="nav-tab" aria-selected="false">Tab</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-app" role="tab" aria-controls="nav-app" aria-selected="false">App</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-attribute" role="tab" aria-controls="nav-app" aria-selected="false">Attribute</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-group-type" role="tab" aria-controls="nav-app" aria-selected="false">GroupType</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-ip-address" role="tab" aria-controls="nav-app" aria-selected="false">IP Addresses</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-owner-type" role="tab" aria-controls="nav-app" aria-selected="false">OwnerType</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-privilege" role="tab" aria-controls="nav-app" aria-selected="false">Privilege</a>
+</div>
+<div class="tab-content" id="nav-tabContent">
+
+<!-- USER -->
+
+    <div class="tab-pane fade show active" id="nav-user" role="tabpanel" aria-labelledby="nav-user-tab">
+        <div id="user-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Slug</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th><abbr title="County District Number">Codist</abbr></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                        foreach($tables->getTable('users')->fetchAll() as $user) {
+                            echo "<tr id='user-$user->slug' class='user-row'>";
+                                echo "<td class='user-slug'>$user->slug</td>";
+                                echo "<td class='user-name'>$user->name</td>";
+                                echo "<td class='user-email'>$user->email</td>";
+                                echo "<td class='user-codist'>$user->codist</td>";
+                            echo "</tr>";
+                        }
+                    ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Slug</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th><abbr title="County District Number">Codist</abbr></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="user-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="user-select">Select All</button>
+            <button type="button" class="btn btn-info" id="user-info">Info</button>
+            <button type="button" class="btn btn-warning" id="user-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="user-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="user-add">Add</button>
+        </div>
+    </div>
+
+<!-- GROUP -->
+
+
+    <div class="tab-pane fade" id="nav-group" role="tabpanel" aria-labelledby="nav-group-tab">
+        <div id="group-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>GroupType</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php
+
+                        foreach($tables->getTable('group')->fetchAll() as $group) {
+                            echo "<tr id='group-$group->slug' class='group-row'>";
+                            echo "<td class='group-slug'>$group->slug</td>";
+                            echo "<td class='group-grouptype'>$group->groupType</td>";
+                            echo "<td class='group-name'>$group->name</td>";
+                            echo "<td class='group-description'>$group->description</td>";
+                            echo "</tr>";
+                        }
+                    ?>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Slug</th>
+                        <th>GroupType</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="group-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="group-select">Select All</button>
+            <button type="button" class="btn btn-info" id="group-info">Info</button>
+            <button type="button" class="btn btn-warning" id="group-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="group-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="group-add">Add</button>
+        </div>
+    </div>
+
+<!-- TAB -->
+
+    <div class="tab-pane fade" id="nav-tab" role="tabpanel" aria-labelledby="nav-tab-tab">
+        <div id="tab-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($tables->getTable('tabs')->fetchAll() as $tab) {
+                    echo "<tr id='tab-$tab->slug' class='tab-row'>";
+                    echo "<td class='tab-slug'>$tab->slug</td>";
+                    echo "<td class='tab-name'>$tab->name</td>";
+                    echo "<td class='tab-description'>$tab->description</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="tab-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="tab-select">Select All</button>
+            <button type="button" class="btn btn-info" id="tab-info">Info</button>
+            <button type="button" class="btn btn-warning" id="tab-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="tab-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="tab-add">Add</button>
+        </div>
+    </div>
+
+<!-- APP -->
+
+    <div class="tab-pane fade" id="nav-app" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="app-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Icon</th>
+                    <th>Name</th>
+                    <th>Url</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($tables->getTable('app')->fetchAll() as $app) {
+                    $icon_url = $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
+                        "?v=" . (int) $app->version;
+                    echo "<tr id='app-$app->slug' class='app-row'>";
+                    echo "<td class='app-slug'>$app->slug</td>";
+                    echo "<td class='app-icon'><img src='$icon_url' alt='' height='30px' width='30px'></td>";
+                    echo "<td class='app-name'>$app->name</td>";
+                    echo "<td class='app-url'>$app->url</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Icon</th>
+                    <th>Name</th>
+                    <th>Url</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="app-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="app-select">Select All</button>
+            <button type="button" class="btn btn-info" id="app-info">Info</button>
+            <button type="button" class="btn btn-warning" id="app-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="app-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="app-add">Add</button>
+        </div>
+    </div>
+
+<!-- ATTRIBUTE -->
+
+    <div class="tab-pane fade" id="nav-attribute" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="attribute-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Data</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($tables->getTable('attribute')->fetchAll() as $attribute) {
+                    echo "<tr id='attribute-$attribute->slug' class='attribute-row'>";
+                    echo "<td class='attribute-slug'>$attribute->slug</td>";
+                    echo "<td class='attribute-name'>$attribute->name</td>";
+                    echo "<td class='attribute-description'>$attribute->description</td>";
+                    echo "<td class='attribute-data'>$attribute->data</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Data</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="attribute-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="attribute-select">Select All</button>
+            <button type="button" class="btn btn-info" id="attribute-info">Info</button>
+            <button type="button" class="btn btn-warning" id="attribute-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="attribute-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="attribute-add">Add</button>
+        </div>
+    </div>
+
+<!-- GROUP-TYPE -->
+
+    <div class="tab-pane fade" id="nav-group-type" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="grouptype-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($tables->getTable('grouptype')->fetchAll() as $grouptype) {
+                    echo "<tr id='grouptype-$grouptype->slug' class='grouptype-row'>";
+                    echo "<td class='grouptype-slug'>$grouptype->slug</td>";
+                    echo "<td class='grouptype-name'>$grouptype->name</td>";
+                    echo "<td class='grouptype-description'>$grouptype->description</td>";
+                    echo "<td class='grouptype-level'>$grouptype->level</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="grouptype-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="grouptype-select">Select All</button>
+            <button type="button" class="btn btn-info" id="grouptype-info">Info</button>
+            <button type="button" class="btn btn-warning" id="grouptype-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="grouptype-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="grouptype-add">Add</button>
+        </div>
+    </div>
+
+<!-- IP-ADDRESS -->
+
+    <div class="tab-pane fade" id="nav-ip-address" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="ipaddress-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>IP</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($tables->getTable('ipaddress')->fetchAll() as $ipaddress) {
+                    echo "<tr id='ipaddress-$ipaddress->slug' class='ipaddress-row'>";
+                    echo "<td class='ipaddress-slug'>$ipaddress->slug</td>";
+                    echo "<td class='ipaddress-name'>$ipaddress->name</td>";
+                    echo "<td class='ipaddress-ip'>$ipaddress->ip</td>";
+                    echo "<td class='ipaddress-description'>$ipaddress->description</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>IP</th>
+                    <th>Description</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="ipaddress-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="ipaddress-select">Select All</button>
+            <button type="button" class="btn btn-info" id="ipaddress-info">Info</button>
+            <button type="button" class="btn btn-warning" id="ipaddress-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="ipaddress-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="ipaddress-add">Add</button>
+        </div>
+    </div>
+
+<!-- OWNER-TYPE -->
+
+    <div class="tab-pane fade" id="nav-owner-type" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="ownertype-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($tables->getTable('ownertype')->fetchAll() as $ownertype) {
+                    echo "<tr id='ownertype-$ownertype->slug' class='ownertype-row'>";
+                    echo "<td class='ownertype-slug'>$ownertype->slug</td>";
+                    echo "<td class='ownertype-name'>$ownertype->name</td>";
+                    echo "<td class='ownertype-description'>$ownertype->description</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="ownertype-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="ownertype-select">Select All</button>
+            <button type="button" class="btn btn-info" id="ownertype-info">Info</button>
+            <button type="button" class="btn btn-warning" id="ownertype-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="ownertype-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="ownertype-add">Add</button>
+        </div>
+    </div>
+
+<!-- PRIVILEGE -->
+
+    <div class="tab-pane fade" id="nav-privilege" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="privilege-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach($tables->getTable('privilege')->fetchAll() as $privilege) {
+                    echo "<tr id='privilege-$privilege->slug' class='privilege-row'>";
+                    echo "<td class='privilege-slug'>$privilege->slug</td>";
+                    echo "<td class='privilege-name'>$privilege->name</td>";
+                    echo "<td class='privilege-description'>$privilege->description</td>";
+                    echo "<td class='privilege-level'>$privilege->level</td>";
+                    echo "</tr>";
+                }
+                ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="privilege-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="privilege-select">Select All</button>
+            <button type="button" class="btn btn-info" id="privilege-info">Info</button>
+            <button type="button" class="btn btn-warning" id="privilege-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="privilege-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="privilege-add">Add</button>
+        </div>
+    </div>
+</div>

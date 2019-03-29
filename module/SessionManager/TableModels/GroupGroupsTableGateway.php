@@ -5,11 +5,14 @@ namespace SessionManager\TableModels;
 use Group\Model\Group;
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
+use Traits\Tables\HasColumns;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 
 class GroupGroupsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
+    use HasColumns;
+
     /**
      * GroupGroupsTableGateway constructor.
      */

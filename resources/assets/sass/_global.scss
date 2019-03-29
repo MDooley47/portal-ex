@@ -12,3 +12,7 @@ body {
 .config .failure {
     color: var(--color-failure);
 }
+
+.bootbox .modal-header{
+    display: block;
+}

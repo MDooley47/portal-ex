@@ -5,11 +5,6 @@ namespace Traits\Models;
 trait HasSlug
 {
     /**
-     * String for User's slug found in the db.
-     */
-    public $slug;
-
-    /**
      * Static function for generating a random slug.
      *
      * @param int    $len     Length of the desired slug. Default Value is 6.

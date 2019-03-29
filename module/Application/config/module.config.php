@@ -34,16 +34,6 @@ return [
                     ],
                 ],
             ],
-            'loginsso' => [
-                'type' => Segment::class,
-                'options' => [
-                    'route'    => '/loginsso[/]',
-                    'defaults' => [
-                        'controller' => Controller\ApplicationController::class,
-                        'action'     => 'loginsso',
-                    ],
-                ],
-            ],
             'logout' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -54,10 +44,35 @@ return [
                     ],
                 ],
             ],
+            'dashboard' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'    => '/dashboard[/]',
+                    'defaults' => [
+                        'controller' => Controller\ApplicationController::class,
+                        'action'     => 'dashboard',
+                    ],
+                ],
+            ],
+            'api' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route'       => '/api/v1[/]',
+                    'constraints' => [
+                        'model'    => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'id'       => '[a-zA-Z0-9]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\APIController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
             'app' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/app[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/app[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -70,7 +85,7 @@ return [
             'attribute' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/attribute[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/attribute[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -84,7 +99,7 @@ return [
             'configuration' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/configuration[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/configuration[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -98,7 +113,7 @@ return [
             'group' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/group[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/group[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -112,7 +127,7 @@ return [
             'grouptype' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/grouptype[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/grouptype[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -126,7 +141,7 @@ return [
             'ipaddress' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/ipaddress[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/ipaddress[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -140,7 +155,7 @@ return [
             'ownertype' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/ownertype[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/ownertype[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -154,7 +169,7 @@ return [
             'privilege' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/privilege[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/privilege[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -168,7 +183,7 @@ return [
             'setting' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/setting[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/setting[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -182,7 +197,7 @@ return [
             'tab' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/tab[/:slug[/:action]][/]',
+                    'route'       => '/t[/:slug[/:action]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -196,7 +211,7 @@ return [
             'user' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route'       => '/user[/:action[/:slug]][/]',
+                    'route'       => '/dashboard/user[/:action[/:slug]][/]',
                     'constraints' => [
                         'action'   => '[a-zA-Z][a-zA-Z0-9_-]*',
                         'slug'     => '[a-zA-Z0-9]+',
@@ -211,6 +226,7 @@ return [
     ],
     'controllers' => [
         'factories' => [
+            Controller\APIController::class           => Controller\APIControllerFactory::class,
             Controller\ApplicationController::class   => Controller\ApplicationControllerFactory::class,
             Controller\AppController::class           => Controller\AppControllerFactory::class,
             Controller\AttributeController::class     => Controller\AttributeControllerFactory::class,

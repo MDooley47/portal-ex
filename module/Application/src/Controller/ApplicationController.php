@@ -8,10 +8,19 @@
 
 namespace Application\Controller;
 
+use App\Form\AppForm;
+use Attribute\Form\AttributeForm;
+use Group\Form\GroupForm;
+use GroupType\Form\GroupTypeForm;
+use IpAddress\Form\IpAddressForm;
+use OwnerType\Form\OwnerTypeForm;
+use Privilege\Form\PrivilegeForm;
 use RuntimeException;
 use SessionManager\Session;
 use SessionManager\Tables;
+use Tab\Form\TabForm;
 use Traits\HasTables;
+use User\Form\UserForm;
 use User\Model\User;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -25,6 +34,24 @@ class ApplicationController extends AbstractActionController
         $this->addTableArray($tables);
     }
 
+    public function dashboardAction()
+    {
+        return (new ViewModel([
+            'forms' => [
+                'user'      => new UserForm(),
+                'group'     => new GroupForm(),
+                'tab'       => new TabForm(),
+                'app'       => new AppForm(),
+                'attribute' => new AttributeForm(),
+                'grouptype' => new GroupTypeForm(),
+                'ipaddress' => new IpAddressForm(),
+                'ownertype' => new OwnerTypeForm(),
+                'privilege' => new PrivilegeForm(),
+            ],
+        ]))
+        ->setTemplate('application/dashboard/index');
+    }
+
     public function indexAction()
     {
         // activate session if not active
@@ -35,6 +62,10 @@ class ApplicationController extends AbstractActionController
             Session::hasPrivilege('auth');
 
             $user = Session::getUser();
+            printf("<br>user is coming back with empty properties, causes failure on defaultTab()<br>");
+            var_dump($user);
+            exit();
+            // user is
             if ($user)
             {
               $tab = $user->defaultTab();
@@ -92,7 +123,8 @@ class ApplicationController extends AbstractActionController
 
         $tables = new Tables();
 
-        $user = $tables->getTable('users')->getUser($attributes['mail'][0], ['type' => 'email']);
+        $user = $this->getTable('user')->get($attributes['mail'][0], ['type' => 'email']);
+
         if (!$user)
         {
           // add user, privilege, and group
@@ -100,7 +132,7 @@ class ApplicationController extends AbstractActionController
           $user->email = $attributes['mail'][0];
           $user->name = $attributes['givenName'][0] . " " . $attributes['sn'][0];
           $user->codist = $attributes['esucc-cdn'][0];
-          $usersTable = $tables->getTable('users');
+          $usersTable = $this->getTable('user');
           $userSlug = $usersTable->saveUser($user);
           $tables->getTable('userPrivileges')->addCorrelation($userSlug,'auth');
           $tables->getTable('userGroups')
@@ -108,7 +140,6 @@ class ApplicationController extends AbstractActionController
 
         }
         // make session active
-        note('Login: Email: '.$email, 'INFO');
         Session::start();
         Session::setUser($user);
         Session::setActiveTime();

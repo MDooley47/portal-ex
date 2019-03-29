@@ -4,17 +4,38 @@ namespace Group\Model;
 
 use DomainException;
 use Group\InputFilter\NameFilter;
+use Model\Concerns\HasCast;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Model;
 use SessionManager\Tables;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
-use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Group implements HasSlugInterface
+class Group extends Model implements HasSlugInterface
 {
-    use HasSlug, HasGuarded, ExchangeArray;
+    use Boot, HasCast, HasSlug, ExchangeArray, QueryBuilder;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'groups';
+    public static $form = [
+        'name' => [
+            'type'     => 'text',
+            'required' => true,
+        ],
+        'description' => [
+            'type'     => 'textarea',
+            'required' => false,
+        ],
+        'grouptype' => [
+            'type'     => 'grouptype',
+            'label'    => 'GroupType',
+            'required' => true,
+        ],
+    ];
 
     /**
      * String for Group's name.
@@ -51,6 +72,11 @@ class Group implements HasSlugInterface
     protected static $guarded = [
         'slug',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
 
     /**
      * Get associated tabs.

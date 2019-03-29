@@ -4,6 +4,10 @@ namespace GroupType\Model;
 
 use DomainException;
 use GroupType\InputFilter\NameFilter;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
@@ -11,21 +15,26 @@ use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class GroupType implements HasSlugInterface
+class GroupType extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
-    /**
-     * Int for GroupType's id found in the db.
-     */
-    public $id;
-    /**
-     * String for GroupType's name.
-     */
-    public $name;
-    /**
-     * String for GroupType's description.
-     */
-    public $description;
+    use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'groupTypes';
+    public static $form = [
+        'name' => [
+            'type'     => 'text',
+            'required' => true,
+        ],
+        'description' => [
+            'type'     => 'textarea',
+            'required' => false,
+        ],
+        'level' => [
+            'type'     => 'number',
+            'required' => true,
+        ],
+    ];
 
     /**
      * InputFilter for GroupType's inputFilter.
@@ -36,7 +45,6 @@ class GroupType implements HasSlugInterface
      * Static variable containing values users cannot change.
      */
     protected static $guarded = [
-        'id',
         'slug',
     ];
 
@@ -48,7 +56,6 @@ class GroupType implements HasSlugInterface
     public function getArrayCopy()
     {
         return [
-            'id'          => $this->id,
             'slug'        => $this->slug,
             'name'        => $this->name,
             'description' => $this->description,

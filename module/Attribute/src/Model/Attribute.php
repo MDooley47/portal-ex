@@ -4,6 +4,11 @@ namespace Attribute\Model;
 
 use Attribute\InputFilter\NameFilter;
 use DomainException;
+use Model\Concerns\HasCast;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
@@ -11,21 +16,26 @@ use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Attribute implements HasSlugInterface
+class Attribute extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
-    /**
-     * Int for Attribute's id found in the db.
-     */
-    public $id;
-    /**
-     * String for Attribute's name.
-     */
-    public $name;
-    /**
-     * String for Attribute's description.
-     */
-    public $description;
+    use Boot, HasCast, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'attributes';
+    public static $form = [
+        'name' => [
+            'type'     => 'text',
+            'required' => false,
+        ],
+        'description' => [
+            'type'     => 'textarea',
+            'required' => false,
+        ],
+        'data' => [
+            'type'     => 'textarea',
+            'required' => true,
+        ],
+    ];
 
     /**
      * InputFilter for Attribute's inputFilter.
@@ -48,7 +58,6 @@ class Attribute implements HasSlugInterface
     public function getArrayCopy()
     {
         return [
-            'id'          => $this->id,
             'slug'        => $this->slug,
             'name'        => $this->name,
             'description' => $this->description,

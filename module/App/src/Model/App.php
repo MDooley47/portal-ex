@@ -8,49 +8,52 @@ use App\InputFilter\NameFilter;
 use App\InputFilter\TabFilter;
 use App\InputFilter\URLFilter;
 use DomainException;
+use Model\Concerns\HasCast;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
-use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class App implements HasSlugInterface
+class App extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
-    /**
-     * Int for App's id found in the db.
-     */
-    public $id;
-    /**
-     * String for App's name.
-     */
-    public $name;
-    /**
-     * String for App's destination url.
-     */
-    public $url;
-    /**
-     * String for App's iconPath on the local filesystem.
-     */
-    public $iconPath;
-    /**
-     * Int for the App's version. Mainly used for cache breaking.
-     */
-    public $version;
+    use Boot, HasCast, HasSlug, ExchangeArray, QueryBuilder;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'apps';
+    public static $form = [
+        'name' => [
+            'type'     => 'text',
+            'required' => true,
+        ],
+        'url' => [
+            'type'     => 'url',
+            'required' => true,
+        ],
+        'icon' => [
+            'type'     => 'file',
+            'required' => true,
+        ],
+    ];
+
     /**
      * InputFilter for App's inputFilter.
      */
     protected $inputFilter;
 
     /**
-     * Static variable containing values users cannot change.
+     * App constructor.
+     *
+     * @param array $attributes
      */
-    protected static $guarded = [
-        'id',
-        'slug',
-        'version',
-    ];
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
 
     /**
      * Get app values as array.
@@ -60,7 +63,6 @@ class App implements HasSlugInterface
     public function getArrayCopy()
     {
         return [
-            'id'       => $this->id,
             'slug'     => $this->slug,
             'name'     => $this->name,
             'url'      => $this->url,
@@ -81,7 +83,7 @@ class App implements HasSlugInterface
      *
      * @param array $options
      *
-     * @return App $this
+     * @return \Zend\InputFilter\BaseInputFilter
      */
     public function getInputFilter($options = [])
     {

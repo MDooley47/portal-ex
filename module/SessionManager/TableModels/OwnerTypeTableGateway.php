@@ -4,12 +4,19 @@ namespace SessionManager\TableModels;
 
 use OwnerType\Model\OwnerType;
 use RuntimeException;
+use Traits\Tables\HasColumns;
+use Traits\Tables\UniversalTableGatewayInterface;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Validator\Db\RecordExists;
 
-class OwnerTypeTableGateway extends AbstractTableGateway
+class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTableGatewayInterface
 {
+    use HasColumns;
+
+    public $model_name = 'OwnerType';
+
     public function __construct()
     {
         $this->table = 'ownerTypes';
@@ -18,58 +25,110 @@ class OwnerTypeTableGateway extends AbstractTableGateway
         $this->initialize();
     }
 
-    public function getType($id, $options = [])
+    /**
+     * @deprecated Please use the add method.
+     *
+     * Adds OwnerType to database from array
+     *
+     * @param array $data
+     *
+     * @return OwnerType
+     */
+    public function addOwnerType($data)
     {
-        if (!array_key_exists('type', $options)) {
-            $options['type'] = 'slug';
-        }
+        return $this->add($data);
+    }
 
-        $rowset = $this->select(function (Select $select) use ($id, $options) {
-            switch (strtolower($options['type'])) {
-                        case 'name':
-                            $select->where([
-                                'name' => $id,
-                            ]);
-                            break;
-                        case 'slug':
-                        default:
-                            $select->where([
-                                'slug' => $id,
-                            ]);
-                    }
-        });
+    /**
+     * Adds OwnerType to database from array.
+     *
+     * @param array $data
+     *
+     * @return OwnerType
+     */
+    public function add($data)
+    {
+        $ownerType = new OwnerType($data);
 
-        return (new OwnerType())
-            ->exchangeArray($rowset->current()->getArrayCopy());
+        return $this->save($ownerType);
+    }
+
+    /**
+     * @deprecated Please use the all method.
+     *
+     * Selects all OwnerTypes from the database.
+     */
+    public function fetchAll()
+    {
+        return $this->all();
     }
 
     /**
      * Selects all OwnerTypes from the database.
-     *
-     * @return OwnerType[]
      */
-    public function fetchAll()
+    public function all()
     {
         return $this->select();
     }
 
     /**
+     * @deprecated Please use the get method.
+     *
+     * @param $id
+     * @param array $options
+     *
+     * @return OwnerType
+     */
+    public function getType($id, $options = [])
+    {
+        return $this->get($id, $options);
+    }
+
+    /**
+     * @deprecated Please use the get method.
+     *
      * Selects an OwnerType from the database.
      *
      * @param mixed      $id      The identifier.
      * @param dictionary $options Contains 'type' which defines what type of
-     *                            identifier $id is. Default value is 'type' => 'id'.
+     *                            identifier $id is. Default value is 'type' => 'slug'.
      *
      * @return OwnerType
      */
     public function getOwnerType($id, $options = ['type' => 'slug'])
     {
-        if ($options['type'] == 'slug') {
-            $rowset = $this->select(['slug' => $id]);
-        } elseif ($options['type'] == 'id') {
-            $rowset = $this->select(['id' => $id]);
-        }
+        return $this->get($id, $options);
+    }
+
+    /**
+     * Selects an OwnerType from the database.
+     *
+     * @param mixed $id      The identifier.
+     * @param array $options
+     *
+     * @return OwnerType
+     */
+    public function get($id, array $options = [])
+    {
+        $options['type'] = $options['type'] ?? OwnerType::$primaryKey;
+
+        $rowset = $this->select(function (Select $select) use ($id, $options) {
+            switch (strtolower($options['type'])) {
+                case 'name':
+                    $select->where([
+                        'name' => $id,
+                    ]);
+                    break;
+                case OwnerType::$primaryKey:
+                default:
+                    $select->where([
+                        OwnerType::$primaryKey => $id,
+                    ]);
+            }
+        });
+
         $row = $rowset->current();
+
         if (!$row) {
             throw new RuntimeException(sprintf(
                 'Could not Find Row with identifier %d of type %s',
@@ -77,25 +136,59 @@ class OwnerTypeTableGateway extends AbstractTableGateway
             ));
         }
 
-        return $row;
+        return new OwnerType($rowset->toArray());
+    }
+
+    /**
+     * @deprecated Please use the exists method.
+     *
+     * Checks if an ownerType exists in the database.
+     *
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
+     *
+     * @return bool If value exists
+     */
+    public function ownerTypeExists($id, $options = null)
+    {
+        return $this->exists($id, $options);
     }
 
     /**
      * Checks if an ownerType exists in the database.
      *
-     * @param mixed      $id      The identifier.
-     * @param dictionary $options Contains 'type' which defines what type of
-     *                            identifier $id is. Default value is 'type' => 'id'.
+     * @param mixed $id      The identifier.
+     * @param array $options Contains 'field' which defines what type of
+     *                       identifier $id is. Default value is 'field' => 'slug'.
      *
      * @return bool If value exists
      */
-    public function ownerTypeExists($id, $options = ['type' => 'id'])
+    public function exists($id, $options = ['field' => 'slug'])
     {
         return (new RecordExists([
             'table'   => $this->getTable(),
-            'field'   => $options['type'],
+            'field'   => $options['slug'] ?? OwnerType::$primaryKey,
             'adapter' => $this->getAdapter(),
         ]))->isValid($id);
+    }
+
+    /**
+     * @deprecated Please use the save method.
+     *
+     * Saves an OwnerType to the database.
+     *
+     * If $ownerType->slug is not null then attempts to update an ownerType with that slug
+     *
+     * @param OwnerType $ownerType
+     *
+     * @throws RuntimeException OwnerType does not exist
+     *
+     * @return OwnerType
+     */
+    public function saveOwnerType($ownerType)
+    {
+        return $this->save($ownerType);
     }
 
     /**
@@ -107,9 +200,9 @@ class OwnerTypeTableGateway extends AbstractTableGateway
      *
      * @throws RuntimeException OwnerType does not exist
      *
-     * @return void
+     * @return OwnerType
      */
-    public function saveOwnerType(OwnerType $ownerType)
+    public function save($ownerType)
     {
         $data = [
             'name'        => $ownerType->name,
@@ -121,20 +214,34 @@ class OwnerTypeTableGateway extends AbstractTableGateway
         if ($slug == null) {
             do {
                 $data['slug'] = OwnerType::generateSlug();
-            } while ($this->ownerTypeExists($data['slug'], ['type' => 'slug']));
+            } while ($this->exists($data['slug'], ['type' => 'slug']));
             $this->insert($data);
-
-            return;
-        }
-
-        if ($dbOwnerType = $this->getOwnerType($slug)) {
+        } elseif ($dbOwnerType = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
-            throw new RuntimeException(springf(
-                'Cannot update ownerType with identifier %d; does not exist',
-                $id
+            throw new RuntimeException(sprintf(
+                'Cannot update ownerType with identifier %d does not exist using identifier type %s',
+                $slug, 'slug'
             ));
         }
+
+        $ownerType->slug = $data['slug'] ?? $slug;
+
+        return $ownerType;
+    }
+
+    /**
+     * @deprecated Please use the delete method.
+     *
+     * Deletes OwnerType and deletes the OwnerType's icon.
+     *
+     * @param string $slug OwnerType's slug.
+     *
+     * @return void
+     */
+    public function deleteOwnerType($slug)
+    {
+        $this->delete($slug);
     }
 
     /**
@@ -144,8 +251,8 @@ class OwnerTypeTableGateway extends AbstractTableGateway
      *
      * @return void
      */
-    public function deleteOwnerType($slug)
+    public function delete($slug)
     {
-        $this->delete(['slug' => $slug]);
+        parent::delete(['slug' => $slug]);
     }
 }

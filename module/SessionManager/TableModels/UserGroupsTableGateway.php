@@ -4,13 +4,15 @@ namespace SessionManager\TableModels;
 
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
+use Traits\Tables\HasColumns;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Validator\Db\RecordExists;
 
 class UserGroupsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
+    use HasColumns;
+
     public function __construct()
     {
         $this->table = 'userGroups';

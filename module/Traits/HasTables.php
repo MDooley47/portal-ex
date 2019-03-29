@@ -19,9 +19,9 @@ trait HasTables
             ->add('OwnerType')
             ->add('Privilege')
             ->add('Setting')
-            ->add('Tabs')
+            ->add('Tab')
             ->add('TabApps')
-            ->add('Users')
+            ->add('User')
             ->add('UserPrivileges')
             ->add('UserGroups');
 

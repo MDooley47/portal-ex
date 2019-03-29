@@ -141,7 +141,7 @@ class Session
             return false;
         }
 
-        $table = (new Tables())->getTable('users');
+        $table = (new Tables())->getTable('user');
 
         return $table->getUser(self::get('userSlug'));
     }

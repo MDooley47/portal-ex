@@ -3,6 +3,11 @@
 namespace User\Model;
 
 use DomainException;
+use Model\Concerns\HasCast;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use SessionManager\Tables;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
@@ -10,10 +15,30 @@ use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
 use User\InputFilter\NameFilter;
 use Zend\InputFilter\InputFilter;
+use Zend\InputFilter\InputFilterInterface;
 
-class User implements HasSlugInterface
+class User extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
+    use Boot, HasCast, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'users';
+    public static $form = [
+        'name' => [
+            'type'     => 'text',
+            'required' => true,
+        ],
+        'email' => [
+            'type'     => 'email',
+            'required' => true,
+        ],
+        'codist' => [
+            'type'     => 'text',
+            'label'    => 'County District Number',
+            'required' => false,
+        ],
+    ];
+
     /**
      * Int for User's id found in the db.
      */
@@ -33,6 +58,16 @@ class User implements HasSlugInterface
     public $codist;
 
     /**
+     * User constructor.
+     *
+     * @param array $attributes
+     */
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+    }
+
+    /**
      * InputFilter for User's inputFilter.
      */
     protected $inputFilter;
@@ -42,6 +77,7 @@ class User implements HasSlugInterface
      */
     protected static $guarded = [
         'slug',
+        'codist',
     ];
 
     /**
@@ -76,10 +112,10 @@ class User implements HasSlugInterface
 
     public function defaultTab()
     {
-      $tables = new Tables();
-      $ownerTabs = $tables->getTable('ownerTabs');
-      $tab = $ownerTabs->getTabs($this->district())[0];
-      return ($tab);
+      return(new Tables())
+            ->getTable('ownerTabs')
+            ->getTabs($this->district())[0];
+            new Tables();
         //->getTab($this->codist);
     }
 

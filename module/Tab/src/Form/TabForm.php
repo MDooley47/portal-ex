@@ -52,6 +52,15 @@ class TabForm extends Form
         ]);
 
         $this->add([
+            'name'    => 'group',
+            'type'    => 'select',
+            'options' => [
+                'label'                     => 'GroupType',
+                'disable_inarray_validator' => true,
+            ],
+        ]);
+
+        $this->add([
             'name'       => 'submit',
             'type'       => 'submit',
             'attributes' => [
