@@ -2,15 +2,19 @@ FROM php:7.1-apache
 
 # Install dependencies from apt
 RUN apt-get update
+# Allows postgresql-client to install without issues
+RUN mkdir -p /usr/share/man/man1 \
+    && mkdir -p /usr/share/man/man7
+
 RUN apt-get install -y \
     git \
     wget \
-    postgresql-client \
     zlib1g-dev \
     libgmp-dev \
     libicu-dev \
     libpq-dev \
-    apache2-dev
+    apache2-dev \
+    postgresql-client
 
 # Install php extensions from docker-php-ext-install
 RUN docker-php-ext-install zip \
