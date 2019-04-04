@@ -336,6 +336,10 @@ export default class DatatableManager {
                 case 'group':
                     order = ['slug', 'groupType', 'name', 'description'];
                     break;
+                case 'grouptype':
+                case 'privilege':
+                    order = ['slug', 'name', 'description', 'level'];
+                    break;
                 case 'app':
                     delete data[name][keys[i]].version;
                     delete data[name][keys[i]].iconPath;
