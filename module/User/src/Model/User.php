@@ -50,7 +50,7 @@ class User extends Model implements HasSlugInterface, Bootable
     }
 
     /**
-     * String for the Nebraska county-district number (CO-DST-BLDG format)
+     * String for the Nebraska county-district number (CO-DST-BLDG format).
      */
     public $codist;
 
@@ -98,10 +98,11 @@ class User extends Model implements HasSlugInterface, Bootable
 
     public function defaultTab()
     {
-      $tables = new Tables();
-      $ownerTabs = $tables->getTable('ownerTabs');
-      $tab = $ownerTabs->getTabs($this->district())[0];
-      return ($tab);
+        $tables = new Tables();
+        $ownerTabs = $tables->getTable('ownerTabs');
+        $tab = $ownerTabs->getTabs($this->district())[0];
+
+        return $tab;
         //->getTab($this->codist);
     }
 
@@ -157,41 +158,39 @@ class User extends Model implements HasSlugInterface, Bootable
 
     /**
      *  Returns the relative path (string) to the user's group logo.
-    */
+     */
     public function getLogoFilename()
     {
-      $fn = "";
-      // look up the group based on the user's CDN
-      $tables = new Tables();
-      $groupsTable = $tables->getTable('group');
-      $group = $groupsTable->getGroup($this->district());
+        $fn = '';
+        // look up the group based on the user's CDN
+        $tables = new Tables();
+        $groupsTable = $tables->getTable('group');
+        $group = $groupsTable->getGroup($this->district());
 
-      if ($group)
-      {
-        $fn = $group->logoFilename;
-      }
+        if ($group) {
+            $fn = $group->logoFilename;
+        }
 
-      return ($fn);
+        return $fn;
     }
 
     /**
      *  Returns the background brand/header color to use for this user in
-     *  6-digit hex format (example: #FF7700)
-    */
+     *  6-digit hex format (example: #FF7700).
+     */
     public function getThemeColor()
     {
-      $color = "";
-      // look up the group based on the user's CDN
-      $tables = new Tables();
-      $groupsTable = $tables->getTable('group');
-      $group = $groupsTable->getGroup($this->district());
+        $color = '';
+        // look up the group based on the user's CDN
+        $tables = new Tables();
+        $groupsTable = $tables->getTable('group');
+        $group = $groupsTable->getGroup($this->district());
 
-      if ($group)
-      {
-        $color = $group->themeColor;
-      }
+        if ($group) {
+            $color = $group->themeColor;
+        }
 
-      return ($color);
+        return $color;
     }
 
     /**

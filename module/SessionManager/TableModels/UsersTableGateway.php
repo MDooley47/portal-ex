@@ -10,7 +10,7 @@ use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 use Zend\Validator\Db\RecordExists;
 
-class UserTableGateway extends AbstractTableGateway implements UniversalTableGatewayInterface
+class UsersTableGateway extends AbstractTableGateway implements UniversalTableGatewayInterface
 {
     use HasColumns;
 
