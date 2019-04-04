@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use App\Model\App;
 use Traits\HasTables;
 use Zend\Http\Headers;
 use Zend\Http\Response;
@@ -26,6 +27,9 @@ class APIController extends AbstractActionController
     {
         $response = new Response();
         $headers = new Headers();
+        // Should allow CORS during local development.
+        if (env('app_env') == 'local')
+            $headers->addHeaderLine('Access-Control-Allow-Origin', '*');
         $headers->addHeaderLine('Content-Type', 'text/json');
         $response->setHeaders($headers);
 
@@ -51,6 +55,9 @@ class APIController extends AbstractActionController
         $action = strtolower($this->getRequest()->getQuery('a'));
         $id = $this->getRequest()->getQuery('id');
         $data = $this->getRequest()->getPost()->toArray();
+
+        # note('Request: ');
+        # note($this->getRequest());
 
         $content = [];
 
@@ -88,7 +95,7 @@ class APIController extends AbstractActionController
         $models = $this->getTable($m)->fetchAll();
 
         foreach ($models as $model) {
-            array_push($content[$this->plural($m)], $model->getArrayCopy());
+            array_push($content[$this->plural($m)], array_change_key_case($model->getArrayCopy()));
         }
     }
 
@@ -97,7 +104,7 @@ class APIController extends AbstractActionController
         $table = $this->getTable($model);
 
         if ($table->exists($id)) {
-            $content[$model] = $table->get($id)->getArrayCopy();
+            $content[$model] = array_change_key_case($table->get($id)->getArrayCopy());
         }
     }
 
@@ -105,23 +112,44 @@ class APIController extends AbstractActionController
     {
         $content['success'] = true;
 
+        if ($model == 'app') {
+            $data['iconPath'] = App::saveIconFromBase64($data['icon']);
+            $data['version'] = $data['version'] ?? 0;
+
+            unset($data['icon']);
+        }
+
         try {
             $table = guaranteeUniversalTableGateway($this->getTable($model));
             $added = $table->add($data);
-            $content[$model] = $added->getArrayCopy();
+            $content[$model] = array_change_key_case($added->getArrayCopy());
         } catch (\Exception $e) {
             $content['success'] = false;
             if (env('debug')) {
                 $content['exception'] = [
-                'message' => $e->getMessage(),
-                'code'    => $e->getCode(),
-            ];
+                    'message' => $e->getMessage(),
+                    'code'    => $e->getCode(),
+                ];
             }
         }
     }
 
     public function editModel(&$content, $m, $id, $data)
     {
+        $content['success'] = true;
+
+        if ($m == 'app') {
+            if (preg_match('/base64/i', explode(',', $data['icon'])[0])) {
+                $data['iconPath'] = App::saveIconFromBase64($data['icon']);
+                $data['version'] = $data['version'] ?? 0;
+
+                $data['icon'] = null;
+                unset($data['icon']);
+            } else {
+                $data['iconPath'] = $data['iconPath'] ?? $data['iconpath'];
+            }
+        }
+
         $table = $this->getTable($m);
         $model = $table->get($id);
 
@@ -129,7 +157,7 @@ class APIController extends AbstractActionController
 
         $table->save($model);
 
-        $content[$m] = $model->getArrayCopy();
+        $content[$m] = array_change_key_case($model->getArrayCopy());
     }
 
     public function formModel(&$content, $m)
@@ -138,7 +166,7 @@ class APIController extends AbstractActionController
 
         try {
             $model = resolveModel($m);
-            $content[$m] = $model::$form;
+            $content[$m] = array_change_key_case($model::$form);
         } catch (\Exception $e) {
             $content['success'] = false;
 
