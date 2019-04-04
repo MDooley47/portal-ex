@@ -55,8 +55,9 @@ class App extends Model implements HasSlugInterface, Bootable
         parent::__construct($attributes);
     }
 
-    public static function saveIconFromBase64($base64Image) {
-        $target = realpath(getenv('storage_path') . '/images/');
+    public static function saveIconFromBase64($base64Image)
+    {
+        $target = realpath(getenv('storage_path').'/images/');
 
         $base64_parts = explode(',', $base64Image);
 
@@ -68,8 +69,8 @@ class App extends Model implements HasSlugInterface, Bootable
         $image_contents = base64_decode($base64Image);
 
         do {
-            $filename = $target . uniqid('/app-', true) . '.' . $image_extension;
-        } while(file_exists($filename));
+            $filename = $target.uniqid('/app-', true).'.'.$image_extension;
+        } while (file_exists($filename));
 
         file_put_contents($filename, $image_contents);
 
