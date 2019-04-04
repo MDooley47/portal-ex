@@ -110,22 +110,14 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
      */
     public function get($id, array $options = [])
     {
-        $options['type'] = $options['type'] ?? OwnerType::$primaryKey;
+        arrayValueDefault('type', $options, OwnerType::$primaryKey);
 
-        $rowset = $this->select(function (Select $select) use ($id, $options) {
-            switch (strtolower($options['type'])) {
-                case 'name':
-                    $select->where([
-                        'name' => $id,
-                    ]);
-                    break;
-                case OwnerType::$primaryKey:
-                default:
-                    $select->where([
-                        OwnerType::$primaryKey => $id,
-                    ]);
-            }
-        });
+        if ($options['type'] == 'name') {
+            $rowset = $this->select(['name' =>  strtolower($id)]);
+        }
+        else {
+            $rowset = $this->select([OwnerType::$primaryKey => $id]);
+        }
 
         $row = $rowset->current();
 
@@ -136,7 +128,7 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
             ));
         }
 
-        return new OwnerType($rowset->toArray());
+        return new OwnerType($row->getArrayCopy());
     }
 
     /**
