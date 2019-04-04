@@ -25,11 +25,22 @@
         "datatables.net-select-bs4": "^1.2.7",
         "jquery": "^3.3.1",
         "laravel-mix": "^3.0.0",
+        "lodash": "^4.17.11",
         "node-sass": "^4.11.0",
         "pluralize": "^7.0.0",
         "popper.js": "^1.14.7",
         "select2": "^4.0.6-rc.1",
-        "lodash": "^4.17.11"
+        "ts-loader": "^3.5.0",
+        "typescript": "^3.3.3333"
     },
-    "dependencies": {}
+    "dependencies": {},
+    "_comments": {
+        "devDependencies": {
+            "laravel-mix": "Must use version 3 because version 4 and above uses webpack 4 which contains issues with dynamic imports.",
+            "ts-loader": [
+                "Version 3.5.0 is the newest version that does not require webpack 4.",
+                "Version 3.5.0 offically supports typescript ^2.7.1; however, I have not noticed any issues with using ^3.3.3333"
+            ]
+        }
+    }
 }
