@@ -28,8 +28,9 @@ class APIController extends AbstractActionController
         $response = new Response();
         $headers = new Headers();
         // Should allow CORS during local development.
-        if (env('app_env') == 'local')
+        if (env('app_env') == 'local') {
             $headers->addHeaderLine('Access-Control-Allow-Origin', '*');
+        }
         $headers->addHeaderLine('Content-Type', 'text/json');
         $response->setHeaders($headers);
 
@@ -56,8 +57,8 @@ class APIController extends AbstractActionController
         $id = $this->getRequest()->getQuery('id');
         $data = $this->getRequest()->getPost()->toArray();
 
-        # note('Request: ');
-        # note($this->getRequest());
+        // note('Request: ');
+        // note($this->getRequest());
 
         $content = [];
 

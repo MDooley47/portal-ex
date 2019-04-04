@@ -6,7 +6,6 @@ use OwnerType\Model\OwnerType;
 use RuntimeException;
 use Traits\Tables\HasColumns;
 use Traits\Tables\UniversalTableGatewayInterface;
-use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
 use Zend\Validator\Db\RecordExists;
@@ -114,8 +113,7 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
 
         if ($options['type'] == 'name') {
             $rowset = $this->select(['name' =>  strtolower($id)]);
-        }
-        else {
+        } else {
             $rowset = $this->select([OwnerType::$primaryKey => $id]);
         }
 
