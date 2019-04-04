@@ -205,7 +205,7 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
             }
         } elseif ($dbApp = $this->get($slug)) {
             if ($data['iconPath'] != $dbApp->iconPath) {
-                if (file_exists(addBasePath($file = $dbApp->iconPath))) {
+                if (file_exists($file = addBasePath($dbApp->iconPath))) {
                     unlink($file);
                 }
             }
