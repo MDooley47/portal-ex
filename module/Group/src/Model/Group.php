@@ -117,12 +117,12 @@ class Group extends Model implements HasSlugInterface
     public function getArrayCopy()
     {
         return [
-            'slug'        => $this->slug,
-            'name'        => $this->name,
-            'description' => $this->description,
-            'grouptype'   => $this->grouptype,
-            'logoFilename' => $this->logoFilename,
-            'themeColor'  => $this->themeColor,
+            'slug'            => $this->slug,
+            'name'            => $this->name,
+            'description'     => $this->description,
+            'grouptype'       => $this->grouptype,
+            'logoFilename'    => $this->logoFilename,
+            'themeColor'      => $this->themeColor,
             'backgroundColor' => $this->backgroundColor,
         ];
     }

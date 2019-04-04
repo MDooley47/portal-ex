@@ -1,15 +1,15 @@
 <?php
 
-$config = array(
+$config = [
 
-    'admin' => array(
+    'admin' => [
         'core:AdminPassword',
-    ),
+    ],
 
-    'default-sp' => array(
+    'default-sp' => [
         'saml:SP',
-        'privatekey' => 'saml.pem',
+        'privatekey'  => 'saml.pem',
         'certificate' => 'saml.crt',
-        'idp' => 'https://idp.nebraskacloud.org/simplesaml/saml2/idp/metadata.php',
-    ),
-);
+        'idp'         => 'https://idp.nebraskacloud.org/simplesaml/saml2/idp/metadata.php',
+    ],
+];
