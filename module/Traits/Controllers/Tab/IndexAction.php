@@ -43,8 +43,8 @@ trait IndexAction
         }
 
         $user = Session::getUser();
-        $this->layout()->setVariable('themeColor',$user->getThemeColor());
-        $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
+        $this->layout()->setVariable('themeColor', $user->getThemeColor());
+        $this->layout()->setVariable('logoFilename', $user->getLogoFilename());
 
         return new ViewModel([
             'apps' => $table->getTab($slug)->getApps(),
