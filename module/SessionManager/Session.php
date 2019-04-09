@@ -15,8 +15,9 @@ class Session
      *      The slug of the active user
      */
 
-    public static function init() {
-        if (! self::isActive()) {
+    public static function init()
+    {
+        if (!self::isActive()) {
             self::end();
         }
 
@@ -57,6 +58,7 @@ class Session
     public static function destroy()
     {
         session_unset();
+
         return session_destroy();
     }
 
@@ -211,10 +213,14 @@ class Session
         return $table->getGroups(self::get('user_slug'));
     }
 
-    public static function table($name = null) {
+    public static function table($name = null)
+    {
         $tables = new Tables();
 
-        if ($name === null) return $tables;
-        else return $tables->getTable($name);
+        if ($name === null) {
+            return $tables;
+        } else {
+            return $tables->getTable($name);
+        }
     }
 }
