@@ -14,7 +14,7 @@ trait IndexAction
      */
     public function indexAction()
     {
-        $table = $this->getTable('tabs');
+        $table = $this->getTable('tab');
 
         // get provided slug
         $slug = $this->params()->fromRoute('slug', null);
@@ -45,7 +45,8 @@ trait IndexAction
         $user = Session::getUser();
         $this->layout()->setVariable('themeColor',$user->getThemeColor());
         $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
-
+        $this->layout()->setVariable('tabSlug',$slug);
+        
         return new ViewModel([
             'apps' => $table->getTab($slug)->getApps(),
         ]);

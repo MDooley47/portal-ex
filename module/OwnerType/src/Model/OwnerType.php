@@ -19,6 +19,11 @@ class OwnerType extends Model implements HasSlugInterface, Bootable
 {
     use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
 
+    public $id;
+    public $slug;
+    public $name;
+    public $description;
+
     public static $primaryKey = 'slug';
     protected static $table = 'ownerTypes';
     public static $form = [
@@ -43,6 +48,14 @@ class OwnerType extends Model implements HasSlugInterface, Bootable
     protected static $guarded = [
         'slug',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+      $this->slug = $attributes[0]['slug'];
+      $this->name = $attributes[0]['name'];
+      $this->description = $attributes[0]['description'];
+
+    }
 
     /**
      * Get app values as array.

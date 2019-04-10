@@ -62,10 +62,7 @@ class ApplicationController extends AbstractActionController
             Session::hasPrivilege('auth');
 
             $user = Session::getUser();
-            printf("<br>user is coming back with empty properties, causes failure on defaultTab()<br>");
-            var_dump($user);
-            exit();
-            // user is
+
             if ($user)
             {
               $tab = $user->defaultTab();
@@ -76,13 +73,13 @@ class ApplicationController extends AbstractActionController
               else
               {
                 $portalError = true;
-                $portalErrorMessage = 'No applications could be located for you. Please contact your technology support staff.';
+                $portalErrorMessage = 'No applications could be located for you. Please contact your technology support staff, ESU technical support, or NebraskaCloud support at help@esucc.org.';
               }
             }
             else
             {
               $portalError = true;
-              $portalErrorMessage = 'We cannot find your user profile. Please contact your technology support staff.';
+              $portalErrorMessage = 'We cannot find your user profile. Please contact your technology support staff, ESU technical support, or NebraskaCloud support at help@esucc.org.';
             }
             if ($portalError)
             {
@@ -93,8 +90,10 @@ class ApplicationController extends AbstractActionController
             }
             $this->layout()->setVariable('themeColor',$user->getThemeColor());
             $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
+            $this->layout()->setVariable('tabSlug',$tab->slug);
+
             return (new ViewModel([
-                'apps' => $tab->getApps(),
+                'apps' => $apps,
             ]))
             ->setTemplate('application/tab/index');
         }
@@ -133,7 +132,7 @@ class ApplicationController extends AbstractActionController
           $user->name = $attributes['givenName'][0] . " " . $attributes['sn'][0];
           $user->codist = $attributes['esucc-cdn'][0];
           $usersTable = $this->getTable('user');
-          $userSlug = $usersTable->saveUser($user);
+          $userSlug = $usersTable->save($user)->slug;
           $tables->getTable('userPrivileges')->addCorrelation($userSlug,'auth');
           $tables->getTable('userGroups')
             ->addCorrelation($userSlug, substr($user->codist,0,7));

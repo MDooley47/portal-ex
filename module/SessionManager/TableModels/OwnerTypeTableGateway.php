@@ -136,7 +136,13 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
             ));
         }
 
-        return new OwnerType($rowset->toArray());
+        while ($row)
+        {
+          $rowArray[] = $row;
+          $row = $rowset->next();
+        }
+
+        return new OwnerType($rowArray);
     }
 
     /**

@@ -45,9 +45,24 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
                 ]);
         });
 
-        return $tables
-            ->getTable('tabs')
-            ->getTabs(array_column($rowset->toArray(), 'tabSlug'));
+        $row = $rowset->current();
+
+        while ($row)
+        {
+          $rowArray[] = $row;
+          $row = $rowset->next();
+        }
+
+        if (is_array($rowArray))
+        {
+          return $tables
+            ->getTable('tab')
+            ->getTabs(array_column($rowArray, 'tabSlug'));
+        }
+        else
+        {
+          return (null);
+        }
     }
 
     public function getOwner($slug)
