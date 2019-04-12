@@ -49,15 +49,15 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
             $requestedPrivilegeLevel = $privilege->level;
         }
 
-        $existingPrivilegeLevel = $this->getUserPrivilege($user, $group);
+        $existingPrivilegeLevel = $this->getUserPrivilege($user, $group)->level;
 
-        if ($existingPrivilegeLevel <= $requestedPrivilegeLevel) {
-            return true;
-        } elseif (isset($group)) {
+        if ($existingPrivilegeLevel >= $requestedPrivilegeLevel) return true;
+        elseif (isset($group)) {
+            // TODO: Fix the issue getParent issue
             $parentGroup = $tables->getTable('groupGroups')->getParent($group);
 
             return $this->hasPrivilege($user, $privilege, $parentGroup);
-        }
+        } else return false;
     }
 
     /**
@@ -89,6 +89,11 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
             $output = (new Tables())
                 ->getTable('privilege')
                 ->getPrivilege('anon');
+        } else {
+            $output = $output->getArrayCopy();
+            $output = (new Tables())
+                ->getTable('privilege')
+                ->getPrivilege($output['privilegeSlug']);
         }
 
         return $output;
