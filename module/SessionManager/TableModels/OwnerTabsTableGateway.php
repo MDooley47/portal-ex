@@ -35,7 +35,7 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
         $options['type'] = $tables
             ->getTable('ownerType')
-            ->getType($options['type'], ['type' => 'name'])
+            ->get($options['type'], ['type' => 'name'])
             ->slug;
 
         $rowset = $this->select(function (Select $select) use ($slug, $options) {
@@ -46,7 +46,7 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
         });
 
         return $tables
-            ->getTable('tabs')
+            ->getTable('tab')
             ->getTabs(array_column($rowset->toArray(), 'tabSlug'));
     }
 

@@ -62,9 +62,7 @@ class ApplicationController extends AbstractActionController
             Session::hasPrivilege('auth');
 
             $user = Session::getUser();
-            printf('<br>user is coming back with empty properties, causes failure on defaultTab()<br>');
-            // var_dump($user);
-            // exit();
+
             // user is
             if ($user) {
                 $tab = $user->defaultTab();

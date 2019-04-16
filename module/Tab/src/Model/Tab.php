@@ -11,6 +11,7 @@ use SessionManager\Tables;
 use Tab\InputFilter\NameFilter;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
+use Model\Concerns\HasCast;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
@@ -18,7 +19,7 @@ use Zend\InputFilter\InputFilterInterface;
 
 class Tab extends Model implements HasSlugInterface, Bootable
 {
-    use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+    use Boot, HasCast, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
 
     public static $primaryKey = 'slug';
     protected static $table = 'tabs';
