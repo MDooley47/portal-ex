@@ -117,20 +117,21 @@ class ApplicationController extends AbstractActionController
 
         $tables = new Tables();
 
-        $user = $this->getTable('user')->get($attributes['mail'][0], ['type' => 'email']);
-
-        if (!$user) {
+        try {
+            $user = $this->getTable('user')->get($attributes['mail'][0], ['type' => 'email']);
+        } catch (\RuntimeException $e) {
             // add user, privilege, and group
             $user = new User();
             $user->email = $attributes['mail'][0];
             $user->name = $attributes['givenName'][0].' '.$attributes['sn'][0];
             $user->codist = $attributes['esucc-cdn'][0];
             $usersTable = $this->getTable('user');
-            $userSlug = $usersTable->saveUser($user);
+            $userSlug = $usersTable->save($user);
             $tables->getTable('userPrivileges')->addCorrelation($userSlug, 'auth');
             $tables->getTable('userGroups')
-            ->addCorrelation($userSlug, substr($user->codist, 0, 7));
+                ->addCorrelation($userSlug, substr($user->codist, 0, 7));
         }
+
         // make session active
         Session::start();
         Session::setUser($user);

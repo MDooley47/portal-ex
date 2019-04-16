@@ -99,6 +99,7 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
         }
 
         $row = $rowset->current();
+
         if (!$row) {
             throw new RuntimeException(sprintf(
                 'Could not Find Row with identifier %d of type %s',
