@@ -7,27 +7,13 @@ use Tab\Model\Tab;
 
 class loadDB
 {
-    public function __construct()
-    {
-        $this->makeTabsForGroupsWithoutTabs();
-    }
-
-    public function makeTabsForGroupsWithoutTabs()
+    public static function makeTabsForGroupsWithoutTabs()
     {
         $tables = new Tables();
 
-        foreach ($tables->getTable('group')->fetchAll() as $row) {
-            $group = (new Group())->exchangeArray($row->getArrayCopy());
+        foreach ($tables->getTable('group')->all() as $group) {
 
-            if (!$group->hasTab()) {
-
-/*                do
-                {
-                    $slug = Tab::generateSlug();
-                }
-                while ($tables->getTable('tab')->tabExists($slug));
-*/
-
+            if (! $group->hasTab()) {
                 $tab = (new Tab())
                     ->exchangeArray([
                         'name' => $group->name,
@@ -35,9 +21,7 @@ class loadDB
 
                 $tabTable = $tables->getTable('tab');
 
-                $tab = $tabTable->getTab(
-                    $tabTable->saveTab($tab)
-                );
+                $tab = $tabTable->save($tab);
 
                 $tables->getTable('ownerTabs')
                     ->addCorrelation($tab->slug, $group->slug, [
@@ -46,8 +30,6 @@ class loadDB
                                 'type' => 'name',
                             ]),
                     ]);
-
-                //$tables->getTable('tab')->saveTab($tab);
             }
         }
     }
