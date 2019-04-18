@@ -2,7 +2,6 @@
 
 namespace SessionManager\TableModels;
 
-use Group\Model\Group;
 use Privilege\Model\Privilege;
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
@@ -16,6 +15,8 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
 {
     use HasColumns;
 
+    public static $thisTime = 0;
+
     public function __construct()
     {
         $this->table = 'userPrivileges';
@@ -23,8 +24,6 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
         $this->featureSet->addFeature(new Feature\GlobalAdapterFeature());
         $this->initialize();
     }
-
-    // TODO: support multiple parents on a group.
 
     /**
      * Does user have privilege?
@@ -37,17 +36,24 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
      */
     public function hasPrivilege($user, $privilege, $group = null)
     {
+        $user = getSlug($user);
+        $group = getSlug($group);
+
         $tables = new Tables();
 
         $privilegeTable = $tables->getTable('privilege');
 
-        if ($privilege instanceof Privilege) {
+        if ($privilege instanceof Privilege || $privilege instanceof \ArrayObject) {
             $requestedPrivilegeLevel = $privilege->level;
         } else {
             // the following line prevents recursion from making
             // unnecessary database calls.
-            $privilege = $privilegeTable->getPrivilege($privilege);
+            $privilege = $privilegeTable->get($privilege);
             $requestedPrivilegeLevel = $privilege->level;
+        }
+
+        if (empty($group) && $privilege->slug != 'sudo') {
+            throw new \InvalidArgumentException('$group should not be null unless checking sudo level access');
         }
 
         $existingPrivilegeLevel = $this->getUserPrivilege($user, $group)->level;
@@ -55,13 +61,19 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
         if ($existingPrivilegeLevel >= $requestedPrivilegeLevel) {
             return true;
         } elseif (isset($group)) {
-            // TODO: Fix the issue getParent issue
             $parentGroup = $tables->getTable('groupGroups')->getParent($group);
-
-            return $this->hasPrivilege($user, $privilege, $parentGroup);
-        } else {
-            return false;
+            if (! empty($parentGroup)) {
+                /* If a user only has auth access on a parent group
+                 * they will not be given auth access on the child group by inference;
+                 * however, if they have admin access or above it will
+                 * transfer to child groups by inference.
+                 */
+                if ($privilege->slug == 'auth') $privilege = 'admin';
+                return $this->hasPrivilege($user, $privilege, $parentGroup);
+            }
         }
+
+        return false;
     }
 
     /**
@@ -75,10 +87,7 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
     public function getUserPrivilege($user, $group = null)
     {
         $user = getSlug($user);
-
-        if (isset($group)) {
-            $group = getSlug($group);
-        }
+        $group = getSlug($group);
 
         $rowset = $this->select(function (Select $select) use ($user, $group) {
             $select->where([

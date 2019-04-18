@@ -7,17 +7,19 @@ use Group\InputFilter\NameFilter;
 use Model\Concerns\HasCast;
 use Model\Concerns\QueryBuilder;
 use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
 use Model\Model;
 use SessionManager\Tables;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
+use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Group extends Model implements HasSlugInterface
+class Group extends Model implements HasSlugInterface, Bootable
 {
-    use Boot, HasCast, HasSlug, ExchangeArray, QueryBuilder;
+    use Boot, HasCast, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
 
     public static $primaryKey = 'slug';
     protected static $table = 'groups';
@@ -77,8 +79,6 @@ class Group extends Model implements HasSlugInterface
     public function getTabs()
     {
         $tables = new Tables();
-
-        //dd($tables->getTable('ownerType'));
 
         return $tables
             ->getTable('ownerTabs')

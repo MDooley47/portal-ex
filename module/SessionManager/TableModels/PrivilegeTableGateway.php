@@ -99,8 +99,8 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
         $row = $rowset->current();
         if (!$row) {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
-                $id, Privilege::$primaryKey
+                'Could not Find Row in %s with identifier %s of type %s',
+                $this->table, $id, Privilege::$primaryKey
             ));
         }
 

@@ -39,7 +39,15 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
      */
     public function all()
     {
-        return $this->select();
+        $groups = [];
+
+        foreach($this->select() as $row) {
+            $group = new Group($row->getArrayCopy());
+
+            array_push($groups, $group);
+        }
+
+        return $groups;
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 use Dotenv\Dotenv;
-use Traits\Interfaces\HasSlug;
+use Model\Model;
 use Zend\Log\Logger;
 use Zend\Log\Writer\Stream;
 
@@ -149,13 +149,13 @@ function addBasePath($data)
 }
 
 /**
- * @param \Traits\Interfaces\HasSlug|object(ArrayObject)|ArrayObject|string $model
+ * @param \Model\Model|object(ArrayObject)|ArrayObject|string $model
  *
  * @return string
  */
 function getSlug($model)
 {
-    if (($model instanceof HasSlug) ||
+    if (($model instanceof Model) ||
         ($model instanceof ArrayObject && $model->offsetExists('slug'))) {
         return $model->slug;
     } else {
