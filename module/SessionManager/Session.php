@@ -179,10 +179,7 @@ class Session
      */
     public static function isActive()
     {
-        //self::start();
         self::start(['start_active_time' => false]);
-
-        note('`isActive()` session has started');
 
         return
             self::isSet('active_time')

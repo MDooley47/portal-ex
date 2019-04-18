@@ -59,8 +59,6 @@ class ApplicationController extends AbstractActionController
             return $this->redirect()->toRoute('login');
         } else {
             // TODO: SHOW THEIR HOME TAB
-            Session::hasPrivilege('auth');
-
             $user = Session::getUser();
 
             // user is
@@ -165,9 +163,7 @@ class ApplicationController extends AbstractActionController
     public function logoutAction()
     {
         if ($this->getRequest()->isPost()) {
-            if (Session::isActive()) {
-                Session::end();
-            }
+            Session::end();
         } else {
             return $this->redirect()->toRoute('home');
         }

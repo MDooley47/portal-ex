@@ -6,9 +6,9 @@ use Group\Model\Group;
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
 use Traits\Tables\HasColumns;
-use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
 
 class GroupGroupsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
@@ -66,6 +66,8 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
      * TODO: support multiple parent groups.
      *
      * @param $childGroup
+     *
+     * @return Group|null
      */
     public function getParent($childGroup)
     {

@@ -50,11 +50,6 @@ class User extends Model implements HasSlugInterface, Bootable
     }
 
     /**
-     * String for the Nebraska county-district number (CO-DST-BLDG format).
-     */
-    public $codist;
-
-    /**
      * InputFilter for User's inputFilter.
      */
     protected $inputFilter;
