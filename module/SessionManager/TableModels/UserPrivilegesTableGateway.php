@@ -62,13 +62,16 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
             return true;
         } elseif (isset($group)) {
             $parentGroup = $tables->getTable('groupGroups')->getParent($group);
-            if (! empty($parentGroup)) {
+            if (!empty($parentGroup)) {
                 /* If a user only has auth access on a parent group
                  * they will not be given auth access on the child group by inference;
                  * however, if they have admin access or above it will
                  * transfer to child groups by inference.
                  */
-                if ($privilege->slug == 'auth') $privilege = 'admin';
+                if ($privilege->slug == 'auth') {
+                    $privilege = 'admin';
+                }
+
                 return $this->hasPrivilege($user, $privilege, $parentGroup);
             }
         }

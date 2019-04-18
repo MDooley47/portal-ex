@@ -3,6 +3,7 @@
 namespace Tab\Model;
 
 use DomainException;
+use Model\Concerns\HasCast;
 use Model\Concerns\QueryBuilder;
 use Model\Concerns\QuickModelBoot as Boot;
 use Model\Contracts\Bootable;
@@ -11,7 +12,6 @@ use SessionManager\Tables;
 use Tab\InputFilter\NameFilter;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
-use Model\Concerns\HasCast;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;

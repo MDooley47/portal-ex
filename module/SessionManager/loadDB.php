@@ -12,8 +12,7 @@ class loadDB
         $tables = new Tables();
 
         foreach ($tables->getTable('group')->all() as $group) {
-
-            if (! $group->hasTab()) {
+            if (!$group->hasTab()) {
                 $tab = (new Tab())
                     ->exchangeArray([
                         'name' => $group->name,
