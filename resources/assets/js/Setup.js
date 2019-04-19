@@ -58,16 +58,20 @@ export default class Setup {
     }
 
     static setupDataTable() {
-        window.DM = new DatatableManager([
-            ['user'],
-            ['group', 2],
-            ['tab'],
-            ['app', 2],
-            ['attribute'],
-            ['grouptype'],
-            ['ipaddress'],
-            ['ownertype'],
-            ['privilege', 3],
-        ]);
+        window.DM = new DatatableManager([]);
     }
+
+    // static setupDataTable() {
+    //     window.DM = new DatatableManager([
+    //         ['user'],
+    //         ['group', 2],
+    //         ['tab'],
+    //         ['app', 2],
+    //         ['attribute'],
+    //         ['grouptype'],
+    //         ['ipaddress'],
+    //         ['ownertype'],
+    //         ['privilege', 3],
+    //     ]);
+    // }
 }

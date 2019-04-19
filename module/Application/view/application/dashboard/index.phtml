@@ -10,9 +10,12 @@
 
     $this->headLink()
         ->prependStylesheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css')
-        ->prependStylesheet('https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css');
+        ->prependStylesheet('https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css')
+        ->prependStylesheet('https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
 
     $this->headScript()
+        ->prependFile('https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        //->prependFile('https://code.jquery.com/jquery-1.12.4.js')
         ->prependFile('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js')
         ->prependFile('https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js');
 
@@ -20,7 +23,8 @@
 
 ?>
 <div class="nav nav-tabs" id="nav-tabs" role="tablist">
-    <a class="nav-item nav-link active" id="nav-user-tab" data-toggle="tab" href="#nav-user" role="tab" aria-controls="nav-user" aria-selected="true">User</a>
+  <a class="nav-item nav-link active" id="nav-layout-tab" data-toggle="tab" href="#nav-tab-layout" role="tab" aria-controls="nav-app" aria-selected="true" onclick="showTabLayout(); return true;">Tab Layout</a>
+  <a class="nav-item nav-link" id="nav-user-tab" data-toggle="tab" href="#nav-user" role="tab" aria-controls="nav-user" aria-selected="false">User</a>
     <a class="nav-item nav-link" id="nav-group-tab" data-toggle="tab" href="#nav-group" role="tab" aria-controls="nav-group" aria-selected="false">Group</a>
     <a class="nav-item nav-link" id="nav-tab-tab" data-toggle="tab" href="#nav-tab" role="tab" aria-controls="nav-tab" aria-selected="false">Tab</a>
     <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-app" role="tab" aria-controls="nav-app" aria-selected="false">App</a>
@@ -34,7 +38,7 @@
 
 <!-- USER -->
 
-    <div class="tab-pane fade show active" id="nav-user" role="tabpanel" aria-labelledby="nav-user-tab">
+    <div class="tab-pane fade show" id="nav-user" role="tabpanel" aria-labelledby="nav-user-tab">
         <div id="user-list" class="model-list">
             <table class="display" style="width:100%">
                 <thead>
@@ -42,12 +46,12 @@
                         <th>Slug</th>
                         <th>Name</th>
                         <th>Email</th>
-                        <th><abbr title="County District Number">Codist</abbr></th>
+                        <th><abbr title="County District Number">CDN</abbr></th>
                     </tr>
                 </thead>
                 <tbody>
-                    <?php
-                        foreach($tables->getTable('users')->fetchAll() as $user) {
+                    <?php /*
+                        foreach($tables->getTable('user')->fetchAll() as $user) {
                             echo "<tr id='user-$user->slug' class='user-row'>";
                                 echo "<td class='user-slug'>$user->slug</td>";
                                 echo "<td class='user-name'>$user->name</td>";
@@ -55,7 +59,7 @@
                                 echo "<td class='user-codist'>$user->codist</td>";
                             echo "</tr>";
                         }
-                    ?>
+                    */ ?>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -91,7 +95,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                    <?php
+                    <?php /*
 
                         foreach($tables->getTable('group')->fetchAll() as $group) {
                             echo "<tr id='group-$group->slug' class='group-row'>";
@@ -101,7 +105,7 @@
                             echo "<td class='group-description'>$group->description</td>";
                             echo "</tr>";
                         }
-                    ?>
+                    */ ?>
                 </tbody>
                 <tfoot>
                     <tr>
@@ -135,15 +139,20 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach($tables->getTable('tabs')->fetchAll() as $tab) {
-                    echo "<tr id='tab-$tab->slug' class='tab-row'>";
-                    echo "<td class='tab-slug'>$tab->slug</td>";
-                    echo "<td class='tab-name'>$tab->name</td>";
-                    echo "<td class='tab-description'>$tab->description</td>";
-                    echo "</tr>";
-                }
-                ?>
+                <?php /*
+                  $tabs = array();
+                  $tabNumber = 0;
+                  foreach($tables->getTable('tab')->fetchAll() as $tab) {
+                      echo "<tr id='tab-$tab->slug' class='tab-row'>";
+                      echo "<td class='tab-slug'>$tab->slug</td>";
+                      echo "<td class='tab-name'>$tab->name</td>";
+                      echo "<td class='tab-description'>$tab->description</td>";
+                      echo "</tr>";
+                      $tabs[$tabNumber]['slug'] = $tab->slug;
+                      $tabs[$tabNumber]['name'] = $tab->name;
+                      $tabNumber++;
+                  }
+                */ ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -177,18 +186,23 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach($tables->getTable('app')->fetchAll() as $app) {
-                    $icon_url = $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
-                        "?v=" . (int) $app->version;
-                    echo "<tr id='app-$app->slug' class='app-row'>";
-                    echo "<td class='app-slug'>$app->slug</td>";
-                    echo "<td class='app-icon'><img src='$icon_url' alt='' height='30px' width='30px'></td>";
-                    echo "<td class='app-name'>$app->name</td>";
-                    echo "<td class='app-url'>$app->url</td>";
-                    echo "</tr>";
-                }
-                ?>
+                <?php /*
+                  $apps = array();
+                  $appNumber = 0;
+                  foreach($tables->getTable('app')->fetchAll() as $app) {
+                      $icon_url = $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
+                          "?v=" . (int) $app->version;
+                      echo "<tr id='app-$app->slug' class='app-row'>";
+                      echo "<td class='app-slug'>$app->slug</td>";
+                      echo "<td class='app-icon'><img src='$icon_url' alt='' height='30px' width='30px'></td>";
+                      echo "<td class='app-name'>$app->name</td>";
+                      echo "<td class='app-url'>$app->url</td>";
+                      echo "</tr>";
+                      $apps[$tabNumber]['slug'] = $app->slug;
+                      $apps[$tabNumber]['name'] = $app->name;
+                      $appNumber++;
+                  }
+                */ ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -223,16 +237,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach($tables->getTable('attribute')->fetchAll() as $attribute) {
-                    echo "<tr id='attribute-$attribute->slug' class='attribute-row'>";
-                    echo "<td class='attribute-slug'>$attribute->slug</td>";
-                    echo "<td class='attribute-name'>$attribute->name</td>";
-                    echo "<td class='attribute-description'>$attribute->description</td>";
-                    echo "<td class='attribute-data'>$attribute->data</td>";
-                    echo "</tr>";
-                }
-                ?>
+                <?php /*
+                  foreach($tables->getTable('attribute')->fetchAll() as $attribute) {
+                      echo "<tr id='attribute-$attribute->slug' class='attribute-row'>";
+                      echo "<td class='attribute-slug'>$attribute->slug</td>";
+                      echo "<td class='attribute-name'>$attribute->name</td>";
+                      echo "<td class='attribute-description'>$attribute->description</td>";
+                      echo "<td class='attribute-data'>$attribute->data</td>";
+                      echo "</tr>";
+                  }
+                */ ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -267,16 +281,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach($tables->getTable('grouptype')->fetchAll() as $grouptype) {
-                    echo "<tr id='grouptype-$grouptype->slug' class='grouptype-row'>";
-                    echo "<td class='grouptype-slug'>$grouptype->slug</td>";
-                    echo "<td class='grouptype-name'>$grouptype->name</td>";
-                    echo "<td class='grouptype-description'>$grouptype->description</td>";
-                    echo "<td class='grouptype-level'>$grouptype->level</td>";
-                    echo "</tr>";
-                }
-                ?>
+                <?php /*
+                  foreach($tables->getTable('grouptype')->fetchAll() as $grouptype) {
+                      echo "<tr id='grouptype-$grouptype->slug' class='grouptype-row'>";
+                      echo "<td class='grouptype-slug'>$grouptype->slug</td>";
+                      echo "<td class='grouptype-name'>$grouptype->name</td>";
+                      echo "<td class='grouptype-description'>$grouptype->description</td>";
+                      echo "<td class='grouptype-level'>$grouptype->level</td>";
+                      echo "</tr>";
+                  }
+                */ ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -311,16 +325,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach($tables->getTable('ipaddress')->fetchAll() as $ipaddress) {
-                    echo "<tr id='ipaddress-$ipaddress->slug' class='ipaddress-row'>";
-                    echo "<td class='ipaddress-slug'>$ipaddress->slug</td>";
-                    echo "<td class='ipaddress-name'>$ipaddress->name</td>";
-                    echo "<td class='ipaddress-ip'>$ipaddress->ip</td>";
-                    echo "<td class='ipaddress-description'>$ipaddress->description</td>";
-                    echo "</tr>";
-                }
-                ?>
+                <?php /*
+                  foreach($tables->getTable('ipaddress')->fetchAll() as $ipaddress) {
+                      echo "<tr id='ipaddress-$ipaddress->slug' class='ipaddress-row'>";
+                      echo "<td class='ipaddress-slug'>$ipaddress->slug</td>";
+                      echo "<td class='ipaddress-name'>$ipaddress->name</td>";
+                      echo "<td class='ipaddress-ip'>$ipaddress->ip</td>";
+                      echo "<td class='ipaddress-description'>$ipaddress->description</td>";
+                      echo "</tr>";
+                  }
+                */ ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -354,15 +368,15 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach($tables->getTable('ownertype')->fetchAll() as $ownertype) {
-                    echo "<tr id='ownertype-$ownertype->slug' class='ownertype-row'>";
-                    echo "<td class='ownertype-slug'>$ownertype->slug</td>";
-                    echo "<td class='ownertype-name'>$ownertype->name</td>";
-                    echo "<td class='ownertype-description'>$ownertype->description</td>";
-                    echo "</tr>";
-                }
-                ?>
+                <?php /*
+                  foreach($tables->getTable('ownertype')->fetchAll() as $ownertype) {
+                      echo "<tr id='ownertype-$ownertype->slug' class='ownertype-row'>";
+                      echo "<td class='ownertype-slug'>$ownertype->slug</td>";
+                      echo "<td class='ownertype-name'>$ownertype->name</td>";
+                      echo "<td class='ownertype-description'>$ownertype->description</td>";
+                      echo "</tr>";
+                  }
+                */ ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -396,16 +410,16 @@
                 </tr>
                 </thead>
                 <tbody>
-                <?php
-                foreach($tables->getTable('privilege')->fetchAll() as $privilege) {
-                    echo "<tr id='privilege-$privilege->slug' class='privilege-row'>";
-                    echo "<td class='privilege-slug'>$privilege->slug</td>";
-                    echo "<td class='privilege-name'>$privilege->name</td>";
-                    echo "<td class='privilege-description'>$privilege->description</td>";
-                    echo "<td class='privilege-level'>$privilege->level</td>";
-                    echo "</tr>";
-                }
-                ?>
+                <?php /*
+                  foreach($tables->getTable('privilege')->fetchAll() as $privilege) {
+                      echo "<tr id='privilege-$privilege->slug' class='privilege-row'>";
+                      echo "<td class='privilege-slug'>$privilege->slug</td>";
+                      echo "<td class='privilege-name'>$privilege->name</td>";
+                      echo "<td class='privilege-description'>$privilege->description</td>";
+                      echo "<td class='privilege-level'>$privilege->level</td>";
+                      echo "</tr>";
+                  }
+                */ ?>
                 </tbody>
                 <tfoot>
                 <tr>
@@ -425,4 +439,136 @@
             <button type="button" class="btn btn-success" id="privilege-add">Add</button>
         </div>
     </div>
+
+<!-- Tab Layout: sets which apps appear on a tab and their order -->
+    <div class="tab-pane fade show active" id="nav-tab-layout" role="tabpanel" aria-labelledby="nav-user-tab" >
+      <h2>Tab Layout Manager</h2>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="appTabSelect">Tab:</label>
+          <select class="form-control" id="appTabSelect" onchange="if (this.selectedIndex) appTabSelected();">
+            <option value="0">Select a Tab...</option>
+            <? /*
+              foreach ($tabs as $tab)
+              { ?>
+                <option value="<? //echo $tab['slug'] ?>"><? //echo $tab['name'] ?></option>
+              <? }
+            */ ?>
+          </select>
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div id="appTabButtons" class="col-md-4" style="visibility:hidden">
+          <button class="btn btn-success" id="btnSaveTabApps">Save</button>
+          <button class="btn btn-light" id="btnRevertTabApps">Cancel</button>
+        </div>
+      </div>
+      <div class="form-row" id="appTabSelected" style="visibility:hidden">
+        <h3 id="appTabTitle">Tab Selected</h3>
+      </div>
+      <div class="form-row" id="appTabLists" style="visibility:hidden">
+        <div class="form-group col-md-4">
+          <p>Available Apps:</p>
+          <select id="allApps" class="form-control" size="20">
+            <option value="1">Digital Ocean</option>
+            <option value="2">ESU 13</option>
+            <option value="3">Gmail</option>
+            <option value="4">Google Docs</option>
+            <option value="5">Google Drive</option>
+            <option value="6">Learn360</option>
+            <option value="7">TestWiz</option>
+            <option value="8">Ubuntu</option>
+            <option value="9">UNOmaha</option>
+          </select>
+          <ul>
+            <li>Click an app to add it to the tab layout.</li>
+          </ul>
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="form-group col-md-4">
+          <p>Selected Apps:</p>
+          <ul id="selectedApps" class="list-group">
+            <li class="list-group-item" id="1">Gmail
+              <span class="float-right button-group">
+                <button type="button" class="btn btn-sm btn-danger">X</button>
+              </span>
+            </li>
+            <li class="list-group-item" id="2">Learn360</li>
+            <li class="list-group-item" id="3">UNOmaha</li>
+          </ul>
+          <ul>
+            <li>Drag an app to set the order it will appear on the tab. </li>
+            <li>Click the red X to remove an app from the tab. </li>
+            <li>When you are finished, click Save to commit the changes.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      $(document).ready(function()
+      {
+        // move this to appTabSelected()?
+        jQuery('#selectedApps').sortable(
+        {
+          axis: 'y',
+          delay: 100,
+          revert: 300
+        });
+        jQuery('.selectedApps').disableSelection();
+        showTabLayout();
+      });
+
+      function appTabSelected()
+      {
+        var selectedTabSlug = document.getElementById("appTabSelect").value;
+        console.log(selectedTabSlug);
+        document.getElementById("appTabTitle").innerHTML = "Tab Selected: " + selectedTabSlug;
+        var x = document.getElementById("appTabSelected");
+        x.style.visibility = "visible";
+        document.getElementById("appTabLists").style.visibility = "visible";
+        document.getElementById("appTabButtons").style.visibility = "visible";
+      }
+
+      function showTabLayout()
+      {
+        var x = document.getElementById("nav-tab-layout");
+        x.style.display = "block";
+        window.PortalAPI.list('tab', (response, request) => {
+          if (response.textStatus == 'success')
+          {
+            var tabSelectList = document.getElementById("appTabSelect");
+
+            // empty the select list
+            while (tabSelectList.options.length > 0)
+            {
+              tabSelectList.remove(tabSelectList.options.length - 1);
+            }
+
+            // re-add new list of items
+            // placeholder first
+            var opt = document.createElement('option');
+            opt.text = 'Select a Tab...';
+            opt.value = '0';
+            tabSelectList.add(opt, null);
+
+            // add list of tabs from API call
+            for (i=0; i < response.data.tabs.length; i++)
+            {
+              var opt = document.createElement('option');
+              opt.text = response.data.tabs[i].name;
+              opt.value = response.data.tabs[i].slug;
+              tabSelectList.add(opt, null);
+            }
+          }
+          else
+          {
+            console.log(response);
+          }
+        });
+      }
+
+    </script>
 </div>
