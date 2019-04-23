@@ -93,12 +93,11 @@ class User extends Model implements HasSlugInterface, Bootable
 
     public function defaultTab()
     {
-        $tables = new Tables();
-        $ownerTabs = $tables->getTable('ownerTabs');
-        $tab = $ownerTabs->getTabs($this->district())[0];
+        $tables =  new Tables();
 
-        return $tab;
-        //->getTab($this->codist);
+        $tabs = $tables->getTable('ownerTabs')->getTabs($this->district());
+
+        return $tabs[0];
     }
 
     public function district($options = []): String
