@@ -93,7 +93,7 @@ class User extends Model implements HasSlugInterface, Bootable
 
     public function defaultTab()
     {
-        $tables =  new Tables();
+        $tables = new Tables();
 
         $tabs = $tables->getTable('ownerTabs')->getTabs($this->district());
 
