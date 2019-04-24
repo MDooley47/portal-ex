@@ -463,14 +463,11 @@
           <button class="btn btn-light" id="btnRevertTabApps">Cancel</button>
         </div>
       </div>
-      <div class="form-row" id="appTabSelected" style="visibility:hidden">
-        <h3 id="appTabTitle">Tab Selected</h3>
-      </div>
       <div class="form-row" id="appTabLists" style="visibility:hidden">
         <div class="form-group col-md-4">
           <p>Available Apps:</p>
-          <select id="allApps" class="form-control" size="20">
-            <option value="1">Digital Ocean</option>
+          <select id="allApps" class="form-control" size="20" onchange="availableAppSelected();">
+            <? /* <option value="1">Digital Ocean</option>
             <option value="2">ESU 13</option>
             <option value="3">Gmail</option>
             <option value="4">Google Docs</option>
@@ -478,7 +475,7 @@
             <option value="6">Learn360</option>
             <option value="7">TestWiz</option>
             <option value="8">Ubuntu</option>
-            <option value="9">UNOmaha</option>
+            <option value="9">UNOmaha</option> */ ?>
           </select>
           <ul>
             <li>Click an app to add it to the tab layout.</li>
@@ -489,13 +486,13 @@
         <div class="form-group col-md-4">
           <p>Selected Apps:</p>
           <ul id="selectedApps" class="list-group">
-            <li class="list-group-item" id="1">Gmail
+            <? /* <li class="list-group-item" id="1">Gmail
               <span class="float-right button-group">
                 <button type="button" class="btn btn-sm btn-danger">X</button>
               </span>
             </li>
             <li class="list-group-item" id="2">Learn360</li>
-            <li class="list-group-item" id="3">UNOmaha</li>
+            <li class="list-group-item" id="3">UNOmaha</li> */ ?>
           </ul>
           <ul>
             <li>Drag an app to set the order it will appear on the tab. </li>
@@ -523,13 +520,114 @@
 
       function appTabSelected()
       {
+        // hide the lists
+        document.getElementById("appTabLists").style.visibility = "hidden";
+        document.getElementById("appTabButtons").style.visibility = "hidden";
+
         var selectedTabSlug = document.getElementById("appTabSelect").value;
         console.log(selectedTabSlug);
-        document.getElementById("appTabTitle").innerHTML = "Tab Selected: " + selectedTabSlug;
-        var x = document.getElementById("appTabSelected");
-        x.style.visibility = "visible";
-        document.getElementById("appTabLists").style.visibility = "visible";
-        document.getElementById("appTabButtons").style.visibility = "visible";
+        // document.getElementById("appTabTitle").innerHTML = "Tab Selected: " + selectedTabSlug;
+        // var x = document.getElementById("appTabSelected");
+        // x.style.visibility = "visible";
+
+        // get list of all apps
+        var allApps = [];
+        var tabApps = [];
+        window.PortalAPI.list('app', (response, request) => {
+          if (response.textStatus == 'success')
+          {
+            for (i=0; i < response.data.apps.length; i++)
+            {
+              allApps[i] = response.data.apps[i];
+            }
+            // get list of tabApps for this tab
+            window.PortalAPI.listRelated('tabApps', selectedTabSlug, (response2, request2) => {
+              if (response2.textStatus == 'success')
+              {
+                for (i=0; i < response2.data.tabapps.length; i++)
+                {
+                  tabApps[i] = response2.data.tabapps[i];
+                }
+                // filter list of all apps to remove already-selected apps = available apps
+                for (i = 0; i < tabApps.length; i++)
+                {
+                  for (j = 0; j < allApps.length; j++)
+                  {
+                    if (allApps[j].slug == tabApps[i].appSlug)
+                    {
+                      allApps.splice(j, 1);
+                      j--;
+                    }
+                  }
+                }
+
+                // populate allApps select list
+                var appSelectList = document.getElementById("allApps");
+
+                // empty the select list
+                while (appSelectList.options.length > 0)
+                {
+                  appSelectList.remove(appSelectList.options.length - 1);
+                }
+                // add list of apps from API call
+                for (i=0; i < allApps.length; i++)
+                {
+                  var opt = document.createElement('option');
+                  opt.text = allApps[i].name;
+                  opt.value = allApps[i].slug;
+                  appSelectList.add(opt, null);
+                }
+
+                // selectedApps UL
+                var selectedAppsList = document.getElementById("selectedApps");
+                // remove items
+                if (selectedAppsList)
+                {
+                  while (selectedAppsList.firstChild)
+                  {
+                    selectedAppsList.removeChild(selectedAppsList.firstChild);
+                  }
+                }
+                // populate the list with tabApps
+                for (i=0; i < tabApps.length; i++)
+                {
+                  var li = document.createElement("li");
+                  li.appendChild(document.createTextNode(tabApps[i].name));
+                  var taSpan = document.createElement("span");
+                  taSpan.setAttribute("class","float-right button-group");
+                  var taButton = document.createElement("button");
+                  taButton.setAttribute("class","btn btn-sm btn-danger");
+                  var taButtonText = document.createTextNode("X");
+                  taButton.appendChild(taButtonText);
+                  taSpan.appendChild(taButton);
+                  li.appendChild(taSpan);
+                  li.setAttribute("id", tabApps[i].appSlug);
+                  li.setAttribute("class", "list-group-item");
+                  selectedAppsList.appendChild(li);
+                }
+
+                // show the lists
+                document.getElementById("appTabLists").style.visibility = "visible";
+                document.getElementById("appTabButtons").style.visibility = "visible";
+
+              }
+              else
+              {
+                console.log(response2);
+              }
+            });
+          }
+          else
+          {
+            console.log(response);
+          }
+        });
+      }
+
+      function availableAppSelected()
+      {
+        var selectedAppSlug = document.getElementById("allApps").value;
+        console.log(selectedAppSlug);
       }
 
       function showTabLayout()

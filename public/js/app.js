@@ -25264,6 +25264,26 @@ function () {
       });
     }
   }, {
+    key: "listRelated",
+    value: function listRelated(model, id, callback) {
+      return PortalAPI.request({
+        'm': model,
+        'a': 'listrelated',
+        'id': id,
+        'success': function success(data, textStatus, jqXHR) {
+          callback({
+            'data': data,
+            'textStatus': textStatus,
+            'jqXHR': jqXHR
+          }, {
+            'm': model,
+            'a': 'listrelated',
+            'id': id
+          });
+        }
+      });
+    }
+  }, {
     key: "view",
     value: function view(model, id, callback) {
       return PortalAPI.request({

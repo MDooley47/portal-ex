@@ -21,6 +21,29 @@ class PortalAPI {
         });
     }
 
+    static listRelated(model, id, callback)
+    {
+      return PortalAPI.request({
+          'm': model,
+          'a': 'listrelated',
+          'id': id,
+          'success': (data, textStatus, jqXHR) => {
+              callback(
+                  {
+                      'data': data,
+                      'textStatus': textStatus,
+                      'jqXHR': jqXHR
+                  },
+                  {
+                      'm': model,
+                      'a': 'listrelated',
+                      'id': id
+                  }
+              );
+          }
+      });
+    }
+
     static view(model, id, callback) {
         return PortalAPI.request({
             'm': model,

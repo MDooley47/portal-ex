@@ -58,11 +58,14 @@ class APIController extends AbstractActionController
             return 400;
         }
 
+
         if (empty($action) && empty($id)) {
             $this->listModels($content, $model);
         } elseif (empty($action) && isset($id)) {
             $this->viewModel($content, $model, $id);
-        } elseif (isset($action) && $action == 'add') {
+          } elseif (isset($action) && $action == 'listrelated') {
+              $this->listRelated($content, $model, $id);
+          } elseif (isset($action) && $action == 'add') {
             $this->addModel($content, $model, $data);
         } elseif (isset($action) && $action == 'edit') {
             $this->editModel($content, $model, $id, $data);
@@ -90,6 +93,15 @@ class APIController extends AbstractActionController
         foreach ($models as $model) {
             array_push($content[$this->plural($m)], $model->getArrayCopy());
         }
+    }
+
+    public function listRelated(&$content, $m, $id)
+    {
+      $table = $this->getTable($m);
+      $models = $table->fetchRelated($id);
+      foreach ($models as $model) {
+        $content[$m][] = $model;
+      }
     }
 
     public function viewModel(&$content, $model, $id)
