@@ -44,6 +44,30 @@ class PortalAPI {
       });
     }
 
+    static updateRelated(model, id, relationData, callback) {
+        return PortalAPI.request({
+            'm': model,
+            'a': 'updateRelated',
+            'id': id,
+            'data': relationData,
+            'success': (data, textStatus, jqXHR) => {
+                callback(
+                    {
+                        'data': data,
+                        'textStatus': textStatus,
+                        'jqXHR': jqXHR
+                    },
+                    {
+                        'm': model,
+                        'a': 'updateRelated',
+                        'id': id,
+                        'data': relationData
+                    }
+                );
+            }
+        });
+    }
+
     static view(model, id, callback) {
         return PortalAPI.request({
             'm': model,

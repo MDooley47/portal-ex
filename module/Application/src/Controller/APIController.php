@@ -73,9 +73,11 @@ class APIController extends AbstractActionController
             $this->formModel($content, $model);
         } elseif (isset($action) && $action == 'delete') {
             $this->deleteModel($content, $model, $id);
+        } elseif (isset($action) && $action == 'updaterelated') {
+            $this->updateRelated($content, $model, $id, $data);
         }
 
-        if (empty($content)) {
+        if (empty($content) && $action != 'listrelated') {
             return 404;
         } else {
             $response->setContent(json_encode($content));
@@ -102,6 +104,24 @@ class APIController extends AbstractActionController
       foreach ($models as $model) {
         $content[$m][] = $model;
       }
+    }
+
+    public function updateRelated(&$content, $m, $id, $data)
+    {
+        $table = $this->getTable($m);
+        if ($table->deleteRelated($id) < 0)
+        {
+          $content[$m] = null;
+          return(false);
+        }
+
+        if ($table->addRelated($data) > -1)
+        {
+          $content[$m] = $data;
+          return(true);
+        }
+
+        return(false);
     }
 
     public function viewModel(&$content, $model, $id)

@@ -44,7 +44,7 @@ class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInt
             ->getApps(array_column($rowset->toArray(), 'appSlug'));
     }
 
-    public function addCorrelation($tab, $app, $options = [])
+    public function addCorrelation($tab, $app, $order, $options = [])
     {
         if ($this->correlationExists($tab, $app, $options)) {
             // correlation already exists
@@ -54,9 +54,21 @@ class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInt
         $data = [
             'tabSlug' => $tab,
             'appSlug' => $app,
+            'appOrder' => $order,
         ];
 
         return $this->insert($data);
+    }
+
+    public function addRelated($data)
+    {
+        foreach($data as $tabAppRec)
+        {
+          $returnVal = $this->insert($tabAppRec);
+          var_dump($returnVal);
+        }
+        exit();
+        return (true);
     }
 
     public function correlationExists($tab, $app, $options = [])
@@ -73,6 +85,12 @@ class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInt
             'adapter' => $adapter,
             'exclude' => $clause,
         ]))->isValid($tab);
+    }
+
+    public function deleteRelated($tab)
+    {
+      $returnVal = $this->delete(array('tabSlug' => $tab));
+      return($returnVal);
     }
 
     /**

@@ -25284,6 +25284,28 @@ function () {
       });
     }
   }, {
+    key: "updateRelated",
+    value: function updateRelated(model, id, relationData, callback) {
+      return PortalAPI.request({
+        'm': model,
+        'a': 'updateRelated',
+        'id': id,
+        'data': relationData,
+        'success': function success(data, textStatus, jqXHR) {
+          callback({
+            'data': data,
+            'textStatus': textStatus,
+            'jqXHR': jqXHR
+          }, {
+            'm': model,
+            'a': 'updateRelated',
+            'id': id,
+            'data': relationData
+          });
+        }
+      });
+    }
+  }, {
     key: "view",
     value: function view(model, id, callback) {
       return PortalAPI.request({

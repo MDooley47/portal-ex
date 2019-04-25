@@ -459,14 +459,14 @@
         <div class="col-sm-2">
         </div>
         <div id="appTabButtons" class="col-md-4" style="visibility:hidden">
-          <button class="btn btn-success" id="btnSaveTabApps">Save</button>
-          <button class="btn btn-light" id="btnRevertTabApps">Cancel</button>
+          <button class="btn btn-success" id="btnSaveTabApps" onClick="saveTabApps();">Save</button>
+          <button class="btn btn-light" id="btnRevertTabApps" onClick="appTabSelected();">Cancel</button>
         </div>
       </div>
       <div class="form-row" id="appTabLists" style="visibility:hidden">
         <div class="form-group col-md-4">
           <p>Available Apps:</p>
-          <select id="allApps" class="form-control" size="20" onchange="availableAppSelected();">
+          <select id="allApps" class="form-control" size="20" onchange="addTabApp();">
             <? /* <option value="1">Digital Ocean</option>
             <option value="2">ESU 13</option>
             <option value="3">Gmail</option>
@@ -505,6 +505,9 @@
 
     <script>
 
+      var allApps = [];
+      var tabApps = [];
+
       $(document).ready(function()
       {
         // move this to appTabSelected()?
@@ -524,15 +527,15 @@
         document.getElementById("appTabLists").style.visibility = "hidden";
         document.getElementById("appTabButtons").style.visibility = "hidden";
 
+        allApps.length = 0;
+        tabApps.length = 0;
         var selectedTabSlug = document.getElementById("appTabSelect").value;
-        console.log(selectedTabSlug);
+        // console.log(selectedTabSlug);
         // document.getElementById("appTabTitle").innerHTML = "Tab Selected: " + selectedTabSlug;
         // var x = document.getElementById("appTabSelected");
         // x.style.visibility = "visible";
 
         // get list of all apps
-        var allApps = [];
-        var tabApps = [];
         window.PortalAPI.list('app', (response, request) => {
           if (response.textStatus == 'success')
           {
@@ -544,67 +547,27 @@
             window.PortalAPI.listRelated('tabApps', selectedTabSlug, (response2, request2) => {
               if (response2.textStatus == 'success')
               {
-                for (i=0; i < response2.data.tabapps.length; i++)
+                if (typeof(response2.data.tabapps) != "undefined")
                 {
-                  tabApps[i] = response2.data.tabapps[i];
-                }
-                // filter list of all apps to remove already-selected apps = available apps
-                for (i = 0; i < tabApps.length; i++)
-                {
-                  for (j = 0; j < allApps.length; j++)
+                  for (i=0; i < response2.data.tabapps.length; i++)
                   {
-                    if (allApps[j].slug == tabApps[i].appSlug)
+                    tabApps[i] = response2.data.tabapps[i];
+                  }
+                  // filter list of all apps to remove already-selected apps = available apps
+                  for (i = 0; i < tabApps.length; i++)
+                  {
+                    for (j = 0; j < allApps.length; j++)
                     {
-                      allApps.splice(j, 1);
-                      j--;
+                      if (allApps[j].slug == tabApps[i].appSlug)
+                      {
+                        allApps.splice(j, 1);
+                        j--;
+                      }
                     }
                   }
                 }
 
-                // populate allApps select list
-                var appSelectList = document.getElementById("allApps");
-
-                // empty the select list
-                while (appSelectList.options.length > 0)
-                {
-                  appSelectList.remove(appSelectList.options.length - 1);
-                }
-                // add list of apps from API call
-                for (i=0; i < allApps.length; i++)
-                {
-                  var opt = document.createElement('option');
-                  opt.text = allApps[i].name;
-                  opt.value = allApps[i].slug;
-                  appSelectList.add(opt, null);
-                }
-
-                // selectedApps UL
-                var selectedAppsList = document.getElementById("selectedApps");
-                // remove items
-                if (selectedAppsList)
-                {
-                  while (selectedAppsList.firstChild)
-                  {
-                    selectedAppsList.removeChild(selectedAppsList.firstChild);
-                  }
-                }
-                // populate the list with tabApps
-                for (i=0; i < tabApps.length; i++)
-                {
-                  var li = document.createElement("li");
-                  li.appendChild(document.createTextNode(tabApps[i].name));
-                  var taSpan = document.createElement("span");
-                  taSpan.setAttribute("class","float-right button-group");
-                  var taButton = document.createElement("button");
-                  taButton.setAttribute("class","btn btn-sm btn-danger");
-                  var taButtonText = document.createTextNode("X");
-                  taButton.appendChild(taButtonText);
-                  taSpan.appendChild(taButton);
-                  li.appendChild(taSpan);
-                  li.setAttribute("id", tabApps[i].appSlug);
-                  li.setAttribute("class", "list-group-item");
-                  selectedAppsList.appendChild(li);
-                }
+                rebuildAppLists();
 
                 // show the lists
                 document.getElementById("appTabLists").style.visibility = "visible";
@@ -613,21 +576,161 @@
               }
               else
               {
-                console.log(response2);
+                alert("ERROR: Could not get list of apps on tab");
+                // console.log(response2);
               }
             });
           }
           else
           {
-            console.log(response);
+            alert("ERROR: Could not get list of available apps");
+            // console.log(response);
           }
         });
       }
 
-      function availableAppSelected()
+      function addTabApp()
       {
-        var selectedAppSlug = document.getElementById("allApps").value;
-        console.log(selectedAppSlug);
+        var appSlug = document.getElementById("allApps").value;
+
+        // find app in available list
+        for (i = 0; i < allApps.length; i++)
+        {
+          if (allApps[i].slug == appSlug)
+          {
+            // add to tab apps list
+            var tabApp = {appSlug:appSlug, name:allApps[i].name, appOrder:0};
+            tabApps.push(tabApp);
+
+            // remove from available apps list
+            allApps.splice(i, 1);
+            i--;
+
+            rebuildAppLists();
+          }
+        }
+      }
+
+      function rebuildAppLists()
+      {
+        // sort available apps list
+        allApps.sort( function (a, b)
+        {
+            if (a.name < b.name)
+            {
+              return -1;
+            }
+            if (a.name > b.name)
+            {
+              return 1;
+            }
+            return 0;
+        });
+
+        // populate allApps select list
+        var appSelectList = document.getElementById("allApps");
+
+        // empty the select list
+        while (appSelectList.options.length > 0)
+        {
+          appSelectList.remove(appSelectList.options.length - 1);
+        }
+        // add list of apps from API call
+        for (i=0; i < allApps.length; i++)
+        {
+          var opt = document.createElement('option');
+          opt.text = allApps[i].name;
+          opt.value = allApps[i].slug;
+          appSelectList.add(opt, null);
+        }
+
+        // selectedApps UL
+        var selectedAppsList = document.getElementById("selectedApps");
+        // remove items
+        if (selectedAppsList)
+        {
+          while (selectedAppsList.firstChild)
+          {
+            selectedAppsList.removeChild(selectedAppsList.firstChild);
+          }
+        }
+        // populate the list with tabApps
+        for (i=0; i < tabApps.length; i++)
+        {
+          var li = document.createElement("li");
+          li.appendChild(document.createTextNode(tabApps[i].name));
+          var taSpan = document.createElement("span");
+          taSpan.setAttribute("class","float-right button-group");
+          var taButton = document.createElement("button");
+          taButton.setAttribute("class","btn btn-sm btn-danger");
+          taButton.setAttribute("id", tabApps[i].appSlug);
+          taButton.setAttribute("onClick", "removeTabApp(this.id);");
+          var taButtonText = document.createTextNode("X");
+          taButton.appendChild(taButtonText);
+          taSpan.appendChild(taButton);
+          li.appendChild(taSpan);
+          li.setAttribute("class", "list-group-item");
+          selectedAppsList.appendChild(li);
+        }
+
+      }
+
+      function removeTabApp(appSlug)
+      {
+        // console.log(appSlug);
+
+        // find app in tabApp list
+        for (i = 0; i < tabApps.length; i++)
+        {
+          if (tabApps[i].appSlug == appSlug)
+          {
+            // add to available apps list
+            var availApp = {slug:appSlug, name:tabApps[i].name};
+            allApps.push(availApp);
+
+            // remove from available apps list
+            tabApps.splice(i, 1);
+            i--;
+
+            rebuildAppLists();
+          }
+        }
+      }
+
+      function saveTabApps()
+      {
+        var selectedTabSlug = document.getElementById("appTabSelect").value;
+
+        // read tabApps list
+        var selectedAppsList = document.getElementById("selectedApps");
+        // remove items
+        if (selectedAppsList)
+        {
+          // hide the lists
+          document.getElementById("appTabLists").style.visibility = "hidden";
+          document.getElementById("appTabButtons").style.visibility = "hidden";
+
+          var newTabApps = [];
+          for (i = 0; i < selectedAppsList.childNodes.length; i++)
+          {
+            var tabApp =
+            {
+              appSlug:selectedAppsList.childNodes[i].childNodes[1].childNodes[0].id,
+              tabSlug:selectedTabSlug,
+              appOrder:i
+            }
+            newTabApps[i] = tabApp;
+          }
+          console.log(newTabApps);
+          // submit revised tabApps list to API for update
+          window.PortalAPI.updateRelated('tabApps', selectedTabSlug, newTabApps, (response, request) => {
+            if (response.textStatus != 'success')
+            {
+              alert('ERROR: Tab Layout could not be saved.');
+            }
+            appTabSelected();
+          });
+        }
       }
 
       function showTabLayout()
@@ -663,7 +766,8 @@
           }
           else
           {
-            console.log(response);
+            alert("ERROR: Could not get list of tabs");
+            // console.log(response);
           }
         });
       }
