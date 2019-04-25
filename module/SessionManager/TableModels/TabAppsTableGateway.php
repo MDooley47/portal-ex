@@ -62,13 +62,17 @@ class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInt
 
     public function addRelated($data)
     {
+        $returnVal = 0;
         foreach($data as $tabAppRec)
         {
-          $returnVal = $this->insert($tabAppRec);
-          var_dump($returnVal);
+          $data = [
+            'tabSlug' => $tabAppRec->tabSlug,
+            'appSlug' => $tabAppRec->appSlug,
+            'appOrder' => $tabAppRec->appOrder,
+          ];
+          $returnVal += $this->insert($data);
         }
-        exit();
-        return (true);
+        return ($returnVal);
     }
 
     public function correlationExists($tab, $app, $options = [])

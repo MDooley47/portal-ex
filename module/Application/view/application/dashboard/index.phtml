@@ -485,7 +485,7 @@
         </div>
         <div class="form-group col-md-4">
           <p>Selected Apps:</p>
-          <ul id="selectedApps" class="list-group">
+          <ul id="selectedApps" class="list-group" onClick="showButtons();">
             <? /* <li class="list-group-item" id="1">Gmail
               <span class="float-right button-group">
                 <button type="button" class="btn btn-sm btn-danger">X</button>
@@ -520,6 +520,29 @@
         jQuery('.selectedApps').disableSelection();
         showTabLayout();
       });
+
+      function addTabApp()
+      {
+        var appSlug = document.getElementById("allApps").value;
+
+        // find app in available list
+        for (i = 0; i < allApps.length; i++)
+        {
+          if (allApps[i].slug == appSlug)
+          {
+            // add to tab apps list
+            var tabApp = {appSlug:appSlug, name:allApps[i].name, appOrder:0};
+            tabApps.push(tabApp);
+
+            // remove from available apps list
+            allApps.splice(i, 1);
+            i--;
+
+          }
+        }
+        rebuildAppLists();
+        document.getElementById("appTabButtons").style.visibility = "visible";
+      }
 
       function appTabSelected()
       {
@@ -571,7 +594,7 @@
 
                 // show the lists
                 document.getElementById("appTabLists").style.visibility = "visible";
-                document.getElementById("appTabButtons").style.visibility = "visible";
+                // document.getElementById("appTabButtons").style.visibility = "visible";
 
               }
               else
@@ -587,28 +610,6 @@
             // console.log(response);
           }
         });
-      }
-
-      function addTabApp()
-      {
-        var appSlug = document.getElementById("allApps").value;
-
-        // find app in available list
-        for (i = 0; i < allApps.length; i++)
-        {
-          if (allApps[i].slug == appSlug)
-          {
-            // add to tab apps list
-            var tabApp = {appSlug:appSlug, name:allApps[i].name, appOrder:0};
-            tabApps.push(tabApp);
-
-            // remove from available apps list
-            allApps.splice(i, 1);
-            i--;
-
-            rebuildAppLists();
-          }
-        }
       }
 
       function rebuildAppLists()
@@ -692,9 +693,10 @@
             tabApps.splice(i, 1);
             i--;
 
-            rebuildAppLists();
           }
         }
+        rebuildAppLists();
+        document.getElementById("appTabButtons").style.visibility = "visible";
       }
 
       function saveTabApps()
@@ -721,9 +723,9 @@
             }
             newTabApps[i] = tabApp;
           }
-          console.log(newTabApps);
           // submit revised tabApps list to API for update
-          window.PortalAPI.updateRelated('tabApps', selectedTabSlug, newTabApps, (response, request) => {
+          var jsonTabApps = JSON.stringify(newTabApps);
+          window.PortalAPI.updateRelated('tabApps', selectedTabSlug, jsonTabApps, (response, request) => {
             if (response.textStatus != 'success')
             {
               alert('ERROR: Tab Layout could not be saved.');
@@ -731,6 +733,11 @@
             appTabSelected();
           });
         }
+      }
+
+      function showButtons()
+      {
+          document.getElementById("appTabButtons").style.visibility = "visible";
       }
 
       function showTabLayout()

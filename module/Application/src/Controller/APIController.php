@@ -74,6 +74,7 @@ class APIController extends AbstractActionController
         } elseif (isset($action) && $action == 'delete') {
             $this->deleteModel($content, $model, $id);
         } elseif (isset($action) && $action == 'updaterelated') {
+            $data = json_decode(file_get_contents("php://input"));
             $this->updateRelated($content, $model, $id, $data);
         }
 
