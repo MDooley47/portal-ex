@@ -14,41 +14,37 @@ trait IndexAction
      */
     public function indexAction()
     {
-        $table = $this->getTable('tab');
+      if (!Session::isActive())
+      {
+        // must be logged in
+        return $this->redirect()->toRoute('login');
+      }
 
-        // get provided slug
-        $slug = $this->params()->fromRoute('slug', null);
+      // get provided tab slug
+      $slug = $this->params()->fromRoute('slug', null);
+      if ((!isset($slug)) || false) {
+          return $this->redirect()->toRoute('home');
+      }
 
-        if ((!isset($slug)) || false) {
-            return $this->redirect()->toRoute('home');
-        }
+      if (!Session::hasTabAccess($slug))
+      {
+        // if user isn't allowed on this tab, go to default
+        return $this->redirect()->toRoute('home');
+      }
 
-        if (!$table->tabExists($slug)) {
-            return $this->getResponse()->setStatusCode(404);
-            // abort(404); // abort NOT_FOUND
-        }
+      $table = $this->getTable('tab');
 
-        Session::isActive();
-        if (!$this
-            ->getTable('userPrivileges')
-            ->hasPrivilege(
-                Session::getUser(),
-                'admin',
-                $this->getTable('ownerTabs')
-                    ->getOwner($slug)
-                    ->ownerSlug
-            )) {
-            return $this->getResponse()->setStatusCode(403);
-            // abort(403); // abort FORBIDDEN
-        }
+      if (!$table->tabExists($slug)) {
+          return $this->redirect()->toRoute('home');
+      }
 
-        $user = Session::getUser();
-        $this->layout()->setVariable('themeColor',$user->getThemeColor());
-        $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
-        $this->layout()->setVariable('tabSlug',$slug);
-        
-        return new ViewModel([
-            'apps' => $table->getTab($slug)->getApps(),
-        ]);
+      $user = Session::getUser();
+      $this->layout()->setVariable('themeColor',$user->getThemeColor());
+      $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
+      $this->layout()->setVariable('tabSlug',$slug);
+
+      return new ViewModel([
+          'apps' => $table->getTab($slug)->getApps(),
+      ]);
     }
 }

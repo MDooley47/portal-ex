@@ -71,12 +71,12 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
         $row = $rowset->current();
 
-        if (!$row) {
-            throw new RuntimeException(sprintf(
-                'OwnerTabs could not Find Row with identifier %d of type Tab',
-                $slug
-            ));
-        }
+        // if (!$row) {
+        //     throw new RuntimeException(sprintf(
+        //         'OwnerTabs could not Find Row with identifier %d of type Tab',
+        //         $slug
+        //     ));
+        // }
 
         return $row;
     }

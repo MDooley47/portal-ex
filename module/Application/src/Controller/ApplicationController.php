@@ -36,7 +36,19 @@ class ApplicationController extends AbstractActionController
 
     public function dashboardAction()
     {
-        return (new ViewModel([
+      if (!Session::isActive())
+      {
+        // must be logged in
+        return $this->redirect()->toRoute('login');
+      }
+
+      if (!Session::hasPrivilege('sudo'))
+      {
+        // must have sudo privilege to use the dashboard
+        return $this->redirect()->toRoute('home');
+      }
+
+      return (new ViewModel([
             'forms' => [
                 'user'      => new UserForm(),
                 'group'     => new GroupForm(),

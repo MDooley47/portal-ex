@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use SessionManager\Session;
 use Traits\HasTables;
 use Zend\Http\Headers;
 use Zend\Http\Response;
@@ -28,6 +29,18 @@ class APIController extends AbstractActionController
         $headers = new Headers();
         $headers->addHeaderLine('Content-Type', 'text/json');
         $response->setHeaders($headers);
+        if (!Session::isActive())
+        {
+          // must be logged in
+          $response->setStatusCode(401);
+          return ($response);
+        }
+        if (!Session::hasPrivilege('sudo'))
+        {
+          // must have sudo privilege to use the API
+          $response->setStatusCode(401);
+          return ($response);
+        }
 
         if ($this->getRequest()->isGet()) {
             return $this->handlePost($response);
