@@ -55,6 +55,7 @@ export default class DatatableManager {
         $('button#' + table + '-add').on('click', (e) => {
             const title = DatatableManager.titleCase('add ' + table);
             const message = window.FormBuilder.html(table);
+            var newIcon = false;
 
             bootbox.dialog({
                 'title': title,
@@ -79,9 +80,36 @@ export default class DatatableManager {
                                 let key = elem.attr('id').replace(table + '-input-', '');
                                 data[key] = elem.val();
 
-                                if (! elem[0].checkValidity()) {
+                                if (table == 'app' && key == 'icon')
+                                {
+                                  var iconFile = document.getElementById('app-input-icon').files[0];
+                                  if (iconFile == undefined)
+                                  {
                                     valid = false;
-
+                                    elem.addClass('is-invalid');
+                                  }
+                                  else
+                                  {
+                                    var iconFilter = /^(image\/bmp|image\/gif|image\/jpeg|image\/png|image\/tiff)$/i;
+                                    if (! iconFilter.test(iconFile.type))
+                                    {
+                                      valid = false;
+                                      alert('The icon file is not a supported image type');
+                                      elem.addClass('is-invalid');
+                                    }
+                                    else if (iconFile.size > 1048576) // 1MB
+                                    {
+                                      valid = false;
+                                      alert('The icon file is larger than the allowed size of 1MB');
+                                      elem.addClass('is-invalid');
+                                    }
+                                    else
+                                    {
+                                      newIcon = true;
+                                    }
+                                  }
+                                } else if (! elem[0].checkValidity()) {
+                                    valid = false;
                                     elem.addClass('is-invalid');
                                 } else if (elem.hasClass('is-invalid')) {
                                     elem.removeClass('is-invalid');
@@ -89,6 +117,26 @@ export default class DatatableManager {
                             }
 
                             if (valid) {
+                              if (newIcon)
+                              {
+                                // read the icon file and put it in the dataset before we make the API call
+                                var iconReader = new FileReader();
+                                iconReader.readAsDataURL(iconFile);
+                                iconReader.onload = function ()
+                                {
+                                  data['icon'] = iconReader.result;
+                                  window.PortalAPI.add(table, data, (response, data) => {
+                                      if (window.DEBUG === true) {
+                                          console.log({
+                                              'response': response,
+                                              'data': data
+                                          });
+                                      }
+                                  });
+                                };
+                              }
+                              else
+                              {
                                 window.PortalAPI.add(table, data, (response, data) => {
                                     if (window.DEBUG === true) {
                                         console.log({
@@ -97,6 +145,7 @@ export default class DatatableManager {
                                         });
                                     }
                                 });
+                              }
                             } else return false;
                         }
                     }
@@ -397,6 +446,7 @@ export default class DatatableManager {
     static displayEdit(table, data, slug) {
         const title = DatatableManager.titleCase('edit ' + table);
         const message = window.FormBuilder.html(table, data[table]);
+        var newIcon = false;
 
         bootbox.dialog({
             'title': title,
@@ -428,7 +478,39 @@ export default class DatatableManager {
                             const key = elem.attr('id').replace(table + '-input-', '');
                             data[key] = elem.val();
 
-                            if (! elem[0].checkValidity()) {
+                            if (table == 'app' && key == 'icon')
+                            {
+                              var iconFile = document.getElementById('app-input-icon').files[0];
+                              if (iconFile == undefined)
+                              {
+                                // on edit, it's OK for there to be no icon file attached
+                                // if there isn't one, we keep the current one
+                                if (elem.hasClass('is-invalid'))
+                                {
+                                    elem.removeClass('is-invalid');
+                                }
+                              }
+                              else
+                              {
+                                var iconFilter = /^(image\/bmp|image\/gif|image\/jpeg|image\/png|image\/tiff)$/i;
+                                if (! iconFilter.test(iconFile.type))
+                                {
+                                  valid = false;
+                                  alert('The icon file is not a supported image type');
+                                  elem.addClass('is-invalid');
+                                }
+                                else if (iconFile.size > 1048576) // 1MB
+                                {
+                                  valid = false;
+                                  alert('The icon file is larger than the allowed size of 1MB');
+                                  elem.addClass('is-invalid');
+                                }
+                                else
+                                {
+                                  newIcon = true;
+                                }
+                              }
+                            } else if (! elem[0].checkValidity()) {
                                 valid = false;
 
                                 elem.addClass('is-invalid');
@@ -438,6 +520,26 @@ export default class DatatableManager {
                         }
 
                         if (valid) {
+                          if (newIcon)
+                          {
+                            // read the icon file and put it in the dataset before we make the API call
+                            var iconReader = new FileReader();
+                            iconReader.readAsDataURL(iconFile);
+                            iconReader.onload = function ()
+                            {
+                              data['icon'] = iconReader.result;
+                              window.PortalAPI.edit(table, slug, data, (response, data) => {
+                                  if (window.DEBUG === true) {
+                                      console.log({
+                                          'response': response,
+                                          'data': data
+                                      });
+                                  }
+                              });
+                            };
+                          }
+                          else
+                          {
                             window.PortalAPI.edit(table, slug, data, (response, data) => {
                                 if (window.DEBUG === true) {
                                     console.log({
@@ -446,6 +548,7 @@ export default class DatatableManager {
                                     });
                                 }
                             });
+                          }
                         } else return false;
                     }
                 }

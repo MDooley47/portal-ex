@@ -1,8 +1,7 @@
 <?php
     use SessionManager\Tables;
 
-    $fileElement = $forms['app']->get('icon');
-
+    // $fileElement = $forms['app']->get('icon');
 
     $title = "Admin Dashboard";
     $escaper = new Zend\Escaper\Escaper('utf-8');
@@ -24,20 +23,21 @@
 ?>
 <div class="nav nav-tabs" id="nav-tabs" role="tablist">
   <a class="nav-item nav-link active" id="nav-layout-tab" data-toggle="tab" href="#nav-tab-layout" role="tab" aria-controls="nav-app" aria-selected="true" onclick="showTabLayout(); return true;">Tab Layout</a>
-  <a class="nav-item nav-link" id="nav-user-tab" data-toggle="tab" href="#nav-user" role="tab" aria-controls="nav-user" aria-selected="false">User</a>
+  <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-app" role="tab" aria-controls="nav-app" aria-selected="false" onclick="showAppManager();">Apps</a>
+  <? /* <a class="nav-item nav-link" id="nav-user-tab" data-toggle="tab" href="#nav-user" role="tab" aria-controls="nav-user" aria-selected="false">User</a>
     <a class="nav-item nav-link" id="nav-group-tab" data-toggle="tab" href="#nav-group" role="tab" aria-controls="nav-group" aria-selected="false">Group</a>
     <a class="nav-item nav-link" id="nav-tab-tab" data-toggle="tab" href="#nav-tab" role="tab" aria-controls="nav-tab" aria-selected="false">Tab</a>
-    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-app" role="tab" aria-controls="nav-app" aria-selected="false">App</a>
     <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-attribute" role="tab" aria-controls="nav-app" aria-selected="false">Attribute</a>
     <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-group-type" role="tab" aria-controls="nav-app" aria-selected="false">GroupType</a>
     <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-ip-address" role="tab" aria-controls="nav-app" aria-selected="false">IP Addresses</a>
     <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-owner-type" role="tab" aria-controls="nav-app" aria-selected="false">OwnerType</a>
     <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-privilege" role="tab" aria-controls="nav-app" aria-selected="false">Privilege</a>
+  */ ?>
 </div>
 <div class="tab-content" id="nav-tabContent">
 
 <!-- USER -->
-
+  <? /*
     <div class="tab-pane fade show" id="nav-user" role="tabpanel" aria-labelledby="nav-user-tab">
         <div id="user-list" class="model-list">
             <table class="display" style="width:100%">
@@ -59,7 +59,7 @@
                                 echo "<td class='user-codist'>$user->codist</td>";
                             echo "</tr>";
                         }
-                    */ ?>
+                    */ ?> <? /*
                 </tbody>
                 <tfoot>
                     <tr>
@@ -105,7 +105,7 @@
                             echo "<td class='group-description'>$group->description</td>";
                             echo "</tr>";
                         }
-                    */ ?>
+                    */ ?> <? /*
                 </tbody>
                 <tfoot>
                     <tr>
@@ -152,7 +152,7 @@
                       $tabs[$tabNumber]['name'] = $tab->name;
                       $tabNumber++;
                   }
-                */ ?>
+                */ ?> <? /*
                 </tbody>
                 <tfoot>
                 <tr>
@@ -170,7 +170,7 @@
             <button type="button" class="btn btn-danger" id="tab-delete">Delete</button>
             <button type="button" class="btn btn-success" id="tab-add">Add</button>
         </div>
-    </div>
+    </div> */ ?>
 
 <!-- APP -->
 
@@ -225,7 +225,7 @@
 
 <!-- ATTRIBUTE -->
 
-    <div class="tab-pane fade" id="nav-attribute" role="tabpanel" aria-labelledby="nav-app-tab">
+    <? /* <div class="tab-pane fade" id="nav-attribute" role="tabpanel" aria-labelledby="nav-app-tab">
         <div id="attribute-list" class="model-list">
             <table class="display" style="width:100%">
                 <thead>
@@ -246,7 +246,7 @@
                       echo "<td class='attribute-data'>$attribute->data</td>";
                       echo "</tr>";
                   }
-                */ ?>
+                */ ?> <? /*
                 </tbody>
                 <tfoot>
                 <tr>
@@ -290,7 +290,7 @@
                       echo "<td class='grouptype-level'>$grouptype->level</td>";
                       echo "</tr>";
                   }
-                */ ?>
+                */ ?> <? /*
                 </tbody>
                 <tfoot>
                 <tr>
@@ -334,7 +334,7 @@
                       echo "<td class='ipaddress-description'>$ipaddress->description</td>";
                       echo "</tr>";
                   }
-                */ ?>
+                */ ?> <? /*
                 </tbody>
                 <tfoot>
                 <tr>
@@ -376,7 +376,7 @@
                       echo "<td class='ownertype-description'>$ownertype->description</td>";
                       echo "</tr>";
                   }
-                */ ?>
+                */ ?> <? /*
                 </tbody>
                 <tfoot>
                 <tr>
@@ -419,7 +419,7 @@
                       echo "<td class='privilege-level'>$privilege->level</td>";
                       echo "</tr>";
                   }
-                */ ?>
+                */ ?> <? /*
                 </tbody>
                 <tfoot>
                 <tr>
@@ -438,7 +438,7 @@
             <button type="button" class="btn btn-danger" id="privilege-delete">Delete</button>
             <button type="button" class="btn btn-success" id="privilege-add">Add</button>
         </div>
-    </div>
+    </div> */ ?>
 
 <!-- Tab Layout: sets which apps appear on a tab and their order -->
     <div class="tab-pane fade show active" id="nav-tab-layout" role="tabpanel" aria-labelledby="nav-user-tab" >
@@ -507,6 +507,7 @@
 
       var allApps = [];
       var tabApps = [];
+      var appManagerLoaded = false;
 
       $(document).ready(function()
       {
@@ -732,6 +733,17 @@
             }
             appTabSelected();
           });
+        }
+      }
+
+      function showAppManager()
+      {
+        if (!appManagerLoaded)
+        {// console.log('Apps tab clicked');
+          new window.FormBuilder([['app',2]]);
+          window.DM.addTables([['app', 2]]);
+          window.DM.updateButtons();
+          appManagerLoaded = true;
         }
       }
 

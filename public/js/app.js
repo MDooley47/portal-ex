@@ -25468,8 +25468,7 @@ function () {
   function FormBuilder(models) {
     _classCallCheck(this, FormBuilder);
 
-    FormBuilder.addForms(models);
-    FormBuilder.getGroupTypes();
+    FormBuilder.addForms(models); // FormBuilder.getGroupTypes();
   }
 
   _createClass(FormBuilder, null, [{
@@ -25520,6 +25519,10 @@ function () {
         html += FormBuilder.htmlElement(model, keys[i], element);
       }
 
+      if (model == 'app' && values !== undefined) {
+        html += '<img class="app-image" src="' + values['iconPath'] + '">';
+      }
+
       html += "</div>";
       return html;
     }
@@ -25534,6 +25537,7 @@ function () {
       var value = elem.hasOwnProperty('value') && elem.value !== null && elem.value !== undefined ? elem.value : '';
       var placeholder = elem.hasOwnProperty('placeholder') ? elem.placeholder : '';
       var required = elem.required ? 'required' : '';
+      var readonly = elem.readonly ? 'readonly' : '';
       var classes = 'input_data form-control';
       html += "<div class='input-group mb-2 " + class_name + "'>";
       html += "<div class='input-group-prepend mr-2 pt-1'>";
@@ -25557,19 +25561,19 @@ function () {
         case 'time':
         case 'url':
         case 'week':
-          html += "<input " + "type='" + type + "' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + "class='" + classes + "' " + required + "/>";
+          html += "<input " + "type='" + type + "' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + "class='" + classes + "' " + required + readonly + "/>";
           break;
 
         case 'textarea':
-          html += "<textarea " + "id='" + name + "' " + "name='" + name + "' " + "class='" + classes + "' " + required + ">" + value + "</textarea>";
+          html += "<textarea " + "id='" + name + "' " + "name='" + name + "' " + "class='" + classes + "' " + required + readonly + ">" + value + "</textarea>";
           break;
 
         case 'ip':
-          html += "<input " + "type='text' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$' " + "class='" + classes + "' " + required + "/>";
+          html += "<input " + "type='text' " + "id='" + name + "' " + "name='" + name + "' " + "value='" + value + "' " + "placeholder='" + placeholder + "' " + "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$' " + "class='" + classes + "' " + required + readonly + "/>";
           break;
 
         case 'grouptype':
-          html += "<select " + "class='select2 single grouptype' " + "name='" + name + "' " + "id='" + name + "' " + "class='" + classes + "' " + required + ">" + "<option></option>";
+          html += "<select " + "class='select2 single grouptype' " + "name='" + name + "' " + "id='" + name + "' " + "class='" + classes + "' " + required + readonly + ">" + "<option></option>";
           var types = FormBuilder.groupTypes;
 
           for (var i in types) {
@@ -27471,6 +27475,7 @@ function () {
       $('button#' + table + '-add').on('click', function (e) {
         var title = DatatableManager.titleCase('add ' + table);
         var message = window.FormBuilder.html(table);
+        var newIcon = false;
         bootbox.dialog({
           'title': title,
           'message': message,
@@ -27492,7 +27497,29 @@ function () {
                   var key = elem.attr('id').replace(table + '-input-', '');
                   data[key] = elem.val();
 
-                  if (!elem[0].checkValidity()) {
+                  if (table == 'app' && key == 'icon') {
+                    var iconFile = document.getElementById('app-input-icon').files[0];
+
+                    if (iconFile == undefined) {
+                      valid = false;
+                      elem.addClass('is-invalid');
+                    } else {
+                      var iconFilter = /^(image\/bmp|image\/gif|image\/jpeg|image\/png|image\/tiff)$/i;
+
+                      if (!iconFilter.test(iconFile.type)) {
+                        valid = false;
+                        alert('The icon file is not a supported image type');
+                        elem.addClass('is-invalid');
+                      } else if (iconFile.size > 1048576) // 1MB
+                        {
+                          valid = false;
+                          alert('The icon file is larger than the allowed size of 1MB');
+                          elem.addClass('is-invalid');
+                        } else {
+                        newIcon = true;
+                      }
+                    }
+                  } else if (!elem[0].checkValidity()) {
                     valid = false;
                     elem.addClass('is-invalid');
                   } else if (elem.hasClass('is-invalid')) {
@@ -27501,14 +27528,32 @@ function () {
                 }
 
                 if (valid) {
-                  window.PortalAPI.add(table, data, function (response, data) {
-                    if (window.DEBUG === true) {
-                      console.log({
-                        'response': response,
-                        'data': data
+                  if (newIcon) {
+                    // read the icon file and put it in the dataset before we make the API call
+                    var iconReader = new FileReader();
+                    iconReader.readAsDataURL(iconFile);
+
+                    iconReader.onload = function () {
+                      data['icon'] = iconReader.result;
+                      window.PortalAPI.add(table, data, function (response, data) {
+                        if (window.DEBUG === true) {
+                          console.log({
+                            'response': response,
+                            'data': data
+                          });
+                        }
                       });
-                    }
-                  });
+                    };
+                  } else {
+                    window.PortalAPI.add(table, data, function (response, data) {
+                      if (window.DEBUG === true) {
+                        console.log({
+                          'response': response,
+                          'data': data
+                        });
+                      }
+                    });
+                  }
                 } else return false;
               }
             }
@@ -27838,6 +27883,7 @@ function () {
     value: function displayEdit(table, data, slug) {
       var title = DatatableManager.titleCase('edit ' + table);
       var message = window.FormBuilder.html(table, data[table]);
+      var newIcon = false;
       bootbox.dialog({
         'title': title,
         'message': message,
@@ -27866,7 +27912,32 @@ function () {
                 var key = elem.attr('id').replace(table + '-input-', '');
                 data[key] = elem.val();
 
-                if (!elem[0].checkValidity()) {
+                if (table == 'app' && key == 'icon') {
+                  var iconFile = document.getElementById('app-input-icon').files[0];
+
+                  if (iconFile == undefined) {
+                    // on edit, it's OK for there to be no icon file attached
+                    // if there isn't one, we keep the current one
+                    if (elem.hasClass('is-invalid')) {
+                      elem.removeClass('is-invalid');
+                    }
+                  } else {
+                    var iconFilter = /^(image\/bmp|image\/gif|image\/jpeg|image\/png|image\/tiff)$/i;
+
+                    if (!iconFilter.test(iconFile.type)) {
+                      valid = false;
+                      alert('The icon file is not a supported image type');
+                      elem.addClass('is-invalid');
+                    } else if (iconFile.size > 1048576) // 1MB
+                      {
+                        valid = false;
+                        alert('The icon file is larger than the allowed size of 1MB');
+                        elem.addClass('is-invalid');
+                      } else {
+                      newIcon = true;
+                    }
+                  }
+                } else if (!elem[0].checkValidity()) {
                   valid = false;
                   elem.addClass('is-invalid');
                 } else if (elem.hasClass('is-invalid')) {
@@ -27875,14 +27946,32 @@ function () {
               }
 
               if (valid) {
-                window.PortalAPI.edit(table, slug, data, function (response, data) {
-                  if (window.DEBUG === true) {
-                    console.log({
-                      'response': response,
-                      'data': data
+                if (newIcon) {
+                  // read the icon file and put it in the dataset before we make the API call
+                  var iconReader = new FileReader();
+                  iconReader.readAsDataURL(iconFile);
+
+                  iconReader.onload = function () {
+                    data['icon'] = iconReader.result;
+                    window.PortalAPI.edit(table, slug, data, function (response, data) {
+                      if (window.DEBUG === true) {
+                        console.log({
+                          'response': response,
+                          'data': data
+                        });
+                      }
                     });
-                  }
-                });
+                  };
+                } else {
+                  window.PortalAPI.edit(table, slug, data, function (response, data) {
+                    if (window.DEBUG === true) {
+                      console.log({
+                        'response': response,
+                        'data': data
+                      });
+                    }
+                  });
+                }
               } else return false;
             }
           }

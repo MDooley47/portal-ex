@@ -4,7 +4,7 @@ class FormBuilder {
 
     constructor(models) {
         FormBuilder.addForms(models);
-        FormBuilder.getGroupTypes();
+        // FormBuilder.getGroupTypes();
     }
 
     static addForms(models) {
@@ -53,6 +53,10 @@ class FormBuilder {
             html += FormBuilder.htmlElement(model, keys[i], element);
         }
 
+        if (model == 'app' && values !== undefined)
+        {
+          html += '<img class="app-image" src="' + values['iconPath'] + '">';
+        }
         html += "</div>";
 
         return html;
@@ -67,6 +71,7 @@ class FormBuilder {
         const value = (elem.hasOwnProperty('value') && (elem.value !== null) && (elem.value !== undefined)) ? elem.value : '';
         const placeholder = (elem.hasOwnProperty('placeholder')) ? elem.placeholder : '';
         const required = (elem.required) ? 'required' : '';
+        const readonly = (elem.readonly) ? 'readonly' : '';
         const classes = 'input_data form-control';
         html += "<div class='input-group mb-2 " + class_name + "'>";
             html += "<div class='input-group-prepend mr-2 pt-1'>";
@@ -92,6 +97,7 @@ class FormBuilder {
                         "placeholder='" + placeholder + "' " +
                         "class='" + classes + "' " +
                         required +
+                        readonly +
                     "/>";
                 break;
             case 'textarea':
@@ -101,6 +107,7 @@ class FormBuilder {
                         "name='" + name + "' " +
                         "class='" + classes + "' " +
                         required +
+                        readonly +
                     ">" +
                         value +
                     "</textarea>";
@@ -116,6 +123,7 @@ class FormBuilder {
                         "pattern='^([0-9]{1,3}\.){3}[0-9]{1,3}$' " +
                         "class='" + classes + "' " +
                         required +
+                        readonly +
                     "/>";
                 break;
             case 'grouptype':
@@ -126,6 +134,7 @@ class FormBuilder {
                         "id='" + name + "' " +
                         "class='" + classes + "' " +
                         required +
+                        readonly +
                     ">" +
                         "<option></option>";
                 let types = FormBuilder.groupTypes;

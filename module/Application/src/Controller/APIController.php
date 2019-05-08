@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use App\Model\App;
 use SessionManager\Session;
 use Traits\HasTables;
 use Zend\Http\Headers;
@@ -151,6 +152,12 @@ class APIController extends AbstractActionController
     {
         $content['success'] = true;
 
+        if ($model == 'app') {
+            $data['iconPath'] = App::saveIconFromBase64($data['icon']);
+            $data['version'] = $data['version'] ?? 0;
+            unset($data['icon']);
+        }
+
         try {
             $table = guaranteeUniversalTableGateway($this->getTable($model));
             $added = $table->add($data);
@@ -168,14 +175,20 @@ class APIController extends AbstractActionController
 
     public function editModel(&$content, $m, $id, $data)
     {
-        $table = $this->getTable($m);
-        $model = $table->get($id);
+      if ($m == 'app' && !empty($data['icon'])) {
+          $data['iconPath'] = App::saveIconFromBase64($data['icon']);
+          $data['version'] = $data['version'] ?? 0;
+          unset($data['icon']);
+      }
 
-        $model->exchangeArray($data);
+      $table = $this->getTable($m);
+      $model = $table->get($id);
 
-        $table->save($model);
+      $model->exchangeArray($data);
+      $model->slug = $id;
+      $table->save($model);
 
-        $content[$m] = $model->getArrayCopy();
+      $content[$m] = $model->getArrayCopy();
     }
 
     public function formModel(&$content, $m)
