@@ -27828,8 +27828,8 @@ function () {
 
           case 'app':
             delete data[name][keys[i]].version;
+            data[name][keys[i]].icon = data[name][keys[i]].iconPath;
             delete data[name][keys[i]].iconPath;
-            data[name][keys[i]].icon = "/dashboard/app/icon/" + data[name][keys[i]].slug;
             order = ['slug', 'icon', 'name', 'url'];
             break;
         }
@@ -27864,7 +27864,7 @@ function () {
               break;
 
             case 'icon':
-              html += "<img src='" + _value + "' alt='' height='30px' width='30px'/>";
+              html += "<img src='" + _value + "' alt='' class='app-list-icon' />";
               break;
 
             default:

@@ -11690,6 +11690,13 @@ body {
 
 /** Application Grid **/
 
+.app-list-icon {
+  height: auto;
+  width: auto;
+  max-height: 30px;
+  max-width: 30px;
+}
+
 .app-tile {
   background-color: var(--color-app-bg);
   height: 100px;
