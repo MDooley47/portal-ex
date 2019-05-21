@@ -48,6 +48,10 @@ class ApplicationController extends AbstractActionController
         return $this->redirect()->toRoute('home');
       }
 
+      $user = Session::getUser();
+      $this->layout()->setVariable('themeColor',$user->getThemeColor());
+      $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
+
       return (new ViewModel([
             // 'forms' => [
                 // 'user'      => new UserForm(),

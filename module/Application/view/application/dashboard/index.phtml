@@ -738,9 +738,12 @@
 
       function showAppManager()
       {
-        new window.FormBuilder([['app',2]]);
-        window.DM.addTables([['app', 2]]);
-        appManagerLoaded = true;
+        if (!appManagerLoaded)
+        {
+          new window.FormBuilder([['app',2]]);
+          window.DM.addTables([['app', 2]]);
+          appManagerLoaded = true;
+        }
       }
 
       function showButtons()
