@@ -51,6 +51,8 @@ class ApplicationController extends AbstractActionController
       $user = Session::getUser();
       $this->layout()->setVariable('themeColor',$user->getThemeColor());
       $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
+      $this->layout()->setVariable('sudo',true);
+      $this->layout()->setVariable('tabSlug','dashboard');
 
       return (new ViewModel([
             // 'forms' => [
@@ -107,6 +109,11 @@ class ApplicationController extends AbstractActionController
             $this->layout()->setVariable('themeColor',$user->getThemeColor());
             $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
             $this->layout()->setVariable('tabSlug',$tab->slug);
+
+            if (Session::hasPrivilege('sudo'))
+            {
+              $this->layout()->setVariable('sudo', true);
+            }
 
             return (new ViewModel([
                 'apps' => $apps,

@@ -147,6 +147,17 @@
                       endforeach;
                     }
                   endforeach;
+                  if ($this->sudo)
+                  {
+                    if ($this->tabSlug == 'dashboard')
+                    { ?>
+                      <a class="nav-link active" href="<?= $this->url('dashboard') ?>">Admin</a>
+                    <? }
+                    else
+                    { ?>
+                      <a class="nav-link" href="<?= $this->url('dashboard') ?>">Admin</a>
+                    <? }
+                  }
               ?>
             </nav>
         </header>

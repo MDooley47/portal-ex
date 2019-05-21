@@ -42,6 +42,10 @@ trait IndexAction
       $this->layout()->setVariable('themeColor',$user->getThemeColor());
       $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
       $this->layout()->setVariable('tabSlug',$slug);
+      if (Session::hasPrivilege('sudo'))
+      {
+        $this->layout()->setVariable('sudo', true);
+      }
 
       return new ViewModel([
           'apps' => $table->getTab($slug)->getApps(),
