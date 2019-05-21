@@ -3,6 +3,10 @@
 namespace Privilege\Model;
 
 use DomainException;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use Privilege\InputFilter\NameFilter;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
@@ -11,36 +15,26 @@ use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class Privilege implements HasSlugInterface
+class Privilege extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
-    /**
-     * Privilege's id found in the db.
-     *
-     * @var int
-     */
-    public $id;
+    use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
 
-    /**
-     * Privilege's description.
-     *
-     * @var string
-     */
-    public $description;
-
-    /**
-     * Privilege's name.
-     *
-     * @var string
-     */
-    public $name;
-
-    /**
-     * Privilege's level.
-     *
-     * @var int
-     */
-    public $level;
+    public static $primaryKey = 'slug';
+    protected static $table = 'privileges';
+    public static $form = [
+        'name' => [
+            'type'     => 'text',
+            'required' => true,
+        ],
+        'description' => [
+            'type'     => 'textarea',
+            'required' => false,
+        ],
+        'level' => [
+            'type'     => 'number',
+            'required' => true,
+        ],
+    ];
 
     /**
      * Privilege's inputFilter.
@@ -65,7 +59,6 @@ class Privilege implements HasSlugInterface
     public function getArrayCopy()
     {
         return [
-            'id'          => $this->id,
             'slug'        => $this->slug,
             'name'        => $this->name,
             'description' => $this->description,

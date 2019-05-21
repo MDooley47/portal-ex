@@ -3,6 +3,10 @@
 namespace OwnerType\Model;
 
 use DomainException;
+use Model\Concerns\QueryBuilder;
+use Model\Concerns\QuickModelBoot as Boot;
+use Model\Contracts\Bootable;
+use Model\Model;
 use OwnerType\InputFilter\NameFilter;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
@@ -11,21 +15,27 @@ use Traits\Models\HasSlug;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
-class OwnerType implements HasSlugInterface
+class OwnerType extends Model implements HasSlugInterface, Bootable
 {
-    use HasSlug, HasGuarded, ExchangeArray;
-    /**
-     * Int for OwnerType's id found in the db.
-     */
+    use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+
     public $id;
-    /**
-     * String for OwnerType's name.
-     */
+    public $slug;
     public $name;
-    /**
-     * String for OwnerType's description.
-     */
     public $description;
+
+    public static $primaryKey = 'slug';
+    protected static $table = 'ownerTypes';
+    public static $form = [
+        'name' => [
+            'type'     => 'text',
+            'required' => true,
+        ],
+        'description' => [
+            'type'     => 'textarea',
+            'required' => false,
+        ],
+    ];
 
     /**
      * InputFilter for OwnerType's inputFilter.
@@ -38,6 +48,14 @@ class OwnerType implements HasSlugInterface
     protected static $guarded = [
         'slug',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+      $this->slug = $attributes[0]['slug'];
+      $this->name = $attributes[0]['name'];
+      $this->description = $attributes[0]['description'];
+
+    }
 
     /**
      * Get app values as array.

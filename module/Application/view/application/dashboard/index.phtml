@@ -1,0 +1,794 @@
+<?php
+    use SessionManager\Tables;
+
+    // $fileElement = $forms['app']->get('icon');
+
+    $title = "Admin Dashboard";
+    $escaper = new Zend\Escaper\Escaper('utf-8');
+    $this->headTitle($title);
+
+    $this->headLink()
+        ->prependStylesheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css')
+        ->prependStylesheet('https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css')
+        ->prependStylesheet('https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css');
+
+    $this->headScript()
+        ->prependFile('https://code.jquery.com/ui/1.12.1/jquery-ui.js')
+        //->prependFile('https://code.jquery.com/jquery-1.12.4.js')
+        ->prependFile('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js')
+        ->prependFile('https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js');
+
+    $tables = new Tables();
+
+?>
+<div class="nav nav-tabs" id="nav-tabs" role="tablist">
+  <a class="nav-item nav-link active" id="nav-layout-tab" data-toggle="tab" href="#nav-tab-layout" role="tab" aria-controls="nav-app" aria-selected="true" onclick="showTabLayout(); return true;">Tab Layout</a>
+  <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-app" role="tab" aria-controls="nav-app" aria-selected="false" onclick="showAppManager();">Apps</a>
+  <? /* <a class="nav-item nav-link" id="nav-user-tab" data-toggle="tab" href="#nav-user" role="tab" aria-controls="nav-user" aria-selected="false">User</a>
+    <a class="nav-item nav-link" id="nav-group-tab" data-toggle="tab" href="#nav-group" role="tab" aria-controls="nav-group" aria-selected="false">Group</a>
+    <a class="nav-item nav-link" id="nav-tab-tab" data-toggle="tab" href="#nav-tab" role="tab" aria-controls="nav-tab" aria-selected="false">Tab</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-attribute" role="tab" aria-controls="nav-app" aria-selected="false">Attribute</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-group-type" role="tab" aria-controls="nav-app" aria-selected="false">GroupType</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-ip-address" role="tab" aria-controls="nav-app" aria-selected="false">IP Addresses</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-owner-type" role="tab" aria-controls="nav-app" aria-selected="false">OwnerType</a>
+    <a class="nav-item nav-link" id="nav-app-tab" data-toggle="tab" href="#nav-privilege" role="tab" aria-controls="nav-app" aria-selected="false">Privilege</a>
+  */ ?>
+</div>
+<div class="tab-content" id="nav-tabContent">
+
+<!-- USER -->
+  <? /*
+    <div class="tab-pane fade show" id="nav-user" role="tabpanel" aria-labelledby="nav-user-tab">
+        <div id="user-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Slug</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th><abbr title="County District Number">CDN</abbr></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php /*
+                        foreach($tables->getTable('user')->fetchAll() as $user) {
+                            echo "<tr id='user-$user->slug' class='user-row'>";
+                                echo "<td class='user-slug'>$user->slug</td>";
+                                echo "<td class='user-name'>$user->name</td>";
+                                echo "<td class='user-email'>$user->email</td>";
+                                echo "<td class='user-codist'>$user->codist</td>";
+                            echo "</tr>";
+                        }
+                    */ ?> <? /*
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Slug</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th><abbr title="County District Number">Codist</abbr></th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="user-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="user-select">Select All</button>
+            <button type="button" class="btn btn-info" id="user-info">Info</button>
+            <button type="button" class="btn btn-warning" id="user-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="user-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="user-add">Add</button>
+        </div>
+    </div>
+
+<!-- GROUP -->
+
+
+    <div class="tab-pane fade" id="nav-group" role="tabpanel" aria-labelledby="nav-group-tab">
+        <div id="group-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>GroupType</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                    <?php /*
+
+                        foreach($tables->getTable('group')->fetchAll() as $group) {
+                            echo "<tr id='group-$group->slug' class='group-row'>";
+                            echo "<td class='group-slug'>$group->slug</td>";
+                            echo "<td class='group-grouptype'>$group->groupType</td>";
+                            echo "<td class='group-name'>$group->name</td>";
+                            echo "<td class='group-description'>$group->description</td>";
+                            echo "</tr>";
+                        }
+                    */ ?> <? /*
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th>Slug</th>
+                        <th>GroupType</th>
+                        <th>Name</th>
+                        <th>Description</th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="group-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="group-select">Select All</button>
+            <button type="button" class="btn btn-info" id="group-info">Info</button>
+            <button type="button" class="btn btn-warning" id="group-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="group-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="group-add">Add</button>
+        </div>
+    </div>
+
+<!-- TAB -->
+
+    <div class="tab-pane fade" id="nav-tab" role="tabpanel" aria-labelledby="nav-tab-tab">
+        <div id="tab-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /*
+                  $tabs = array();
+                  $tabNumber = 0;
+                  foreach($tables->getTable('tab')->fetchAll() as $tab) {
+                      echo "<tr id='tab-$tab->slug' class='tab-row'>";
+                      echo "<td class='tab-slug'>$tab->slug</td>";
+                      echo "<td class='tab-name'>$tab->name</td>";
+                      echo "<td class='tab-description'>$tab->description</td>";
+                      echo "</tr>";
+                      $tabs[$tabNumber]['slug'] = $tab->slug;
+                      $tabs[$tabNumber]['name'] = $tab->name;
+                      $tabNumber++;
+                  }
+                */ ?> <? /*
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="tab-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="tab-select">Select All</button>
+            <button type="button" class="btn btn-info" id="tab-info">Info</button>
+            <button type="button" class="btn btn-warning" id="tab-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="tab-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="tab-add">Add</button>
+        </div>
+    </div> */ ?>
+
+<!-- APP -->
+
+    <div class="tab-pane fade" id="nav-app" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="app-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Icon</th>
+                    <th>Name</th>
+                    <th>Url</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /*
+                  $apps = array();
+                  $appNumber = 0;
+                  foreach($tables->getTable('app')->fetchAll() as $app) {
+                      $icon_url = $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
+                          "?v=" . (int) $app->version;
+                      echo "<tr id='app-$app->slug' class='app-row'>";
+                      echo "<td class='app-slug'>$app->slug</td>";
+                      echo "<td class='app-icon'><img src='$icon_url' alt='' height='30px' width='30px'></td>";
+                      echo "<td class='app-name'>$app->name</td>";
+                      echo "<td class='app-url'>$app->url</td>";
+                      echo "</tr>";
+                      $apps[$tabNumber]['slug'] = $app->slug;
+                      $apps[$tabNumber]['name'] = $app->name;
+                      $appNumber++;
+                  }
+                */ ?>
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Icon</th>
+                    <th>Name</th>
+                    <th>Url</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="app-btns" class="table-btns">
+            <!-- <button type="button" class="btn btn-primary" id="app-select">Select All</button> -->
+            <button type="button" class="btn btn-info disabled" id="app-info">Info</button>
+            <button type="button" class="btn btn-warning disabled" id="app-edit">Edit</button>
+            <button type="button" class="btn btn-danger disabled" id="app-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="app-add">Add</button>
+        </div>
+    </div>
+
+<!-- ATTRIBUTE -->
+
+    <? /* <div class="tab-pane fade" id="nav-attribute" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="attribute-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Data</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /*
+                  foreach($tables->getTable('attribute')->fetchAll() as $attribute) {
+                      echo "<tr id='attribute-$attribute->slug' class='attribute-row'>";
+                      echo "<td class='attribute-slug'>$attribute->slug</td>";
+                      echo "<td class='attribute-name'>$attribute->name</td>";
+                      echo "<td class='attribute-description'>$attribute->description</td>";
+                      echo "<td class='attribute-data'>$attribute->data</td>";
+                      echo "</tr>";
+                  }
+                */ ?> <? /*
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Data</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="attribute-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="attribute-select">Select All</button>
+            <button type="button" class="btn btn-info" id="attribute-info">Info</button>
+            <button type="button" class="btn btn-warning" id="attribute-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="attribute-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="attribute-add">Add</button>
+        </div>
+    </div>
+
+<!-- GROUP-TYPE -->
+
+    <div class="tab-pane fade" id="nav-group-type" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="grouptype-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /*
+                  foreach($tables->getTable('grouptype')->fetchAll() as $grouptype) {
+                      echo "<tr id='grouptype-$grouptype->slug' class='grouptype-row'>";
+                      echo "<td class='grouptype-slug'>$grouptype->slug</td>";
+                      echo "<td class='grouptype-name'>$grouptype->name</td>";
+                      echo "<td class='grouptype-description'>$grouptype->description</td>";
+                      echo "<td class='grouptype-level'>$grouptype->level</td>";
+                      echo "</tr>";
+                  }
+                */ ?> <? /*
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="grouptype-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="grouptype-select">Select All</button>
+            <button type="button" class="btn btn-info" id="grouptype-info">Info</button>
+            <button type="button" class="btn btn-warning" id="grouptype-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="grouptype-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="grouptype-add">Add</button>
+        </div>
+    </div>
+
+<!-- IP-ADDRESS -->
+
+    <div class="tab-pane fade" id="nav-ip-address" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="ipaddress-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>IP</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /*
+                  foreach($tables->getTable('ipaddress')->fetchAll() as $ipaddress) {
+                      echo "<tr id='ipaddress-$ipaddress->slug' class='ipaddress-row'>";
+                      echo "<td class='ipaddress-slug'>$ipaddress->slug</td>";
+                      echo "<td class='ipaddress-name'>$ipaddress->name</td>";
+                      echo "<td class='ipaddress-ip'>$ipaddress->ip</td>";
+                      echo "<td class='ipaddress-description'>$ipaddress->description</td>";
+                      echo "</tr>";
+                  }
+                */ ?> <? /*
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>IP</th>
+                    <th>Description</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="ipaddress-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="ipaddress-select">Select All</button>
+            <button type="button" class="btn btn-info" id="ipaddress-info">Info</button>
+            <button type="button" class="btn btn-warning" id="ipaddress-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="ipaddress-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="ipaddress-add">Add</button>
+        </div>
+    </div>
+
+<!-- OWNER-TYPE -->
+
+    <div class="tab-pane fade" id="nav-owner-type" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="ownertype-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /*
+                  foreach($tables->getTable('ownertype')->fetchAll() as $ownertype) {
+                      echo "<tr id='ownertype-$ownertype->slug' class='ownertype-row'>";
+                      echo "<td class='ownertype-slug'>$ownertype->slug</td>";
+                      echo "<td class='ownertype-name'>$ownertype->name</td>";
+                      echo "<td class='ownertype-description'>$ownertype->description</td>";
+                      echo "</tr>";
+                  }
+                */ ?> <? /*
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="ownertype-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="ownertype-select">Select All</button>
+            <button type="button" class="btn btn-info" id="ownertype-info">Info</button>
+            <button type="button" class="btn btn-warning" id="ownertype-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="ownertype-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="ownertype-add">Add</button>
+        </div>
+    </div>
+
+<!-- PRIVILEGE -->
+
+    <div class="tab-pane fade" id="nav-privilege" role="tabpanel" aria-labelledby="nav-app-tab">
+        <div id="privilege-list" class="model-list">
+            <table class="display" style="width:100%">
+                <thead>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                </tr>
+                </thead>
+                <tbody>
+                <?php /*
+                  foreach($tables->getTable('privilege')->fetchAll() as $privilege) {
+                      echo "<tr id='privilege-$privilege->slug' class='privilege-row'>";
+                      echo "<td class='privilege-slug'>$privilege->slug</td>";
+                      echo "<td class='privilege-name'>$privilege->name</td>";
+                      echo "<td class='privilege-description'>$privilege->description</td>";
+                      echo "<td class='privilege-level'>$privilege->level</td>";
+                      echo "</tr>";
+                  }
+                */ ?> <? /*
+                </tbody>
+                <tfoot>
+                <tr>
+                    <th>Slug</th>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th>Level</th>
+                </tr>
+                </tfoot>
+            </table>
+        </div>
+        <div id="privilege-btns" class="table-btns">
+            <button type="button" class="btn btn-primary" id="privilege-select">Select All</button>
+            <button type="button" class="btn btn-info" id="privilege-info">Info</button>
+            <button type="button" class="btn btn-warning" id="privilege-edit">Edit</button>
+            <button type="button" class="btn btn-danger" id="privilege-delete">Delete</button>
+            <button type="button" class="btn btn-success" id="privilege-add">Add</button>
+        </div>
+    </div> */ ?>
+
+<!-- Tab Layout: sets which apps appear on a tab and their order -->
+    <div class="tab-pane fade show active" id="nav-tab-layout" role="tabpanel" aria-labelledby="nav-user-tab" >
+      <h2>Tab Layout Manager</h2>
+      <div class="form-row">
+        <div class="form-group col-md-4">
+          <label for="appTabSelect">Tab:</label>
+          <select class="form-control" id="appTabSelect" onchange="if (this.selectedIndex) appTabSelected();">
+            <option value="0">Select a Tab...</option>
+            <? /*
+              foreach ($tabs as $tab)
+              { ?>
+                <option value="<? //echo $tab['slug'] ?>"><? //echo $tab['name'] ?></option>
+              <? }
+            */ ?>
+          </select>
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div id="appTabButtons" class="col-md-4" style="visibility:hidden">
+          <button class="btn btn-success" id="btnSaveTabApps" onClick="saveTabApps();">Save</button>
+          <button class="btn btn-light" id="btnRevertTabApps" onClick="appTabSelected();">Cancel</button>
+        </div>
+      </div>
+      <div class="form-row" id="appTabLists" style="visibility:hidden">
+        <div class="form-group col-md-4">
+          <p>Available Apps:</p>
+          <select id="allApps" class="form-control" size="20" onchange="addTabApp();">
+            <? /* <option value="1">Digital Ocean</option>
+            <option value="2">ESU 13</option>
+            <option value="3">Gmail</option>
+            <option value="4">Google Docs</option>
+            <option value="5">Google Drive</option>
+            <option value="6">Learn360</option>
+            <option value="7">TestWiz</option>
+            <option value="8">Ubuntu</option>
+            <option value="9">UNOmaha</option> */ ?>
+          </select>
+          <ul>
+            <li>Click an app to add it to the tab layout.</li>
+          </ul>
+        </div>
+        <div class="col-sm-2">
+        </div>
+        <div class="form-group col-md-4">
+          <p>Selected Apps:</p>
+          <ul id="selectedApps" class="list-group" onClick="showButtons();">
+            <? /* <li class="list-group-item" id="1">Gmail
+              <span class="float-right button-group">
+                <button type="button" class="btn btn-sm btn-danger">X</button>
+              </span>
+            </li>
+            <li class="list-group-item" id="2">Learn360</li>
+            <li class="list-group-item" id="3">UNOmaha</li> */ ?>
+          </ul>
+          <ul>
+            <li>Drag an app to set the order it will appear on the tab. </li>
+            <li>Click the red X to remove an app from the tab. </li>
+            <li>When you are finished, click Save to commit the changes.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <script>
+
+      var allApps = [];
+      var tabApps = [];
+      var appManagerLoaded = false;
+
+      $(document).ready(function()
+      {
+        // move this to appTabSelected()?
+        jQuery('#selectedApps').sortable(
+        {
+          axis: 'y',
+          delay: 100,
+          revert: 300
+        });
+        jQuery('.selectedApps').disableSelection();
+        showTabLayout();
+      });
+
+      function addTabApp()
+      {
+        var appSlug = document.getElementById("allApps").value;
+
+        // find app in available list
+        for (i = 0; i < allApps.length; i++)
+        {
+          if (allApps[i].slug == appSlug)
+          {
+            // add to tab apps list
+            var tabApp = {appSlug:appSlug, name:allApps[i].name, appOrder:0};
+            tabApps.push(tabApp);
+
+            // remove from available apps list
+            allApps.splice(i, 1);
+            i--;
+
+          }
+        }
+        rebuildAppLists();
+        document.getElementById("appTabButtons").style.visibility = "visible";
+      }
+
+      function appTabSelected()
+      {
+        // hide the lists
+        document.getElementById("appTabLists").style.visibility = "hidden";
+        document.getElementById("appTabButtons").style.visibility = "hidden";
+
+        allApps.length = 0;
+        tabApps.length = 0;
+        var selectedTabSlug = document.getElementById("appTabSelect").value;
+        // console.log(selectedTabSlug);
+        // document.getElementById("appTabTitle").innerHTML = "Tab Selected: " + selectedTabSlug;
+        // var x = document.getElementById("appTabSelected");
+        // x.style.visibility = "visible";
+
+        // get list of all apps
+        window.PortalAPI.list('app', (response, request) => {
+          if (response.textStatus == 'success')
+          {
+            for (i=0; i < response.data.apps.length; i++)
+            {
+              allApps[i] = response.data.apps[i];
+            }
+            // get list of tabApps for this tab
+            window.PortalAPI.listRelated('tabApps', selectedTabSlug, (response2, request2) => {
+              if (response2.textStatus == 'success')
+              {
+                if (typeof(response2.data.tabapps) != "undefined")
+                {
+                  for (i=0; i < response2.data.tabapps.length; i++)
+                  {
+                    tabApps[i] = response2.data.tabapps[i];
+                  }
+                  // filter list of all apps to remove already-selected apps = available apps
+                  for (i = 0; i < tabApps.length; i++)
+                  {
+                    for (j = 0; j < allApps.length; j++)
+                    {
+                      if (allApps[j].slug == tabApps[i].appSlug)
+                      {
+                        allApps.splice(j, 1);
+                        j--;
+                      }
+                    }
+                  }
+                }
+
+                rebuildAppLists();
+
+                // show the lists
+                document.getElementById("appTabLists").style.visibility = "visible";
+                // document.getElementById("appTabButtons").style.visibility = "visible";
+
+              }
+              else
+              {
+                alert("ERROR: Could not get list of apps on tab");
+                // console.log(response2);
+              }
+            });
+          }
+          else
+          {
+            alert("ERROR: Could not get list of available apps");
+            // console.log(response);
+          }
+        });
+      }
+
+      function rebuildAppLists()
+      {
+        // sort available apps list
+        allApps.sort( function (a, b)
+        {
+            if (a.name < b.name)
+            {
+              return -1;
+            }
+            if (a.name > b.name)
+            {
+              return 1;
+            }
+            return 0;
+        });
+
+        // populate allApps select list
+        var appSelectList = document.getElementById("allApps");
+
+        // empty the select list
+        while (appSelectList.options.length > 0)
+        {
+          appSelectList.remove(appSelectList.options.length - 1);
+        }
+        // add list of apps from API call
+        for (i=0; i < allApps.length; i++)
+        {
+          var opt = document.createElement('option');
+          opt.text = allApps[i].name;
+          opt.value = allApps[i].slug;
+          appSelectList.add(opt, null);
+        }
+
+        // selectedApps UL
+        var selectedAppsList = document.getElementById("selectedApps");
+        // remove items
+        if (selectedAppsList)
+        {
+          while (selectedAppsList.firstChild)
+          {
+            selectedAppsList.removeChild(selectedAppsList.firstChild);
+          }
+        }
+        // populate the list with tabApps
+        for (i=0; i < tabApps.length; i++)
+        {
+          var li = document.createElement("li");
+          li.appendChild(document.createTextNode(tabApps[i].name));
+          var taSpan = document.createElement("span");
+          taSpan.setAttribute("class","float-right button-group");
+          var taButton = document.createElement("button");
+          taButton.setAttribute("class","btn btn-sm btn-danger");
+          taButton.setAttribute("id", tabApps[i].appSlug);
+          taButton.setAttribute("onClick", "removeTabApp(this.id);");
+          var taButtonText = document.createTextNode("X");
+          taButton.appendChild(taButtonText);
+          taSpan.appendChild(taButton);
+          li.appendChild(taSpan);
+          li.setAttribute("class", "list-group-item");
+          selectedAppsList.appendChild(li);
+        }
+
+      }
+
+      function removeTabApp(appSlug)
+      {
+        // console.log(appSlug);
+
+        // find app in tabApp list
+        for (i = 0; i < tabApps.length; i++)
+        {
+          if (tabApps[i].appSlug == appSlug)
+          {
+            // add to available apps list
+            var availApp = {slug:appSlug, name:tabApps[i].name};
+            allApps.push(availApp);
+
+            // remove from available apps list
+            tabApps.splice(i, 1);
+            i--;
+
+          }
+        }
+        rebuildAppLists();
+        document.getElementById("appTabButtons").style.visibility = "visible";
+      }
+
+      function saveTabApps()
+      {
+        var selectedTabSlug = document.getElementById("appTabSelect").value;
+
+        // read tabApps list
+        var selectedAppsList = document.getElementById("selectedApps");
+        // remove items
+        if (selectedAppsList)
+        {
+          // hide the lists
+          document.getElementById("appTabLists").style.visibility = "hidden";
+          document.getElementById("appTabButtons").style.visibility = "hidden";
+
+          var newTabApps = [];
+          for (i = 0; i < selectedAppsList.childNodes.length; i++)
+          {
+            var tabApp =
+            {
+              appSlug:selectedAppsList.childNodes[i].childNodes[1].childNodes[0].id,
+              tabSlug:selectedTabSlug,
+              appOrder:i
+            }
+            newTabApps[i] = tabApp;
+          }
+          // submit revised tabApps list to API for update
+          var jsonTabApps = JSON.stringify(newTabApps);
+          window.PortalAPI.updateRelated('tabApps', selectedTabSlug, jsonTabApps, (response, request) => {
+            if (response.textStatus != 'success')
+            {
+              alert('ERROR: Tab Layout could not be saved.');
+            }
+            appTabSelected();
+          });
+        }
+      }
+
+      function showAppManager()
+      {
+        if (!appManagerLoaded)
+        {
+          new window.FormBuilder([['app',2]]);
+          window.DM.addTables([['app', 2]]);
+          appManagerLoaded = true;
+        }
+      }
+
+      function showButtons()
+      {
+          document.getElementById("appTabButtons").style.visibility = "visible";
+      }
+
+      function showTabLayout()
+      {
+        var x = document.getElementById("nav-tab-layout");
+        x.style.display = "block";
+        window.PortalAPI.list('tab', (response, request) => {
+          if (response.textStatus == 'success')
+          {
+            var tabSelectList = document.getElementById("appTabSelect");
+
+            // empty the select list
+            while (tabSelectList.options.length > 0)
+            {
+              tabSelectList.remove(tabSelectList.options.length - 1);
+            }
+
+            // re-add new list of items
+            // placeholder first
+            var opt = document.createElement('option');
+            opt.text = 'Select a Tab...';
+            opt.value = '0';
+            tabSelectList.add(opt, null);
+
+            // add list of tabs from API call
+            for (i=0; i < response.data.tabs.length; i++)
+            {
+              var opt = document.createElement('option');
+              opt.text = response.data.tabs[i].name;
+              opt.value = response.data.tabs[i].slug;
+              tabSelectList.add(opt, null);
+            }
+          }
+          else
+          {
+            alert("ERROR: Could not get list of tabs");
+            // console.log(response);
+          }
+        });
+      }
+
+    </script>
+</div>

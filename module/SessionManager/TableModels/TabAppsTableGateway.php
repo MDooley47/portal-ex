@@ -4,6 +4,7 @@ namespace SessionManager\TableModels;
 
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
+use Traits\Tables\HasColumns;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
@@ -11,6 +12,8 @@ use Zend\Validator\Db\RecordExists;
 
 class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
+    use HasColumns;
+
     public function __construct()
     {
         $this->table = 'tabApps';
@@ -41,7 +44,7 @@ class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInt
             ->getApps(array_column($rowset->toArray(), 'appSlug'));
     }
 
-    public function addCorrelation($tab, $app, $options = [])
+    public function addCorrelation($tab, $app, $order, $options = [])
     {
         if ($this->correlationExists($tab, $app, $options)) {
             // correlation already exists
@@ -51,9 +54,25 @@ class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInt
         $data = [
             'tabSlug' => $tab,
             'appSlug' => $app,
+            'appOrder' => $order,
         ];
 
         return $this->insert($data);
+    }
+
+    public function addRelated($data)
+    {
+        $returnVal = 0;
+        foreach($data as $tabAppRec)
+        {
+          $data = [
+            'tabSlug' => $tabAppRec->tabSlug,
+            'appSlug' => $tabAppRec->appSlug,
+            'appOrder' => $tabAppRec->appOrder,
+          ];
+          $returnVal += $this->insert($data);
+        }
+        return ($returnVal);
     }
 
     public function correlationExists($tab, $app, $options = [])
@@ -71,4 +90,26 @@ class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInt
             'exclude' => $clause,
         ]))->isValid($tab);
     }
+
+    public function deleteRelated($tab)
+    {
+      $returnVal = $this->delete(array('tabSlug' => $tab));
+      return($returnVal);
+    }
+
+    /**
+     * Selects apps applied to the given tab slug
+     */
+    public function fetchRelated($tabSlug)
+    {
+      $select = new Select();
+      $select->from('tabApps');
+      $select->where(['tabSlug' => $tabSlug]);
+      $select->columns(['tabSlug','appSlug', 'appOrder']);
+      $select->join('apps', 'tabApps.appSlug = apps.slug', ['name'], Select::JOIN_LEFT);
+      $select->order("appOrder ASC");
+
+      return $this->selectWith($select);
+    }
+
 }

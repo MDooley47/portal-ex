@@ -24,8 +24,7 @@ foreach ($apps as $app) {
         <div class="col-xs-6 col-sm-3 col-md-2">
           <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
             <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
-                    <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
-                    "?v=" . (int) $app->version ?>" alt="">
+                    <img src="<?= $app->iconPath ?>" alt="">
                     <span class="app-name"><?= $escaper->escapeHtml($app->name) ?></span>
             </div>
           </a>

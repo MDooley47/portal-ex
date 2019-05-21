@@ -1,7 +1,15 @@
 <?php
+    use SessionManager\Tables;
+
     $escaper = new Zend\Escaper\Escaper('utf-8');
     $this->headTitle($title = 'Add New Tab');
 
+    $this->headLink()
+        ->prependStylesheet('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/css/select2.min.css');
+    $this->headScript()
+        ->prependFile('https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.5/js/select2.min.js');
+
+    $tables = new Tables();
 ?>
 
 <h1><?= $escaper->escapeHTML($title); ?></h1>
@@ -11,10 +19,18 @@
     $form->setAttribute('enctype', 'multipart/form-data');
     $form->prepare();
 ?>
-    <?= $this->form()->openTag($form) ?>
+<?= $this->form()->openTag($form) ?>
     <?= $this->formRow($this->form->get('name')); ?>
     <br>
     <?= $this->formRow($this->form->get('description')); ?>
+    <br>
+    <select class="select2 single group" name="group">
+        <option></option>
+        <? foreach ($tables->getTable('group')->fetchAll() as $group) : ?>
+            <option value="<?= $group->slug ?>"><?= $group->name ?></option>
+        <? endforeach; ?>
+    </select>
+
 
 
 <?= $this->formRow($this->form->get('submit')); ?>
