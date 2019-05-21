@@ -215,10 +215,10 @@
             </table>
         </div>
         <div id="app-btns" class="table-btns">
-            <button type="button" class="btn btn-primary" id="app-select">Select All</button>
-            <button type="button" class="btn btn-info" id="app-info">Info</button>
-            <button type="button" class="btn btn-warning" id="app-edit">Edit</button>
-            <button type="button" class="btn btn-danger" id="app-delete">Delete</button>
+            <!-- <button type="button" class="btn btn-primary" id="app-select">Select All</button> -->
+            <button type="button" class="btn btn-info disabled" id="app-info">Info</button>
+            <button type="button" class="btn btn-warning disabled" id="app-edit">Edit</button>
+            <button type="button" class="btn btn-danger disabled" id="app-delete">Delete</button>
             <button type="button" class="btn btn-success" id="app-add">Add</button>
         </div>
     </div>
@@ -738,13 +738,9 @@
 
       function showAppManager()
       {
-        if (!appManagerLoaded)
-        {// console.log('Apps tab clicked');
-          new window.FormBuilder([['app',2]]);
-          window.DM.addTables([['app', 2]]);
-          window.DM.updateButtons();
-          appManagerLoaded = true;
-        }
+        new window.FormBuilder([['app',2]]);
+        window.DM.addTables([['app', 2]]);
+        appManagerLoaded = true;
       }
 
       function showButtons()

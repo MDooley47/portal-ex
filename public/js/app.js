@@ -27411,8 +27411,7 @@ function () {
     this.tables = {};
     this.selections = selections;
     new window.FormBuilder(tables);
-    this.addTables(tables);
-    this.updateButtons();
+    this.addTables(tables); // this.updateButtons();
   }
 
   _createClass(DatatableManager, [{
@@ -27437,8 +27436,7 @@ function () {
           if (window.DEBUG) console.log({
             'response': response,
             'request': request
-          });
-          $('#' + name + '-list table tbody').html(DatatableManager.buildTable(name, response.jqXHR.responseJSON));
+          }); // $('#' + name + '-list table tbody').html(DatatableManager.buildTable(name, response.jqXHR.responseJSON));
 
           _this.addTable(name, sort, slug, direction);
         });
@@ -27454,20 +27452,69 @@ function () {
       var sort = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
       var slug = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 0;
       var direction = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : 'asc';
-      var dt = this;
+      var dt = this; // if ( $.fn.dataTable.isDataTable( '#' + table + '-list table' ) ) {
+      //   this.tables[table] = $('#' + table + '-list table').DataTable();
+      //   this.tables[table].order([[sort, direction]]);
+      // }
+      // else {
+
       this.tables[table] = $('#' + table + '-list table').DataTable({
-        "order": [[sort, direction]]
-      });
+        "order": [[sort, direction]],
+        "ajax": {
+          "url": "/api/v1?m=app",
+          "dataSrc": "apps"
+        },
+        "columns": [{
+          "data": "slug"
+        }, {
+          "data": "iconPath",
+          "render": function render(data, type, row, meta) {
+            return '<img src="' + data + '" alt="" class="app-list-icon" />';
+          }
+        }, {
+          "data": "name"
+        }, {
+          "data": "url"
+        }]
+      }); // $('#' + table + '-list table tbody').on('click', 'tr', function() {
+      //     let data = dt.tables[table].row(this).data();
+      //     dt.toggleSelection(table, data[slug]);
+      // });
+
       $('#' + table + '-list table tbody').on('click', 'tr', function () {
-        var data = dt.tables[table].row(this).data();
-        dt.toggleSelection(table, data[slug]);
+        var buttons = {
+          // 'select': $('#' + table + '-select'),
+          'edit': $('#' + table + '-edit'),
+          'delete': $('#' + table + '-delete'),
+          'info': $('#' + table + '-info')
+        };
+        var disabled_class = 'disabled';
+
+        if ($(this).hasClass('selected')) {
+          $(this).removeClass('selected');
+          buttons.info.addClass(disabled_class);
+          buttons.info.attr('disabled', 'disabled');
+          buttons.edit.addClass(disabled_class);
+          buttons.edit.attr('disabled', 'disabled');
+          buttons["delete"].addClass(disabled_class);
+          buttons["delete"].attr('disabled', 'disabled');
+        } else {
+          dt.tables[table].$('tr.selected').removeClass('selected');
+          $(this).addClass('selected');
+          buttons.info.removeClass(disabled_class);
+          buttons.info.removeAttr('disabled');
+          buttons.edit.removeClass(disabled_class);
+          buttons.edit.removeAttr('disabled');
+          buttons["delete"].removeClass(disabled_class);
+          buttons["delete"].removeAttr('disabled');
+        }
       });
       this.addAddButton(table);
       this.addEditButton(table);
-      this.addInfoButton(table);
-      this.addSelectButton(table, dt);
-      this.addDeleteButton(table);
-      this.selections[table] = [];
+      this.addInfoButton(table); // this.addSelectButton(table, dt);
+
+      this.addDeleteButton(table); // this.selections[table] = [];
+      // }
     }
   }, {
     key: "addAddButton",
@@ -27541,7 +27588,10 @@ function () {
                             'response': response,
                             'data': data
                           });
-                        }
+                        } // refresh data in list
+
+
+                        window.DM.tables[table].ajax.reload(null, false);
                       });
                     };
                   } else {
@@ -27551,7 +27601,10 @@ function () {
                           'response': response,
                           'data': data
                         });
-                      }
+                      } // refresh data in list
+
+
+                      window.DM.tables[table].ajax.reload(null, false);
                     });
                   }
                 } else return false;
@@ -27565,230 +27618,212 @@ function () {
   }, {
     key: "addEditButton",
     value: function addEditButton(table) {
-      var _this2 = this;
-
       $('button#' + table + '-edit').on('click', function (e) {
-        var slug = _this2.selections[table][0];
-        window.PortalAPI.view(table, slug, function (response, request) {
-          DatatableManager.displayEdit(table, response.data, request.id);
-          if (window.DEBUG) console.log({
-            'response': response,
-            'request': request
+        var slug = window.DM.tables[table].row('.selected').data().slug;
+
+        if (typeof slug != "undefined") {
+          window.PortalAPI.view(table, slug, function (response, request) {
+            DatatableManager.displayEdit(table, response.data, request.id);
+            if (window.DEBUG) console.log({
+              'response': response,
+              'request': request
+            });
           });
-        });
+        }
       });
     }
   }, {
     key: "addInfoButton",
     value: function addInfoButton(table) {
-      var _this3 = this;
-
       $('button#' + table + '-info').on('click', function (e) {
-        var slug = _this3.selections[table][0];
-        window.PortalAPI.view(table, slug, function (response, request) {
-          DatatableManager.displayInfo(table, response.data);
-          if (window.DEBUG) console.log({
-            'response': response,
-            'request': request
+        var slug = window.DM.tables[table].row('.selected').data().slug;
+
+        if (typeof slug != "undefined") {
+          window.PortalAPI.view(table, slug, function (response, request) {
+            DatatableManager.displayInfo(table, response.data);
+            if (window.DEBUG) console.log({
+              'response': response,
+              'request': request
+            });
           });
-        });
+        }
       });
     }
   }, {
     key: "addDeleteButton",
     value: function addDeleteButton(table) {
-      var _this4 = this;
+      var _this2 = this;
 
       $('button#' + table + '-delete').on('click', function (e) {
-        var title = DatatableManager.titleCase(table + ' deletion');
-        var message = "Are you sure you wish to delete the following " + window.pluralize(table) + "?";
-        var list = "<ul>";
+        if (typeof _this2.tables[table].row('.selected').data().slug != "undefined") {
+          var title = DatatableManager.titleCase(table + ' deletion');
+          var message = "Are you sure you wish to delete the following " + window.pluralize(table) + "?";
+          var list = "<ul>"; // for (let i in this.selections[table]) {
+          //     let slug = this.selections[table][i];
+          //     let name = $('#' + table + '-' + slug + ' .' + table + '-name').text();
+          //     list += "<li>";
+          //     list += "<strong>" + slug + "</strong> ";
+          //     list += name;
+          //     list += "</li>";
+          // }
 
-        for (var i in _this4.selections[table]) {
-          var slug = _this4.selections[table][i];
-          var name = $('#' + table + '-' + slug + ' .' + table + '-name').text();
-          list += "<li>";
-          list += "<strong>" + slug + "</strong> ";
-          list += name;
-          list += "</li>";
-        }
-
-        list += "</ul>";
-        message += list;
-        bootbox.confirm({
-          title: title,
-          message: message,
-          buttons: {
-            confirm: {
-              label: 'Delete',
-              className: 'btn-danger'
+          list += "<li>(" + _this2.tables[table].row('.selected').data().slug + ") " + _this2.tables[table].row('.selected').data().name + "</li>";
+          list += "</ul>";
+          message += list;
+          bootbox.confirm({
+            title: title,
+            message: message,
+            buttons: {
+              confirm: {
+                label: 'Delete',
+                className: 'btn-danger'
+              },
+              cancel: {
+                label: 'Cancel',
+                className: 'btn-secondary'
+              }
             },
-            cancel: {
-              label: 'Cancel',
-              className: 'btn-secondary'
-            }
-          },
-          callback: function callback(result) {
-            if (result) {
-              for (var _i in window.DM.selections[table]) {
-                var _slug = window.DM.selections[table][_i];
-                window.PortalAPI["delete"](table, _slug, function (response, data) {
-                  if (window.DEBUG === true) {
-                    console.log({
-                      'data': data,
-                      'response': response
-                    });
-                  }
-                });
+            callback: function callback(result) {
+              if (result) {
+                // for (let i in window.DM.selections[table]) {
+                var slug = window.DM.tables[table].row('.selected').data().slug;
+
+                if (typeof slug != "undefined") {
+                  window.PortalAPI["delete"](table, slug, function (response, data) {
+                    window.DM.tables[table].row('.selected').remove().draw(false);
+
+                    if (window.DEBUG === true) {
+                      console.log({
+                        'data': data,
+                        'response': response
+                      });
+                    }
+                  });
+                } // }
+
               }
             }
-          }
-        }).find(".modal-dialog").addClass("modal-dialog-centered");
-      });
-    }
-  }, {
-    key: "addSelectButton",
-    value: function addSelectButton(table, dt) {
-      $('button#' + table + '-select').on('click', function (e) {
-        var button = $(e.target);
-        if (button.hasClass('disabled')) return false;else if (button.text().toString().toLowerCase() === 'select all') {
-          dt.selectAll(table);
-          button.text('Deselect All');
-        } else {
-          dt.deselectAll(table);
-          button.text('Select All');
+          }).find(".modal-dialog").addClass("modal-dialog-centered");
         }
       });
-    }
-  }, {
-    key: "addSelection",
-    value: function addSelection(table, id) {
-      this.selections[table].push(id);
-      this.renderSelections(table);
-    }
-  }, {
-    key: "removeSelection",
-    value: function removeSelection(table, id) {
-      this.selections[table] = this.selections[table].filter(function (elem) {
-        return elem !== id;
-      });
-      this.renderSelections(table);
-    }
-  }, {
-    key: "toggleSelection",
-    value: function toggleSelection(table, id) {
-      if (this.isSelected(table, id)) this.removeSelection(table, id);else this.addSelection(table, id);
-    }
-  }, {
-    key: "selectAll",
-    value: function selectAll(table) {
-      var rows = $("tr." + table + "-row").toArray();
+    } // addSelectButton(table, dt) {
+    //     $('button#' + table + '-select').on('click', (e) => {
+    //         let button = $(e.target);
+    //         if (button.hasClass('disabled')) return false;
+    //         else if (button.text().toString().toLowerCase() === 'select all') {
+    //             dt.selectAll(table);
+    //             button.text('Deselect All');
+    //         } else {
+    //             dt.deselectAll(table);
+    //             button.text('Select All');
+    //         }
+    //     });
+    // }
+    // addSelection(table, id) {
+    //     this.selections[table].push(id);
+    //     this.renderSelections(table);
+    // }
+    //
+    // removeSelection(table, id) {
+    //     this.selections[table] = this.selections[table].filter(elem => elem !== id);
+    //     this.renderSelections(table);
+    // }
+    //
+    // toggleSelection(table, id) {
+    //     if (this.isSelected(table, id)) this.removeSelection(table, id);
+    //     else this.addSelection(table, id);
+    // }
+    //
+    // selectAll(table) {
+    //     let rows = $("tr." + table + "-row").toArray();
+    //     for(let i = 0; i < rows.length; ++i) {
+    //         this.addSelection(table, $(rows[i]).attr('id').replace(table + '-', ''));
+    //     }
+    // }
+    //
+    // deselectAll(table) {
+    //     this.removeAllSelectionsFrom(table);
+    // }
+    //
+    // isSelected(table, id) {
+    //     return this.selections[table].includes(id);
+    // }
+    //
+    // getSelections(table) {
+    //     return this.selections[table];
+    // }
+    // renderSelections(table = null) {
+    //     if (table == null) {
+    //         for (let key in this.selections) this.renderSelections(key);
+    //     } else {
+    //         $("tr." + table + "-row.selected-row").removeClass('selected-row');
+    //
+    //         for (let id in this.selections[table]) {
+    //             $('#' + table + '-' + this.selections[table][id]).addClass('selected-row');
+    //         }
+    //     }
+    //
+    //     this.updateButtons(table);
+    // }
+    // updateButtons(table = null) {
+    //     let disabled_class = 'disabled';
+    //
+    //     if (table == null) {
+    //         for (let key in this.selections) this.updateButtons(key);
+    //     } else {
+    //         let rows = $('.' + table + '-row').toArray();
+    //
+    //         let buttons = {
+    //             // 'select': $('#' + table + '-select'),
+    //             'edit': $('#' + table + '-edit'),
+    //             'delete': $('#' + table + '-delete'),
+    //             'info': $('#' + table + '-info'),
+    //         };
+    //
+    //         // if (rows === undefined || rows.length === 0) {
+    //         //     buttons.select.addClass(disabled_class);
+    //         //     buttons.select.attr('disabled', 'disabled');
+    //         // } else if (buttons.select.hasClass(disabled_class)) {
+    //         //     buttons.select.removeClass(disabled_class);
+    //         //     buttons.select.removeAttr('disabled');
+    //         // }
+    //
+    //         if (this.selections[table] === undefined || this.selections[table].length === 0) {
+    //             buttons.info.addClass(disabled_class);
+    //             buttons.info.attr('disabled', 'disabled');
+    //             buttons.edit.addClass(disabled_class);
+    //             buttons.edit.attr('disabled', 'disabled');
+    //             buttons.delete.addClass(disabled_class);
+    //             buttons.delete.attr('disabled', 'disabled');
+    //         } else {
+    //             if (this.selections[table].length === 1) {
+    //                 buttons.info.removeClass(disabled_class);
+    //                 buttons.info.removeAttr('disabled');
+    //                 buttons.edit.removeClass(disabled_class);
+    //                 buttons.edit.removeAttr('disabled');
+    //             } else if (this.selections[table].length > 1) {
+    //                 buttons.info.addClass(disabled_class);
+    //                 buttons.info.attr('disabled', 'disabled');
+    //                 buttons.edit.addClass(disabled_class);
+    //                 buttons.edit.attr('disabled', 'disabled');
+    //             }
+    //
+    //             if (buttons.delete.hasClass(disabled_class)) {
+    //                 buttons.delete.removeClass(disabled_class);
+    //                 buttons.delete.removeAttr('disabled', 'disabled');
+    //             }
+    //         }
+    //     }
+    // }
+    // removeAllSelectionsFrom(table) {
+    //     this.selections[table] = [];
+    //     this.renderSelections(table);
+    // }
+    //
+    // reset() {
+    //     for (let table in this.selections) this.selections[table] = [];
+    // }
 
-      for (var i = 0; i < rows.length; ++i) {
-        this.addSelection(table, $(rows[i]).attr('id').replace(table + '-', ''));
-      }
-    }
-  }, {
-    key: "deselectAll",
-    value: function deselectAll(table) {
-      this.removeAllSelectionsFrom(table);
-    }
-  }, {
-    key: "isSelected",
-    value: function isSelected(table, id) {
-      return this.selections[table].includes(id);
-    }
-  }, {
-    key: "getSelections",
-    value: function getSelections(table) {
-      return this.selections[table];
-    }
-  }, {
-    key: "renderSelections",
-    value: function renderSelections() {
-      var table = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-
-      if (table == null) {
-        for (var key in this.selections) {
-          this.renderSelections(key);
-        }
-      } else {
-        $("tr." + table + "-row.selected-row").removeClass('selected-row');
-
-        for (var id in this.selections[table]) {
-          $('#' + table + '-' + this.selections[table][id]).addClass('selected-row');
-        }
-      }
-
-      this.updateButtons(table);
-    }
-  }, {
-    key: "updateButtons",
-    value: function updateButtons() {
-      var table = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-      var disabled_class = 'disabled';
-
-      if (table == null) {
-        for (var key in this.selections) {
-          this.updateButtons(key);
-        }
-      } else {
-        var rows = $('.' + table + '-row').toArray();
-        var buttons = {
-          'select': $('#' + table + '-select'),
-          'edit': $('#' + table + '-edit'),
-          'delete': $('#' + table + '-delete'),
-          'info': $('#' + table + '-info')
-        };
-
-        if (rows === undefined || rows.length === 0) {
-          buttons.select.addClass(disabled_class);
-          buttons.select.attr('disabled', 'disabled');
-        } else if (buttons.select.hasClass(disabled_class)) {
-          buttons.select.removeClass(disabled_class);
-          buttons.select.removeAttr('disabled');
-        }
-
-        if (this.selections[table] === undefined || this.selections[table].length === 0) {
-          buttons.info.addClass(disabled_class);
-          buttons.info.attr('disabled', 'disabled');
-          buttons.edit.addClass(disabled_class);
-          buttons.edit.attr('disabled', 'disabled');
-          buttons["delete"].addClass(disabled_class);
-          buttons["delete"].attr('disabled', 'disabled');
-        } else {
-          if (this.selections[table].length === 1) {
-            buttons.info.removeClass(disabled_class);
-            buttons.info.removeAttr('disabled');
-            buttons.edit.removeClass(disabled_class);
-            buttons.edit.removeAttr('disabled');
-          } else if (this.selections[table].length > 1) {
-            buttons.info.addClass(disabled_class);
-            buttons.info.attr('disabled', 'disabled');
-            buttons.edit.addClass(disabled_class);
-            buttons.edit.attr('disabled', 'disabled');
-          }
-
-          if (buttons["delete"].hasClass(disabled_class)) {
-            buttons["delete"].removeClass(disabled_class);
-            buttons["delete"].removeAttr('disabled', 'disabled');
-          }
-        }
-      }
-    }
-  }, {
-    key: "removeAllSelectionsFrom",
-    value: function removeAllSelectionsFrom(table) {
-      this.selections[table] = [];
-      this.renderSelections(table);
-    }
-  }, {
-    key: "reset",
-    value: function reset() {
-      for (var table in this.selections) {
-        this.selections[table] = [];
-      }
-    }
   }], [{
     key: "titleCase",
     value: function titleCase(str) {
@@ -27796,88 +27831,87 @@ function () {
       return str.replace(/\w\S*/g, function (txt) {
         return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
       });
-    }
-  }, {
-    key: "getRowValues",
-    value: function getRowValues(table, slug) {
-      var row = $('#' + table.toLowerCase() + '-' + slug);
-      var cells = row.children().toArray();
-      var data = {};
+    } // static getRowValues(table, slug) {
+    //     const row = $('#' + table.toLowerCase() + '-' + slug);
+    //     const cells = row.children().toArray();
+    //     let data = {};
+    //
+    //     for (let i in cells) {
+    //         const key = $(cells[i]).attr('class').split(' ')[0].replace(table + '-', '');
+    //         data[key] = $(cells[i]).text();
+    //     }
+    //
+    //     return data;
+    // }
+    // static buildTable(name, data) {
+    //     let html = "";
+    //     const table = name.toLowerCase();
+    //     name = window.pluralize(name);
+    //     let keys = Object.keys(data[name]);
+    //     let order;
+    //
+    //     for (let i in  keys) {
+    //         switch (table) {
+    //             case 'group':
+    //                 order = ['slug', 'groupType', 'name', 'description'];
+    //                 break;
+    //             case 'app':
+    //                 delete data[name][keys[i]].version;
+    //                 data[name][keys[i]].icon = data[name][keys[i]].iconPath;
+    //                 delete data[name][keys[i]].iconPath;
+    //                 order = ['slug', 'icon', 'name', 'url'];
+    //                 break;
+    //         }
+    //
+    //         html += DatatableManager.buildTableRow(table, data[name][keys[i]], order);
+    //     }
+    //     return html;
+    // }
+    //
+    // static buildTableRow(table, data, order) {
+    //     let html = "";
+    //
+    //     html += "<tr " +
+    //         "id='" + table + "-" + data.slug + "' " +
+    //         "class='" + table + "-row'>";
+    //     if (order === undefined) {
+    //         const keys = Object.keys(data);
+    //
+    //         for (let i in keys) {
+    //             const value = (data[keys[i]] !== null && data[keys[i]] !== undefined) ? data[keys[i]] : '';
+    //
+    //             html +=
+    //                 "<td class='" + table + "-" + keys[i] + "'>" +
+    //                 value +
+    //                 "</td>";
+    //         }
+    //     } else {
+    //         for(let i in order) {
+    //             const value = (data[order[i]] !== null && data[order[i]] !== undefined) ? data[order[i]] : '';
+    //             html +=
+    //                 "<td class='" + table + "-" + order[i] + "'>";
+    //             switch(order[i].toLowerCase()) {
+    //                 case 'grouptype':
+    //                     html +=
+    //                         "<span class='grouptype-slug-" + data.groupType + "'>" +
+    //                         FormBuilder.getGroupType(data.groupType) +
+    //                         "</span>";
+    //                     break;
+    //                 case 'icon':
+    //                     html += "<img src='" + value + "' alt='' class='app-list-icon' />";
+    //                     break;
+    //                 default:
+    //                     html += value;
+    //             }
+    //             html += "</td>";
+    //         }
+    //     }
+    //
+    //     html += "</tr>";
+    //
+    //     return html;
+    // }
 
-      for (var i in cells) {
-        var key = $(cells[i]).attr('class').split(' ')[0].replace(table + '-', '');
-        data[key] = $(cells[i]).text();
-      }
-
-      return data;
-    }
-  }, {
-    key: "buildTable",
-    value: function buildTable(name, data) {
-      var html = "";
-      var table = name.toLowerCase();
-      name = window.pluralize(name);
-      var keys = Object.keys(data[name]);
-      var order;
-
-      for (var i in keys) {
-        switch (table) {
-          case 'group':
-            order = ['slug', 'groupType', 'name', 'description'];
-            break;
-
-          case 'app':
-            delete data[name][keys[i]].version;
-            data[name][keys[i]].icon = data[name][keys[i]].iconPath;
-            delete data[name][keys[i]].iconPath;
-            order = ['slug', 'icon', 'name', 'url'];
-            break;
-        }
-
-        html += DatatableManager.buildTableRow(table, data[name][keys[i]], order);
-      }
-
-      return html;
-    }
-  }, {
-    key: "buildTableRow",
-    value: function buildTableRow(table, data, order) {
-      var html = "";
-      html += "<tr " + "id='" + table + "-" + data.slug + "' " + "class='" + table + "-row'>";
-
-      if (order === undefined) {
-        var keys = Object.keys(data);
-
-        for (var i in keys) {
-          var value = data[keys[i]] !== null && data[keys[i]] !== undefined ? data[keys[i]] : '';
-          html += "<td class='" + table + "-" + keys[i] + "'>" + value + "</td>";
-        }
-      } else {
-        for (var _i2 in order) {
-          var _value = data[order[_i2]] !== null && data[order[_i2]] !== undefined ? data[order[_i2]] : '';
-
-          html += "<td class='" + table + "-" + order[_i2] + "'>";
-
-          switch (order[_i2].toLowerCase()) {
-            case 'grouptype':
-              html += "<span class='grouptype-slug-" + data.groupType + "'>" + FormBuilder.getGroupType(data.groupType) + "</span>";
-              break;
-
-            case 'icon':
-              html += "<img src='" + _value + "' alt='' class='app-list-icon' />";
-              break;
-
-            default:
-              html += _value;
-          }
-
-          html += "</td>";
-        }
-      }
-
-      html += "</tr>";
-      return html;
-    }
   }, {
     key: "displayEdit",
     value: function displayEdit(table, data, slug) {
@@ -27959,7 +27993,10 @@ function () {
                           'response': response,
                           'data': data
                         });
-                      }
+                      } // refresh data in list
+
+
+                      window.DM.tables[table].ajax.reload(null, false);
                     });
                   };
                 } else {
@@ -27969,7 +28006,10 @@ function () {
                         'response': response,
                         'data': data
                       });
-                    }
+                    } // refresh data in list
+
+
+                    window.DM.tables[table].ajax.reload(null, false);
                   });
                 }
               } else return false;

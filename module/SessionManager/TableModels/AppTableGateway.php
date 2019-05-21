@@ -68,7 +68,9 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      */
     public function all()
     {
-        return $this->select();
+      $select = $this->getSql()->select();
+      $select->order('name ASC');
+      return $this->selectWith($select);
     }
 
     public function getApps($appSlugs)
