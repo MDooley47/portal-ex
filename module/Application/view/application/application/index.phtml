@@ -32,7 +32,7 @@ if ($apps)
             echo "<div class='row'>";
         endif;*/
 ?>
-        <div class="col-xs-4 col-sm-3 col-md-2">
+        <div class="col-4 col-sm-3 col-md-2">
           <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
             <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
                                     <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
