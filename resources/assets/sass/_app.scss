@@ -35,3 +35,21 @@
     border-bottom-right-radius: 15px;
     border-bottom-left-radius: 15px;
 }
+@include media-breakpoint-up(xs) {
+    .app-tile {
+        height: 75px;
+        width: 75px;
+    }
+    .app-tile .app-name {
+        width: 75px;
+    }
+}
+@include media-breakpoint-up(sm) {
+    .app-tile {
+        height: 100px;
+        width: 100px;
+    }
+    .app-tile .app-name {
+        width: 100px;
+    }
+}

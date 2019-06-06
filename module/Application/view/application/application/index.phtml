@@ -17,21 +17,22 @@ if ($apps)
 
 ?>
 
+<div class="row">
 <?php
     if ($portalError)
     {
       printf("<h2>%s</h2>", $portalErrorMessage);
     }
 
-    $i = 0;
-    $opened = false;
+/*    $i = 0;
+    $opened = false;*/
     foreach ($data as $app) :
-        $i++;
+/*        $i++;
         if ((($i-1) % 6) == 0 && !$opened) :
             echo "<div class='row'>";
-        endif;
+        endif;*/
 ?>
-        <div class="col-xs-6 col-sm-3 col-md-2">
+        <div class="col-xs-4 col-sm-3 col-md-2">
           <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
             <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
                                     <img src="<?= $this->url('app', ['action' => 'icon', 'slug' => $app->slug]) .
@@ -41,18 +42,19 @@ if ($apps)
           </a>
         </div>
 <?php
-        if ((($i) % 6) == 0 && $opened) :
+/*        if ((($i) % 6) == 0 && $opened) :
             $opened = false;
             echo "</div>";
         else :
             $opened = true;
-        endif;
+        endif;*/
     endforeach;
-    if ($opened)
+    /*if ($opened)
     {
         echo "</div>";
-    }
+    }*/
 ?>
+</div>
 <!--
 <hr>
 <span class="text-center">Below is a view of what is in the db</span>

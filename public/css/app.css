@@ -11509,10 +11509,8 @@ body {
 .app-tile img,
 .app-image {
   margin-top: 5px;
-  height: auto;
-  width: auto;
-  max-height: 90px;
-  max-width: 90px;
+  height: 90px;
+  width: 90px;
 }
 
 .app-tile .app-name {
@@ -11527,6 +11525,26 @@ body {
   text-decoration: none;
   border-bottom-right-radius: 15px;
   border-bottom-left-radius: 15px;
+}
+
+.app-tile {
+  height: 75px;
+  width: 75px;
+}
+
+.app-tile .app-name {
+  width: 75px;
+}
+
+@media (min-width: 576px) {
+  .app-tile {
+    height: 100px;
+    width: 100px;
+  }
+
+  .app-tile .app-name {
+    width: 100px;
+  }
 }
 
 /** Header **/
