@@ -68,9 +68,10 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      */
     public function all()
     {
-      $select = $this->getSql()->select();
-      $select->order('name ASC');
-      return $this->selectWith($select);
+        $select = $this->getSql()->select();
+        $select->order('name ASC');
+
+        return $this->selectWith($select);
     }
 
     public function getApps($appSlugs)
@@ -112,10 +113,10 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
 
         $row = $rowset->current();
         // if (!$row) {
-            // throw new RuntimeException(sprintf(
-            //     'Could not Find Row with identifier %d of type %s',
-            //     $id, App::$primaryKey
-            // ));
+        // throw new RuntimeException(sprintf(
+        //     'Could not Find Row with identifier %d of type %s',
+        //     $id, App::$primaryKey
+        // ));
         // }
 
         return $row;
@@ -186,7 +187,6 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      */
     public function save($app)
     {
-
         $data = [
             'name'     => $app->name,
             'url'      => $app->url,
@@ -228,6 +228,7 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
         }
 
         $app->slug = $data['slug'] ?? $slug;
+
         return $app;
     }
 

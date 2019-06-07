@@ -47,21 +47,17 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
         $row = $rowset->current();
 
-        while ($row)
-        {
-          $rowArray[] = $row;
-          $row = $rowset->next();
+        while ($row) {
+            $rowArray[] = $row;
+            $row = $rowset->next();
         }
 
-        if (is_array($rowArray))
-        {
-          return $tables
+        if (is_array($rowArray)) {
+            return $tables
             ->getTable('tab')
             ->getTabs(array_column($rowArray, 'tabSlug'));
-        }
-        else
-        {
-          return (null);
+        } else {
+            return;
         }
     }
 
