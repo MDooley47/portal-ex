@@ -8,6 +8,8 @@
 
 namespace Application\Controller;
 
+use App\Model\App;
+use SessionManager\Session;
 use Traits\HasTables;
 use Zend\Http\Headers;
 use Zend\Http\Response;
@@ -28,6 +30,18 @@ class APIController extends AbstractActionController
         $headers = new Headers();
         $headers->addHeaderLine('Content-Type', 'text/json');
         $response->setHeaders($headers);
+        if (!Session::isActive())
+        {
+          // must be logged in
+          $response->setStatusCode(401);
+          return ($response);
+        }
+        if (!Session::hasPrivilege('sudo'))
+        {
+          // must have sudo privilege to use the API
+          $response->setStatusCode(401);
+          return ($response);
+        }
 
         if ($this->getRequest()->isGet()) {
             return $this->handlePost($response);
@@ -58,11 +72,14 @@ class APIController extends AbstractActionController
             return 400;
         }
 
+
         if (empty($action) && empty($id)) {
             $this->listModels($content, $model);
         } elseif (empty($action) && isset($id)) {
             $this->viewModel($content, $model, $id);
-        } elseif (isset($action) && $action == 'add') {
+          } elseif (isset($action) && $action == 'listrelated') {
+              $this->listRelated($content, $model, $id);
+          } elseif (isset($action) && $action == 'add') {
             $this->addModel($content, $model, $data);
         } elseif (isset($action) && $action == 'edit') {
             $this->editModel($content, $model, $id, $data);
@@ -70,9 +87,12 @@ class APIController extends AbstractActionController
             $this->formModel($content, $model);
         } elseif (isset($action) && $action == 'delete') {
             $this->deleteModel($content, $model, $id);
+        } elseif (isset($action) && $action == 'updaterelated') {
+            $data = json_decode(file_get_contents("php://input"));
+            $this->updateRelated($content, $model, $id, $data);
         }
 
-        if (empty($content)) {
+        if (empty($content) && $action != 'listrelated') {
             return 404;
         } else {
             $response->setContent(json_encode($content));
@@ -92,6 +112,33 @@ class APIController extends AbstractActionController
         }
     }
 
+    public function listRelated(&$content, $m, $id)
+    {
+      $table = $this->getTable($m);
+      $models = $table->fetchRelated($id);
+      foreach ($models as $model) {
+        $content[$m][] = $model;
+      }
+    }
+
+    public function updateRelated(&$content, $m, $id, $data)
+    {
+        $table = $this->getTable($m);
+        if ($table->deleteRelated($id) < 0)
+        {
+          $content[$m] = null;
+          return(false);
+        }
+
+        if ($table->addRelated($data) > -1)
+        {
+          $content[$m] = $data;
+          return(true);
+        }
+
+        return(false);
+    }
+
     public function viewModel(&$content, $model, $id)
     {
         $table = $this->getTable($model);
@@ -104,6 +151,12 @@ class APIController extends AbstractActionController
     public function addModel(&$content, $model, $data)
     {
         $content['success'] = true;
+
+        if ($model == 'app') {
+            $data['iconPath'] = App::saveIconFromBase64($data['icon']);
+            $data['version'] = $data['version'] ?? 0;
+            unset($data['icon']);
+        }
 
         try {
             $table = guaranteeUniversalTableGateway($this->getTable($model));
@@ -122,14 +175,20 @@ class APIController extends AbstractActionController
 
     public function editModel(&$content, $m, $id, $data)
     {
-        $table = $this->getTable($m);
-        $model = $table->get($id);
+      if ($m == 'app' && !empty($data['icon'])) {
+          $data['iconPath'] = App::saveIconFromBase64($data['icon']);
+          $data['version'] = $data['version'] ?? 0;
+          unset($data['icon']);
+      }
 
-        $model->exchangeArray($data);
+      $table = $this->getTable($m);
+      $model = $table->get($id);
 
-        $table->save($model);
+      $model->exchangeArray($data);
+      $model->slug = $id;
+      $table->save($model);
 
-        $content[$m] = $model->getArrayCopy();
+      $content[$m] = $model->getArrayCopy();
     }
 
     public function formModel(&$content, $m)

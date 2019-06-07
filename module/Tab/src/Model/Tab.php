@@ -20,6 +20,10 @@ class Tab extends Model implements HasSlugInterface, Bootable
 {
     use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
 
+    public $slug;
+    public $name;
+    public $description;
+
     public static $primaryKey = 'slug';
     protected static $table = 'tabs';
     public static $form = [
@@ -44,6 +48,13 @@ class Tab extends Model implements HasSlugInterface, Bootable
     protected static $guarded = [
         'slug',
     ];
+
+    public function __construct(array $attributes = [])
+    {
+        $this->slug = $attributes['slug'];
+        $this->name = $attributes['name'];
+        $this->description = $attributes['description'];
+    }
 
     public function getApps()
     {

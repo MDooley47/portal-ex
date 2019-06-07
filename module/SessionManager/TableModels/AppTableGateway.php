@@ -68,7 +68,9 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      */
     public function all()
     {
-        return $this->select();
+      $select = $this->getSql()->select();
+      $select->order('name ASC');
+      return $this->selectWith($select);
     }
 
     public function getApps($appSlugs)
@@ -109,12 +111,12 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
         $rowset = $this->select([App::$primaryKey => $id]);
 
         $row = $rowset->current();
-        if (!$row) {
-            throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
-                $id, App::$primaryKey
-            ));
-        }
+        // if (!$row) {
+            // throw new RuntimeException(sprintf(
+            //     'Could not Find Row with identifier %d of type %s',
+            //     $id, App::$primaryKey
+            // ));
+        // }
 
         return $row;
     }
@@ -184,6 +186,7 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
      */
     public function save($app)
     {
+
         $data = [
             'name'     => $app->name,
             'url'      => $app->url,
@@ -204,11 +207,11 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
                     ->addCorrelation($app->tab, $data['slug']);
             }
         } elseif ($dbApp = $this->get($slug)) {
-            if ($data['iconPath'] != $dbApp->iconPath) {
-                if (file_exists(addBasePath($file = $dbApp->iconPath))) {
-                    unlink($file);
-                }
-            }
+            // if ($data['iconPath'] != $dbApp->iconPath) {
+            //     if (file_exists(addBasePath($file = $dbApp->iconPath))) {
+            //         unlink($file);
+            //     }
+            // }
             $data['version'] = 1 + (int) $dbApp->version;
             $this->update($data, ['slug' => $slug]);
 
@@ -225,7 +228,6 @@ class AppTableGateway extends AbstractTableGateway implements UniversalTableGate
         }
 
         $app->slug = $data['slug'] ?? $slug;
-
         return $app;
     }
 

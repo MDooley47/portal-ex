@@ -123,7 +123,7 @@ class User extends Model implements HasSlugInterface, Bootable
     {
         arrayValueDefault('composite-key', $options, true);
 
-        $codist = explode('-', $this->codist);
+        $codist = explode('-', $this->attributes['codist']);
 
         if ($options['composite-key']) {
             $out = $codist[0].'-'.$codist[1];

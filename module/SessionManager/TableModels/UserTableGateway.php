@@ -99,14 +99,11 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
         }
 
         $row = $rowset->current();
-        if (!$row) {
-            throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
-                $id, $options['type']
-            ));
+        if ($row) {
+          return new User($row->getArrayCopy());
         }
 
-        return new User($row->getArrayCopy());
+        return (null);
     }
 
     /**
@@ -177,6 +174,7 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
         $data = [
             'name'  => $user->name,
             'email' => $user->email,
+            'codist' => $user->codist,
         ];
 
         $slug = $user->slug;

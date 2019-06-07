@@ -59,7 +59,7 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
      */
     public function fetchAll()
     {
-        return $this->select();
+        return $this->all();
     }
 
     /**
@@ -67,7 +67,9 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
      */
     public function all()
     {
-        return $this->select();
+        $select = $this->getSql()->select();
+        $select->order('name ASC');
+        return $this->selectWith($select);
     }
 
     /**
@@ -103,18 +105,15 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
                 $id, 'slug'
             ));
         }
-
         return new Tab($row->getArrayCopy());
     }
 
     public function getTabs($tabSlugs)
     {
         $tabs = [];
-
         foreach ($tabSlugs as $tab) {
             array_push($tabs, $this->getTab($tab));
         }
-
         return $tabs;
     }
 

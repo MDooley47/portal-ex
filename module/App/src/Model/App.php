@@ -38,6 +38,12 @@ class App extends Model implements HasSlugInterface, Bootable
             'type'     => 'file',
             'required' => true,
         ],
+        'iconPath' => [
+          'type' => 'text',
+          'required' => false,
+          'readonly' => true,
+          'label' => 'Icon Path',
+        ]
     ];
 
     /**
@@ -53,6 +59,27 @@ class App extends Model implements HasSlugInterface, Bootable
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
+    }
+
+    public static function saveIconFromBase64($base64Image)
+    {
+        $target = realpath(getenv('storage_path').'/images/');
+
+        $base64_parts = explode(',', $base64Image);
+        $base64Prefix = $base64_parts[0];
+        $base64Image = $base64_parts[1];
+
+        $image_extension = explode('/', explode(';', $base64Prefix)[0])[1];
+
+        $image_contents = base64_decode($base64Image);
+
+        do {
+            $filename = $target.uniqid('/app-', true).'.'.$image_extension;
+        } while (file_exists($filename));
+
+        file_put_contents($filename, $image_contents);
+
+        return removeBasePath($filename);
     }
 
     /**

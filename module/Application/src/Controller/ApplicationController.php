@@ -36,18 +36,36 @@ class ApplicationController extends AbstractActionController
 
     public function dashboardAction()
     {
-        return (new ViewModel([
-            'forms' => [
-                'user'      => new UserForm(),
-                'group'     => new GroupForm(),
-                'tab'       => new TabForm(),
-                'app'       => new AppForm(),
-                'attribute' => new AttributeForm(),
-                'grouptype' => new GroupTypeForm(),
-                'ipaddress' => new IpAddressForm(),
-                'ownertype' => new OwnerTypeForm(),
-                'privilege' => new PrivilegeForm(),
-            ],
+      if (!Session::isActive())
+      {
+        // must be logged in
+        return $this->redirect()->toRoute('login');
+      }
+
+      if (!Session::hasPrivilege('sudo'))
+      {
+        // must have sudo privilege to use the dashboard
+        return $this->redirect()->toRoute('home');
+      }
+
+      $user = Session::getUser();
+      $this->layout()->setVariable('themeColor',$user->getThemeColor());
+      $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
+      $this->layout()->setVariable('sudo',true);
+      $this->layout()->setVariable('tabSlug','dashboard');
+
+      return (new ViewModel([
+            // 'forms' => [
+                // 'user'      => new UserForm(),
+                // 'group'     => new GroupForm(),
+                // 'tab'       => new TabForm(),
+                // 'app'       => new AppForm(),
+                // 'attribute' => new AttributeForm(),
+                // 'grouptype' => new GroupTypeForm(),
+                // 'ipaddress' => new IpAddressForm(),
+                // 'ownertype' => new OwnerTypeForm(),
+                // 'privilege' => new PrivilegeForm(),
+            // ],
         ]))
         ->setTemplate('application/dashboard/index');
     }
@@ -62,33 +80,43 @@ class ApplicationController extends AbstractActionController
             Session::hasPrivilege('auth');
 
             $user = Session::getUser();
-            printf('<br>user is coming back with empty properties, causes failure on defaultTab()<br>');
-            var_dump($user);
-            exit();
-            // user is
-            if ($user) {
-                $tab = $user->defaultTab();
-                if ($tab) {
-                    $apps = $tab->getApps();
-                } else {
-                    $portalError = true;
-                    $portalErrorMessage = 'No applications could be located for you. Please contact your technology support staff.';
-                }
-            } else {
+
+            if ($user)
+            {
+              $tab = $user->defaultTab();
+              if ($tab)
+              {
+                $apps = $tab->getApps();
+              }
+              else
+              {
                 $portalError = true;
-                $portalErrorMessage = 'We cannot find your user profile. Please contact your technology support staff.';
+                $portalErrorMessage = 'No applications could be located for you. Please contact your technology support staff, ESU technical support, or NebraskaCloud support at help@esucc.org.';
+              }
             }
-            if ($portalError) {
-                return new ViewModel([
-                'portalError'        => $portalError,
+            else
+            {
+              $portalError = true;
+              $portalErrorMessage = 'We cannot find your user profile. Please contact your technology support staff, ESU technical support, or NebraskaCloud support at help@esucc.org.';
+            }
+            if ($portalError)
+            {
+              return (new ViewModel([
+                'portalError' => $portalError,
                 'portalErrorMessage' => $portalErrorMessage,
               ]);
             }
-            $this->layout()->setVariable('themeColor', $user->getThemeColor());
-            $this->layout()->setVariable('logoFilename', $user->getLogoFilename());
+            $this->layout()->setVariable('themeColor',$user->getThemeColor());
+            $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
+            $this->layout()->setVariable('tabSlug',$tab->slug);
+
+            if (Session::hasPrivilege('sudo'))
+            {
+              $this->layout()->setVariable('sudo', true);
+            }
 
             return (new ViewModel([
-                'apps' => $tab->getApps(),
+                'apps' => $apps,
             ]))
             ->setTemplate('application/tab/index');
         }
@@ -119,17 +147,18 @@ class ApplicationController extends AbstractActionController
 
         $user = $this->getTable('user')->get($attributes['mail'][0], ['type' => 'email']);
 
-        if (!$user) {
-            // add user, privilege, and group
-            $user = new User();
-            $user->email = $attributes['mail'][0];
-            $user->name = $attributes['givenName'][0].' '.$attributes['sn'][0];
-            $user->codist = $attributes['esucc-cdn'][0];
-            $usersTable = $this->getTable('user');
-            $userSlug = $usersTable->saveUser($user);
-            $tables->getTable('userPrivileges')->addCorrelation($userSlug, 'auth');
-            $tables->getTable('userGroups')
-            ->addCorrelation($userSlug, substr($user->codist, 0, 7));
+        if (!$user)
+        {
+          // add user, privilege, and group
+          $user = new User();
+          $user->email = $attributes['mail'][0];
+          $user->name = $attributes['givenName'][0] . " " . $attributes['sn'][0];
+          $user->codist = $attributes['esucc-cdn'][0];
+          $usersTable = $this->getTable('user');
+          $userSlug = $usersTable->save($user)->slug;
+          $tables->getTable('userPrivileges')->addCorrelation($userSlug,'auth');
+          $tables->getTable('userGroups')
+            ->addCorrelation($userSlug, substr($user->codist,0,7));
         }
         // make session active
         Session::start();

@@ -45,9 +45,24 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
                 ]);
         });
 
-        return $tables
-            ->getTable('tabs')
-            ->getTabs(array_column($rowset->toArray(), 'tabSlug'));
+        $row = $rowset->current();
+
+        while ($row)
+        {
+          $rowArray[] = $row;
+          $row = $rowset->next();
+        }
+
+        if (is_array($rowArray))
+        {
+          return $tables
+            ->getTable('tab')
+            ->getTabs(array_column($rowArray, 'tabSlug'));
+        }
+        else
+        {
+          return (null);
+        }
     }
 
     public function getOwner($slug)
@@ -56,12 +71,12 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
         $row = $rowset->current();
 
-        if (!$row) {
-            throw new RuntimeException(sprintf(
-                'OwnerTabs could not Find Row with identifier %d of type Tab',
-                $slug
-            ));
-        }
+        // if (!$row) {
+        //     throw new RuntimeException(sprintf(
+        //         'OwnerTabs could not Find Row with identifier %d of type Tab',
+        //         $slug
+        //     ));
+        // }
 
         return $row;
     }

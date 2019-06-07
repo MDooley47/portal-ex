@@ -10,6 +10,7 @@ use Traits\Tables\HasColumns;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Validator\Db\RecordExists;
 
 class UserPrivilegesTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
@@ -49,14 +50,19 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
             $requestedPrivilegeLevel = $privilege->level;
         }
 
-        $existingPrivilegeLevel = $this->getUserPrivilege($user, $group);
+        $userPrivilegeArr = $this->getUserPrivilege($user, $group);
+        $existingPrivilegeLevel = $privilegeTable->getPrivilege($userPrivilegeArr['privilegeSlug'])->level;
 
-        if ($existingPrivilegeLevel <= $requestedPrivilegeLevel) {
+        if ($existingPrivilegeLevel >= $requestedPrivilegeLevel) {
             return true;
         } elseif (isset($group)) {
             $parentGroup = $tables->getTable('groupGroups')->getParent($group);
 
             return $this->hasPrivilege($user, $privilege, $parentGroup);
+        }
+        else
+        {
+          return false;
         }
     }
 
@@ -70,7 +76,7 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
      */
     public function getUserPrivilege($user, $group = null)
     {
-        $user = getSlug($user);
+        // $user = getSlug($user);
 
         if (isset($group)) {
             $group = getSlug($group);
@@ -90,7 +96,6 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
                 ->getTable('privilege')
                 ->getPrivilege('anon');
         }
-
         return $output;
     }
 
