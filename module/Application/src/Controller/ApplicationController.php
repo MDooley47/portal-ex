@@ -104,7 +104,7 @@ class ApplicationController extends AbstractActionController
               return (new ViewModel([
                 'portalError' => $portalError,
                 'portalErrorMessage' => $portalErrorMessage,
-              ]));
+              ]);
             }
             $this->layout()->setVariable('themeColor',$user->getThemeColor());
             $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
@@ -159,16 +159,14 @@ class ApplicationController extends AbstractActionController
           $tables->getTable('userPrivileges')->addCorrelation($userSlug,'auth');
           $tables->getTable('userGroups')
             ->addCorrelation($userSlug, substr($user->codist,0,7));
-
         }
         // make session active
         Session::start();
         Session::setUser($user);
         Session::setActiveTime();
-        Session::set('attributes',$attributes);
+        Session::set('attributes', $attributes);
 
         return $this->redirect()->toRoute('home');
-
     }
 
     public function loginPostAction()
