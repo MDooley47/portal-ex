@@ -11743,6 +11743,17 @@ body {
   border-bottom-left-radius: 15px;
 }
 
+@media (max-width: 575.98px) {
+  .app-tile {
+    height: 75px;
+  }
+
+  .app-tile,
+  .app-tile .app-name {
+    width: 75px;
+  }
+}
+
 /** Header **/
 
 header {
