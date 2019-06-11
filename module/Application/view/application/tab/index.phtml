@@ -11,17 +11,11 @@ foreach ($apps as $app) {
 }
 
 ?>
-
+<div class="row">
 <?php
-    $i = 0;
-    $opened = false;
     foreach ($data as $app) :
-        $i++;
-        if ((($i-1) % 6) == 0 && !$opened) :
-            echo "<div class='row'>";
-        endif;
 ?>
-        <div class="col-6 col-sm-3 col-md-2">
+        <div class="col-4 col-sm-3 col-md-2">
           <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
             <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
                     <img src="<?= $app->iconPath ?>" alt="">
@@ -30,15 +24,6 @@ foreach ($apps as $app) {
           </a>
         </div>
 <?php
-        if ((($i) % 6) == 0 && $opened) :
-            $opened = false;
-            echo "</div>";
-        else :
-            $opened = true;
-        endif;
     endforeach;
-    if ($opened)
-    {
-        echo "</div>";
-    }
 ?>
+</div>
