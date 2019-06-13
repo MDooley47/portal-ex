@@ -52,4 +52,11 @@
             width: 75px;
         }
     }
+    .app-tile img, .app-image {
+        margin-top: 3px;
+        height: auto;
+        width: auto;
+        max-height: 69px;
+        max-width: 69px;
+    }
 }
