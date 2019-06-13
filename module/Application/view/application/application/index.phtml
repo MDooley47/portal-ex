@@ -16,22 +16,16 @@ if ($apps)
 }
 
 ?>
-
+<div class="row">
 <?php
     if ($portalError)
     {
       printf("<h2>%s</h2>", $portalErrorMessage);
     }
 
-    $i = 0;
-    $opened = false;
     foreach ($data as $app) :
-        $i++;
-        if ((($i-1) % 6) == 0 && !$opened) :
-            echo "<div class='row'>";
-        endif;
 ?>
-        <div class="col-6 col-sm-3 col-md-2">
+        <div class="col-4 col-sm-3 col-md-2">
           <a href="<?= $this->url('app', ['action' => 'open', 'slug' => $app->slug]) ?>" target="_blank">
             <div class="app-tile" id="app_<?= $escaper->escapeHtml($app->slug) ?>">
                                     <img src="<?= $app->iconPath ?>" alt="">
@@ -40,49 +34,6 @@ if ($apps)
           </a>
         </div>
 <?php
-        if ((($i) % 6) == 0 && $opened) :
-            $opened = false;
-            echo "</div>";
-        else :
-            $opened = true;
-        endif;
     endforeach;
-    if ($opened)
-    {
-        echo "</div>";
-    }
 ?>
-<!--
-<hr>
-<span class="text-center">Below is a view of what is in the db</span>
-<hr>
-<table class="table">
-    <tr>
-    <th>ID</th>
-    <th>Version</th>
-    <th>Slug</th>
-    <th>Name</th>
-    <th>URL</th>
-    <th>iconPath</th>
-    <th>Actions</th>
-</tr>
-<?php foreach ($data as $app) : ?>
-    <tr>
-        <td><?= $escaper->escapeHtml($app->id) ?></td>
-        <td><?= $escaper->escapeHtml($app->version) ?></td>
-        <td><?= $escaper->escapeHtml($app->slug) ?></td>
-        <td><?= $escaper->escapeHtml($app->name) ?></td>
-        <td><?= $escaper->escapeHtml($app->url) ?></td>
-        <td><?= $escaper->escapeHtml($app->iconPath) ?></td>
-        <td>
-            <a href="<?= $this->url('app', ['action' => 'edit', 'slug' => $app->slug]) ?>">Edit</a>
-            |
-            <a class="post" href="<?= $this->url('app', ['action' => 'delete', 'slug' => $app->slug]) ?>">Delete</a>
-        </td>
-    </tr>
-<?php endforeach;?>
-</table>
-<p>
-    <a href="<?= $this->url('app', ['action' => 'add']) ?>">Add new app</a>
-</p>
--->
+</div>
