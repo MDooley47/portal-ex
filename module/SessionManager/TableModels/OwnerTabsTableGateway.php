@@ -7,7 +7,6 @@ use SessionManager\Tables;
 use Tab\Model\Tab;
 use Traits\Interfaces\CorrelationInterface;
 use Traits\Tables\HasColumns;
-use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
@@ -47,21 +46,17 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
         $row = $rowset->current();
 
-        while ($row)
-        {
-          $rowArray[] = $row;
-          $row = $rowset->next();
+        while ($row) {
+            $rowArray[] = $row;
+            $row = $rowset->next();
         }
 
-        if (is_array($rowArray))
-        {
-          return $tables
+        if (is_array($rowArray)) {
+            return $tables
             ->getTable('tab')
             ->getTabs(array_column($rowArray, 'tabSlug'));
-        }
-        else
-        {
-          return (null);
+        } else {
+            return;
         }
     }
 

@@ -59,10 +59,8 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
             $parentGroup = $tables->getTable('groupGroups')->getParent($group);
 
             return $this->hasPrivilege($user, $privilege, $parentGroup);
-        }
-        else
-        {
-          return false;
+        } else {
+            return false;
         }
     }
 
@@ -96,6 +94,7 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
                 ->getTable('privilege')
                 ->getPrivilege('anon');
         }
+
         return $output;
     }
 

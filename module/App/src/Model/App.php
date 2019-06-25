@@ -39,11 +39,11 @@ class App extends Model implements HasSlugInterface, Bootable
             'required' => true,
         ],
         'iconPath' => [
-          'type' => 'text',
+          'type'     => 'text',
           'required' => false,
           'readonly' => true,
-          'label' => 'Icon Path',
-        ]
+          'label'    => 'Icon Path',
+        ],
     ];
 
     /**
