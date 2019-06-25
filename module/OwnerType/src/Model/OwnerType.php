@@ -51,10 +51,9 @@ class OwnerType extends Model implements HasSlugInterface, Bootable
 
     public function __construct(array $attributes = [])
     {
-      $this->slug = $attributes[0]['slug'];
-      $this->name = $attributes[0]['name'];
-      $this->description = $attributes[0]['description'];
-
+        $this->slug = $attributes[0]['slug'];
+        $this->name = $attributes[0]['name'];
+        $this->description = $attributes[0]['description'];
     }
 
     /**

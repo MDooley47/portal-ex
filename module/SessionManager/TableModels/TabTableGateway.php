@@ -69,6 +69,7 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
     {
         $select = $this->getSql()->select();
         $select->order('name ASC');
+
         return $this->selectWith($select);
     }
 
@@ -105,6 +106,7 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
                 $id, 'slug'
             ));
         }
+
         return new Tab($row->getArrayCopy());
     }
 
@@ -114,6 +116,7 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
         foreach ($tabSlugs as $tab) {
             array_push($tabs, $this->getTab($tab));
         }
+
         return $tabs;
     }
 

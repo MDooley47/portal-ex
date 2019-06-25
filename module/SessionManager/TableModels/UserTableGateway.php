@@ -100,10 +100,8 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
 
         $row = $rowset->current();
         if ($row) {
-          return new User($row->getArrayCopy());
+            return new User($row->getArrayCopy());
         }
-
-        return (null);
     }
 
     /**
@@ -172,8 +170,8 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
     public function save($user)
     {
         $data = [
-            'name'  => $user->name,
-            'email' => $user->email,
+            'name'   => $user->name,
+            'email'  => $user->email,
             'codist' => $user->codist,
         ];
 
