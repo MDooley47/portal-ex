@@ -73,6 +73,23 @@ foreach ($csv as $row) {
     }
 
     /*
+     * Manually used (with psysh) for adding county groups:
+     *
+     * $rows = array_map('str_getcsv', file(__DIR__.'/counties.csv'));
+     * $header = array_shift($rows);
+     * $csv = [];
+     * foreach ($rows as $row) {
+     *     $csv[] = array_combine($header, $row);
+     * }
+     *
+     * $db = new PDO('pgsql:host=db;dbname=portal', 'postgres', 'asdfgh');
+     *
+     * foreach ($csv as $row) {
+     *    $db->exec("INSERT INTO groups (\"groupType\", slug, name) VALUES('ri12io', '".$row['CODIST']."', '".ucwords(strtolower($row['COUNTY']))."');");
+     * }
+     */
+
+    /*
         // Add Buildings
 
         try
