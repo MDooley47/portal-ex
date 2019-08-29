@@ -10,26 +10,40 @@ services:
             # Exposes the PostgreSQL port (5432) so that
             # you may connect to it from the host machine.
             # See github.com/MDooley47/pgweb
+        volumes:
+            - portal-db:/var/lib/postgresql/data
+            - .:/var/www
+        restart: always
     zf:
         depends_on:
-          - db
+            - db
         build: .
         ports:
-            - "8080:80"
+            - "0.0.0.0:80:80"
+            - "0.0.0.0:443:443"
         volumes:
             - .:/var/www
-            - data:/volumes/storage
+            - portal-files:/volumes/storage
+            - ./simplesamlphp/cert:/var/www/vendor/simplesamlphp/simplesamlphpcert/
+            - ./simplesamlphp/config:/var/www/vendor/simplesamlphp/simplesamlphp/config/
+            - ./simplesamlphp/metadata:/var/www/vendor/simplesamlphp/simplesamlphp/metadata
+            - ./data/logs:/var/www/vendor/simplesamlphp/simplesamlphp/log
+            - ./xdebug/docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
         links:
             - db
-    migration:
-        build: .
-        command: ["./docker-scripts/wait-for-postgres.sh", "db", "php", "data/load_db.php"]
-        volumes:
-            - .:/var/www
-        depends_on:
-            - db
-            - zf
+        restart: always
+#       migration:
+#       build: .
+#       command: ["./docker-scripts/wait-for-postgres.sh", "db", "php", "data/load_db.php"]
+#       volumes:
+#           - .:/var/www
+#       depends_on:
+#           - db
+#           - zf
 volumes:
-    data:
+    portal-files:
         external:
             name: portal-ex-data
+    portal-db:
+        external:
+            name: portal-pgdata
