@@ -27,6 +27,11 @@ abstract class Model
         self::protectedFill($attributes);
     }
 
+    public function __toString()
+    {
+        return implode(' | ', $this->getArrayCopy());
+    }
+
     /**
      * Get all rows.
      *
@@ -117,11 +122,6 @@ abstract class Model
     }
 
     abstract public function getArrayCopy();
-
-    public static function cast(array $attributes)
-    {
-        return castModel(self::$table, $attributes);
-    }
 
     public static function buildMultiPKWhere($identifiers)
     {
