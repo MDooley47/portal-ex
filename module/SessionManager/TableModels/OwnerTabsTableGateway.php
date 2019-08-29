@@ -2,6 +2,7 @@
 
 namespace SessionManager\TableModels;
 
+use Group\Model\Group;
 use OwnerType\Model\OwnerType;
 use SessionManager\Tables;
 use Tab\Model\Tab;
@@ -62,18 +63,27 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
     public function getOwner($slug)
     {
+        $tables = (new Tables());
+
+        $slug = getSlug($slug);
+
         $rowset = $this->select(['tabSlug' => $slug]);
 
-        $row = $rowset->current();
+        $owner = $rowset->current();
 
-        // if (!$row) {
+        // if (!$owner) {
         //     throw new RuntimeException(sprintf(
         //         'OwnerTabs could not Find Row with identifier %d of type Tab',
         //         $slug
         //     ));
         // }
 
-        return $row;
+        if ($owner->ownerType === $tables->getTable('ownerType')
+                ->get('group', ['type' => 'name'])->slug) {
+            $owner = $tables->getTable('group')->get($owner->ownerSlug);
+        }
+
+        return $owner;
     }
 
     public function correlationExists($tab, $owner, $options = [])
