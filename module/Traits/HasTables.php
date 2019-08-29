@@ -65,7 +65,7 @@ trait HasTables
     {
         return (isset($this->tables[strtolower($table)]))
             ? $this->tables[strtolower($table)]
-            : $this->table;
+            : $this->tables;
     }
 
     private function addTableGateway($name, $ref)
