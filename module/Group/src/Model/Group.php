@@ -85,17 +85,10 @@ class Group extends Model implements HasSlugInterface
      */
     public function getTabs()
     {
-        $tables = new Tables();
-
-        //dd($tables->getTable('ownerType'));
-
-        return $tables
+        return (new Tables())
             ->getTable('ownerTabs')
             ->getTabs($this->slug, [
-                'type' => $tables
-                    ->getTable('ownerType')
-                    ->getType('group', ['type' => 'name'])
-                    ->name,
+                'type' => 'group',
             ]);
     }
 
