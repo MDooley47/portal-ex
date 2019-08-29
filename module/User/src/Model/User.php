@@ -39,23 +39,6 @@ class User extends Model implements HasSlugInterface, Bootable
         ],
     ];
 
-    /**
-     * Int for User's id found in the db.
-     */
-    public $id;
-    /**
-     * String for User's name.
-     */
-    public $name;
-    /**
-     * String for User's email.
-     */
-    public $email;
-
-    /**
-     * String for the Nebraska county-district number (CO-DST-BLDG format).
-     */
-    public $codist;
 
     /**
      * User constructor.
@@ -92,7 +75,7 @@ class User extends Model implements HasSlugInterface, Bootable
      *
      * note: hyphen's are assumed to be part of the codist.
      */
-    public function building($options = []): string
+    public function building($options = []): String
     {
         arrayValueDefault('composite-key', $options, true);
 
@@ -105,21 +88,26 @@ class User extends Model implements HasSlugInterface, Bootable
         return $out;
     }
 
-    public function county(): string
+    public function county(): String
     {
         return explode('-', $this->codist)[0];
     }
 
     public function defaultTab()
     {
-        return(new Tables())
-            ->getTable('ownerTabs')
-            ->getTabs($this->district())[0];
-        new Tables();
-        //->getTab($this->codist);
+        $groupTable = (new Tables())->getTable('group');
+        if ($groupTable->exists($this->building())) {
+            $group = $groupTable->get($this->building());
+        } else if ($groupTable->exists($this->district())) {
+            $group = $groupTable->get($this->district());
+        } else {
+            $group = $groupTable->get($this->county());
+        }
+
+        return $group->getTabs()[0];
     }
 
-    public function district($options = []): string
+    public function district($options = []): String
     {
         arrayValueDefault('composite-key', $options, true);
 
@@ -174,39 +162,41 @@ class User extends Model implements HasSlugInterface, Bootable
 
     /**
      *  Returns the relative path (string) to the user's group logo.
-     */
+    */
     public function getLogoFilename()
     {
-        $fn = '';
-        // look up the group based on the user's CDN
-        $tables = new Tables();
-        $groupsTable = $tables->getTable('group');
-        $group = $groupsTable->getGroup($this->district());
+      $fn = "";
+      // look up the group based on the user's CDN
+      $tables = new Tables();
+      $groupsTable = $tables->getTable('group');
+      $group = $groupsTable->getGroup($this->district());
 
-        if ($group) {
-            $fn = $group->logoFilename;
-        }
+      if ($group)
+      {
+        $fn = $group->logoFilename;
+      }
 
-        return $fn;
+      return ($fn);
     }
 
     /**
      *  Returns the background brand/header color to use for this user in
-     *  6-digit hex format (example: #FF7700).
-     */
+     *  6-digit hex format (example: #FF7700)
+    */
     public function getThemeColor()
     {
-        $color = '';
-        // look up the group based on the user's CDN
-        $tables = new Tables();
-        $groupsTable = $tables->getTable('group');
-        $group = $groupsTable->getGroup($this->district());
+      $color = "";
+      // look up the group based on the user's CDN
+      $tables = new Tables();
+      $groupsTable = $tables->getTable('group');
+      $group = $groupsTable->getGroup($this->district());
 
-        if ($group) {
-            $color = $group->themeColor;
-        }
+      if ($group)
+      {
+        $color = $group->themeColor;
+      }
 
-        return $color;
+      return ($color);
     }
 
     /**
