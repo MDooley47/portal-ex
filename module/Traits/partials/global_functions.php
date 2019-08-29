@@ -285,12 +285,24 @@ function castModel($table, array $attributes)
     $model = null;
 
     switch (strtolower($table)) {
-        case 'apps':
+        case 'app':case 'apps':
             $model = \App\Model\App::cast($attributes);
             break;
-        case 'users':
+        case 'user':case 'users':
             $model = \User\Model\User::cast($attributes);
-            break; }
+            break;
+        case 'privilege':case 'privileges':
+            $model = \Privilege\Model\Privilege::cast($attributes);
+            break;
+        case 'tab':case 'tabs':
+            $model = \Tab\Model\Tab::cast($attributes);
+            break;
+        case 'group':case 'groups':
+            $model = \Group\Model\Group::cast($attributes);
+            break;
+        default:
+            throw new \Traits\Exceptions\CastException($table . ' cast not created.');
+    }
 
     return $model;
 }
