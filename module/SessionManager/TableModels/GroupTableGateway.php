@@ -104,7 +104,9 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
             ));
         }
 
-        return $row;
+        $group = castModel('groups', $row->getArrayCopy());
+
+        return $group;
     }
 
     /**
