@@ -8,19 +8,10 @@
 
 namespace Application\Controller;
 
-use App\Form\AppForm;
-use Attribute\Form\AttributeForm;
-use Group\Form\GroupForm;
-use GroupType\Form\GroupTypeForm;
-use IpAddress\Form\IpAddressForm;
-use OwnerType\Form\OwnerTypeForm;
-use Privilege\Form\PrivilegeForm;
 use RuntimeException;
 use SessionManager\Session;
 use SessionManager\Tables;
-use Tab\Form\TabForm;
 use Traits\HasTables;
-use User\Form\UserForm;
 use User\Model\User;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
@@ -97,13 +88,11 @@ class ApplicationController extends AbstractActionController
               $portalError = true;
               $portalErrorMessage = 'We cannot find your user profile. Please contact your technology support staff, ESU technical support, or NebraskaCloud support at help@esucc.org.';
             }
-            if ($portalError)
-            {
-              return (new ViewModel([
-                'portalError' => $portalError,
-                'portalErrorMessage' => $portalErrorMessage,
-              ]));
+
+            if ($portalError) {
+                return $this->portalError($portalErrorMessage, $portalError, empty($user) ?: $user);
             }
+
             $this->layout()->setVariable('themeColor',$user->getThemeColor());
             $this->layout()->setVariable('logoFilename',$user->getLogoFilename());
             $this->layout()->setVariable('tabSlug',$tab->slug);
@@ -168,6 +157,12 @@ class ApplicationController extends AbstractActionController
         Session::setActiveTime();
         Session::set('attributes',$attributes);
 
+        if (!Session::hasPrivilege('auth')) {
+            $email = Session::getUser()->email;
+            Session::destroy();
+            return $this->portalError('User not authorized. Please contact your technology support staff, ESU technical support, or NebraskaCloud support at help@esucc.org.', true, $email);
+        }
+
         return $this->redirect()->toRoute('home');
 
     }
@@ -203,6 +198,22 @@ class ApplicationController extends AbstractActionController
             }
         } else {
             return $this->redirect()->toRoute('home');
+        }
+    }
+
+    public function portalError($message, $isError = true, $email = null) {
+        if (isset($email)) {
+            if ($email instanceof User || ($email instanceof \ArrayObject && $email->offsetExists('email'))) {
+                $email = $email->email;
+            }
+            note('Issue with ' . $email . ':', 'warning');
+        }
+        note($message, 'warning');
+        if ($isError) {
+            return (new ViewModel([
+                'portalError' => $isError,
+                'portalErrorMessage' => $message,
+            ]))->setTemplate('application/application/index');
         }
     }
 }
