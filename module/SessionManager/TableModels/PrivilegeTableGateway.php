@@ -99,7 +99,7 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
         $row = $rowset->current();
         if (!$row) {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
+                'Privileges could not Find Row with identifier %d of type %s',
                 $id, Privilege::$primaryKey
             ));
         }
@@ -132,13 +132,14 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
      *
      * @return bool If value exists
      */
-    public function exists($id, $options = ['field' => 'slug'])
+    public function exists($slug, $options = ['field' => 'slug'])
     {
+        $slug = getSlug($slug);
         return (new RecordExists([
             'table'   => $this->getTable(),
             'field'   => $options['field'] ?? Privilege::$primaryKey,
             'adapter' => $this->getAdapter(),
-        ]))->isValid($id);
+        ]))->isValid($slug);
     }
 
     /**

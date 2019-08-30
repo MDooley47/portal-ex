@@ -99,7 +99,7 @@ class SettingTableGateway extends AbstractTableGateway implements UniversalTable
 
         if (!$row) {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %s of type %s',
+                'Settings could not Find Row with identifier %s of type %s',
                 $id, Setting::$primaryKey
             ));
         }

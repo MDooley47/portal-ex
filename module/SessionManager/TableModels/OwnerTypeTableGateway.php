@@ -131,7 +131,7 @@ class OwnerTypeTableGateway extends AbstractTableGateway implements UniversalTab
 
         if (!$row) {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %d of type %s',
+                'OwnerTypes could not Find Row with identifier %d of type %s',
                 $id, $options['type']
             ));
         }

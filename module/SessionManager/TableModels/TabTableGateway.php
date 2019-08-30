@@ -102,7 +102,7 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
 
         if (!$row) {
             throw new RuntimeException(sprintf(
-                'Could not Find Row with identifier %s of type %s.',
+                'Tab could not Find Row with identifier %s of type %s.',
                 $id, 'slug'
             ));
         }
