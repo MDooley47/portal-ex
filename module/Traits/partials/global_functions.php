@@ -76,14 +76,40 @@ function logger($type)
     $logger = new Logger();
     $logPath = APPLICATION_PATH.'/data/logs/';
 
-    $logFileInfo = $logFileDebug = $logFileDefault = 'log.log';
+    $logFileDebug   = 'debug.log';
+    $logFileInfo    = 'informational.log';
+    $logFileNotice  = 'notice.log';
+    $logFileWarn    = 'warning.log';
+    $logFileErr     = 'error.log';
+    $logFileCrit    = 'critical.log';
+    $logFileAlert   = 'alert.log';
+    $logFileEmerg   = 'emergency.log';
+    $logFileDefault = 'log.log';
 
     switch (strtolower($type)) {
         case 'debug':
             $logFile = $logPath.$logFileDebug;
             break;
-        case 'info':
+        case 'info':case 'informational':
             $logFile = $logPath.$logFileInfo;
+            break;
+        case 'notice':
+            $logFile = $logPath.$logFileNotice;
+            break;
+        case 'warn':case 'warning':
+            $logFile = $logPath.$logFileWarn;
+            break;
+        case 'err':case 'error':
+            $logFile = $logPath.$logFileErr;
+            break;
+        case 'crit':case 'critical':
+            $logFile = $logPath.$logFileCrit;
+            break;
+        case 'alert':
+            $logFile = $logPath.$logFileAlert;
+            break;
+        case 'emerg':case 'emergency':
+            $logFile = $logPath.$logFileEmerg;
             break;
         default:
             $logFile = $logPath.$logFileDefault;
@@ -92,6 +118,11 @@ function logger($type)
 
     $writer = new Stream($logFile);
     $logger->addWriter($writer);
+
+    if ($logFile !== $logPath.$logFileDefault) {
+        $completeWriter = new Stream($logPath . $logFileDefault);
+        $logger->addWriter($completeWriter);
+    }
 
     return $logger;
 }
@@ -114,9 +145,28 @@ function note($value, $type = null)
         case 'debug':
             $logger->log(Logger::DEBUG, $value);
             break;
-        case 'info':
+        case 'info':case 'informational':
         default:
             $logger->log(Logger::INFO, $value);
+            break;
+        case 'notice':
+            $logger->log(Logger::NOTICE, $value);
+            break;
+        case 'warn':case 'warning':
+            $logger->log(Logger::WARN, $value);
+            break;
+        case 'err':case 'error':
+            $logger->log(Logger::ERR, $value);
+            break;
+        case 'crit':case 'critical':
+            $logger->log(Logger::CRIT, $value);
+            break;
+        case 'alert':
+            $logger->log(Logger::ALERT, $value);
+            break;
+        case 'emerg':case 'emergency':
+            $logger->log(Logger::EMERG, $value);
+            break;
     }
 }
 
