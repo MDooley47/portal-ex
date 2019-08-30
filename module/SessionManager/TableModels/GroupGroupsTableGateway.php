@@ -8,6 +8,7 @@ use Traits\Interfaces\CorrelationInterface;
 use Traits\Tables\HasColumns;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
+use Zend\Db\Sql\Select;
 
 class GroupGroupsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
@@ -60,17 +61,24 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
      */
     public function getParentGroup($childGroup)
     {
-        $groupTable = (new Tables())->getTable('group');
+        $tables = new Tables();
+        $group = null;
 
         if ($childGroup instanceof Group) {
             $childGroup = $childGroup->slug;
         }
 
         $rowset = $this->select(function (Select $select) use ($childGroup) {
-            $select->where('childGroup', '=', $childGroup);
+            $select->where("\"childGroup\" = '" . $childGroup . "'");
         });
 
-        dd($rowset->current);
+        $row = $rowset->current();
+
+        if (!empty($row)) {
+            $group = $tables->getTable('group')->get($row->parentGroup);
+        }
+
+        return $group;
     }
 
     public function correlationExists($parentGroup, $childGroup, $options = [])
