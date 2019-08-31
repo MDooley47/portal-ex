@@ -135,6 +135,7 @@ class PrivilegeTableGateway extends AbstractTableGateway implements UniversalTab
     public function exists($slug, $options = ['field' => 'slug'])
     {
         $slug = getSlug($slug);
+
         return (new RecordExists([
             'table'   => $this->getTable(),
             'field'   => $options['field'] ?? Privilege::$primaryKey,

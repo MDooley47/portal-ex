@@ -2,10 +2,11 @@
 
 namespace Traits\Exceptions;
 
-use \Exception;
+use Exception;
 
-class CastException extends Exception {
-    public function __construct($message = "", $code = 0, Throwable $previous = null)
+class CastException extends Exception
+{
+    public function __construct($message = '', $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, $code, $previous);
     }

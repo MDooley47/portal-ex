@@ -76,14 +76,14 @@ function logger($type)
     $logger = new Logger();
     $logPath = APPLICATION_PATH.'/data/logs/';
 
-    $logFileDebug   = 'debug.log';
-    $logFileInfo    = 'informational.log';
-    $logFileNotice  = 'notice.log';
-    $logFileWarn    = 'warning.log';
-    $logFileErr     = 'error.log';
-    $logFileCrit    = 'critical.log';
-    $logFileAlert   = 'alert.log';
-    $logFileEmerg   = 'emergency.log';
+    $logFileDebug = 'debug.log';
+    $logFileInfo = 'informational.log';
+    $logFileNotice = 'notice.log';
+    $logFileWarn = 'warning.log';
+    $logFileErr = 'error.log';
+    $logFileCrit = 'critical.log';
+    $logFileAlert = 'alert.log';
+    $logFileEmerg = 'emergency.log';
     $logFileDefault = 'log.log';
 
     switch (strtolower($type)) {
@@ -120,7 +120,7 @@ function logger($type)
     $logger->addWriter($writer);
 
     if ($logFile !== $logPath.$logFileDefault) {
-        $completeWriter = new Stream($logPath . $logFileDefault);
+        $completeWriter = new Stream($logPath.$logFileDefault);
         $logger->addWriter($completeWriter);
     }
 
@@ -351,7 +351,7 @@ function castModel($table, array $attributes)
             $model = \Group\Model\Group::cast($attributes);
             break;
         default:
-            throw new \Traits\Exceptions\CastException($table . ' cast not created.');
+            throw new \Traits\Exceptions\CastException($table.' cast not created.');
     }
 
     return $model;

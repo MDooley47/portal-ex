@@ -6,9 +6,9 @@ use Group\Model\Group;
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
 use Traits\Tables\HasColumns;
+use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
-use Zend\Db\Sql\Select;
 
 class GroupGroupsTableGateway extends AbstractTableGateway implements CorrelationInterface
 {
@@ -69,7 +69,7 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
         }
 
         $rowset = $this->select(function (Select $select) use ($childGroup) {
-            $select->where("\"childGroup\" = '" . $childGroup . "'");
+            $select->where("\"childGroup\" = '".$childGroup."'");
         })->toArray();
 
         if (!empty($rowset)) {
@@ -77,7 +77,7 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
             if (count($rowset) == 1) {
                 $group = $groupTable->get($rowset[0]->parentGroup);
             } else {
-                foreach($rowset as $i=>$row) {
+                foreach ($rowset as $i=>$row) {
                     $group[$i] = $groupTable->get($row['parentGroup']);
                 }
             }
