@@ -46,7 +46,7 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
 
         if ($privilege instanceof Privilege || $privilege instanceof \ArrayObject) {
             $requestedPrivilegeLevel = $privilege->level;
-        } else if ($privilegeTable->exists($privilege)) {
+        } elseif ($privilegeTable->exists($privilege)) {
             // the following line prevents recursion from making
             // unnecessary database calls.
             $privilege = $privilegeTable->get($privilege);
@@ -72,17 +72,17 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
 
             if ($parentGroups instanceof Group) {
                 return $this->hasPrivilege($user, $privilege, $parentGroups);
-            } else if (isset($parentGroups) && count($parentGroups) > 0) {
+            } elseif (isset($parentGroups) && count($parentGroups) > 0) {
                 $hasPrivilege = false;
-                foreach($parentGroups as $parentGroup) {
+                foreach ($parentGroups as $parentGroup) {
                     if ($this->hasPrivilege($user, $privilege, $parentGroup)) {
                         $hasPrivilege = true;
                         break;
                     }
                 }
+
                 return $hasPrivilege;
             }
-
         }
 
         return false;

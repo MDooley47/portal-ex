@@ -2,7 +2,6 @@
 
 namespace SessionManager\TableModels;
 
-use Group\Model\Group;
 use OwnerType\Model\OwnerType;
 use SessionManager\Tables;
 use Tab\Model\Tab;

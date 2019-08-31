@@ -39,7 +39,6 @@ class User extends Model implements HasSlugInterface, Bootable
         ],
     ];
 
-
     /**
      * User constructor.
      *
@@ -75,7 +74,7 @@ class User extends Model implements HasSlugInterface, Bootable
      *
      * note: hyphen's are assumed to be part of the codist.
      */
-    public function building($options = []): String
+    public function building($options = []): string
     {
         arrayValueDefault('composite-key', $options, true);
 
@@ -88,7 +87,7 @@ class User extends Model implements HasSlugInterface, Bootable
         return $out;
     }
 
-    public function county(): String
+    public function county(): string
     {
         return explode('-', $this->codist)[0];
     }
@@ -98,7 +97,7 @@ class User extends Model implements HasSlugInterface, Bootable
         $groupTable = (new Tables())->getTable('group');
         if ($groupTable->exists($this->building())) {
             $group = $groupTable->get($this->building());
-        } else if ($groupTable->exists($this->district())) {
+        } elseif ($groupTable->exists($this->district())) {
             $group = $groupTable->get($this->district());
         } else {
             $group = $groupTable->get($this->county());
@@ -107,7 +106,7 @@ class User extends Model implements HasSlugInterface, Bootable
         return $group->getTabs()[0];
     }
 
-    public function district($options = []): String
+    public function district($options = []): string
     {
         arrayValueDefault('composite-key', $options, true);
 
@@ -162,41 +161,39 @@ class User extends Model implements HasSlugInterface, Bootable
 
     /**
      *  Returns the relative path (string) to the user's group logo.
-    */
+     */
     public function getLogoFilename()
     {
-      $fn = "";
-      // look up the group based on the user's CDN
-      $tables = new Tables();
-      $groupsTable = $tables->getTable('group');
-      $group = $groupsTable->getGroup($this->district());
+        $fn = '';
+        // look up the group based on the user's CDN
+        $tables = new Tables();
+        $groupsTable = $tables->getTable('group');
+        $group = $groupsTable->getGroup($this->district());
 
-      if ($group)
-      {
-        $fn = $group->logoFilename;
-      }
+        if ($group) {
+            $fn = $group->logoFilename;
+        }
 
-      return ($fn);
+        return $fn;
     }
 
     /**
      *  Returns the background brand/header color to use for this user in
-     *  6-digit hex format (example: #FF7700)
-    */
+     *  6-digit hex format (example: #FF7700).
+     */
     public function getThemeColor()
     {
-      $color = "";
-      // look up the group based on the user's CDN
-      $tables = new Tables();
-      $groupsTable = $tables->getTable('group');
-      $group = $groupsTable->getGroup($this->district());
+        $color = '';
+        // look up the group based on the user's CDN
+        $tables = new Tables();
+        $groupsTable = $tables->getTable('group');
+        $group = $groupsTable->getGroup($this->district());
 
-      if ($group)
-      {
-        $color = $group->themeColor;
-      }
+        if ($group) {
+            $color = $group->themeColor;
+        }
 
-      return ($color);
+        return $color;
     }
 
     /**

@@ -200,30 +200,26 @@ class Session
 
     public static function hasTabAccess($tab)
     {
-      $tab = getSlug($tab);
-      // system admins can access every tab
-      if (self::hasPrivilege('sudo'))
-      {
-        return (true);
-      }
+        $tab = getSlug($tab);
+        // system admins can access every tab
+        if (self::hasPrivilege('sudo')) {
+            return true;
+        }
 
-      $table = (new Tables())->getTable('ownerTabs');
-      $owner = $table->getOwner($tab);
-      if (!$owner)
-      {
-        // no record found for the tab slug provided
-        return (false);
-      }
+        $table = (new Tables())->getTable('ownerTabs');
+        $owner = $table->getOwner($tab);
+        if (!$owner) {
+            // no record found for the tab slug provided
+            return false;
+        }
 
-      if (self::hasPrivilege('auth', $owner))
-      {
-        // user is a member of the group which owns the tab
-        return (true);
-      }
+        if (self::hasPrivilege('auth', $owner)) {
+            // user is a member of the group which owns the tab
+            return true;
+        }
 
-      return (false);
+        return false;
     }
-
 
     /**
      * @return array
