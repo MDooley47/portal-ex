@@ -59,7 +59,7 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
      *
      * @param $childGroup
      */
-    public function getParentGroup($childGroup)
+    public function getParentGroups($childGroup)
     {
         $tables = new Tables();
         $group = null;
@@ -70,12 +70,17 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
 
         $rowset = $this->select(function (Select $select) use ($childGroup) {
             $select->where("\"childGroup\" = '" . $childGroup . "'");
-        });
+        })->toArray();
 
-        $row = $rowset->current();
-
-        if (!empty($row)) {
-            $group = $tables->getTable('group')->get($row->parentGroup);
+        if (!empty($rowset)) {
+            $groupTable = $tables->getTable('group');
+            if (count($rowset) == 1) {
+                $group = $groupTable->get($rowset[0]->parentGroup);
+            } else {
+                foreach($rowset as $i=>$row) {
+                    $group[$i] = $groupTable->get($row['parentGroup']);
+                }
+            }
         }
 
         return $group;

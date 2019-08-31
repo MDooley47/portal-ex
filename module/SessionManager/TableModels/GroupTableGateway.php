@@ -99,7 +99,7 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
         $row = $rowset->current();
         if (!$row) {
             throw new RuntimeException(sprintf(
-                'Could not find row with identifier %s of type %s',
+                'Group could not find row with identifier %s of type %s',
                 $id, Group::$primaryKey
             ));
         }

@@ -2,6 +2,7 @@
 
 namespace SessionManager\TableModels;
 
+use Group\Model\Group;
 use Privilege\Model\Privilege;
 use SessionManager\Tables;
 use Traits\Interfaces\CorrelationInterface;
@@ -58,7 +59,7 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
             && ($existingPrivilegeLevel >= $requestedPrivilegeLevel)) {
             return true;
         } elseif (isset($group)) {
-            $parentGroup = $tables->getTable('groupGroups')->getParentGroup($group);
+            $parentGroups = $tables->getTable('groupGroups')->getParentGroups($group);
 
             /* If a user only has auth access on a parent group
              * they will not be given auth access on the child group by inference;
@@ -69,7 +70,19 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
                 $privilege = 'admin';
             }
 
-            return $this->hasPrivilege($user, $privilege, $parentGroup);
+            if ($parentGroups instanceof Group) {
+                return $this->hasPrivilege($user, $privilege, $parentGroups);
+            } else if (isset($parentGroups) && count($parentGroups) > 0) {
+                $hasPrivilege = false;
+                foreach($parentGroups as $parentGroup) {
+                    if ($this->hasPrivilege($user, $privilege, $parentGroup)) {
+                        $hasPrivilege = true;
+                        break;
+                    }
+                }
+                return $hasPrivilege;
+            }
+
         }
 
         return false;
