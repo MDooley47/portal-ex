@@ -2,7 +2,6 @@
 
 namespace SessionManager;
 
-use Group\Model\Group;
 use Tab\Model\Tab;
 
 class loadDB

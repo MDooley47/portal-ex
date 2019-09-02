@@ -73,7 +73,7 @@ class User extends Model implements HasSlugInterface, Bootable
      *
      * note: hyphen's are assumed to be part of the codist.
      */
-    public function building($options = []): String
+    public function building($options = []): string
     {
         arrayValueDefault('composite-key', $options, true);
 
@@ -86,7 +86,7 @@ class User extends Model implements HasSlugInterface, Bootable
         return $out;
     }
 
-    public function county(): String
+    public function county(): string
     {
         return explode('-', $this->codist)[0];
     }
@@ -100,7 +100,7 @@ class User extends Model implements HasSlugInterface, Bootable
         return $tabs[0];
     }
 
-    public function district($options = []): String
+    public function district($options = []): string
     {
         arrayValueDefault('composite-key', $options, true);
 
