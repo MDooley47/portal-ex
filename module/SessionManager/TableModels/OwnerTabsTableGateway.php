@@ -4,10 +4,8 @@ namespace SessionManager\TableModels;
 
 use OwnerType\Model\OwnerType;
 use SessionManager\Tables;
-use Tab\Model\Tab;
 use Traits\Interfaces\CorrelationInterface;
 use Traits\Tables\HasColumns;
-use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\TableGateway\AbstractTableGateway;
 use Zend\Db\TableGateway\Feature;
