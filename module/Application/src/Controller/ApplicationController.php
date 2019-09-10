@@ -131,6 +131,7 @@ class ApplicationController extends AbstractActionController
             $user->email = $attributes['mail'][0];
             $user->name = $attributes['givenName'][0].' '.$attributes['sn'][0];
             $user->codist = $attributes['esucc-cdn'][0];
+            $user->is_staff = $attributes['esucc-position'][0] == 'staff';
             $usersTable = $this->getTable('user');
             $userSlug = $usersTable->save($user)->slug;
             $tables->getTable('userPrivileges')->addCorrelation($userSlug, 'auth');
