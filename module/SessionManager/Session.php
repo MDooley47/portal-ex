@@ -209,7 +209,7 @@ class Session
 
         $table = $tables->getTable('ownerTabs');
         $owner = $table->getOwner(getSlug($tab));
-        if (! $tab instanceof \Tab\Model\Tab) {
+        if (!$tab instanceof \Tab\Model\Tab) {
             $tab = $tables->getTable('tab')->get($tab);
         }
 
@@ -221,7 +221,7 @@ class Session
         $user = self::getUser();
 
         if (self::hasPrivilege('auth', $owner) && (($user->is_staff && $tab->staff_access)
-            || (! $user->is_staff && $tab->student_access))) {
+            || (!$user->is_staff && $tab->student_access))) {
             // user is a member of the group which owns the tab
             // user is either staff and tab has staff_access
             // or user is a student and tab has student_access

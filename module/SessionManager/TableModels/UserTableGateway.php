@@ -170,9 +170,9 @@ class UserTableGateway extends AbstractTableGateway implements UniversalTableGat
     public function save($user)
     {
         $data = [
-            'name'   => $user->name,
-            'email'  => $user->email,
-            'codist' => $user->codist,
+            'name'     => $user->name,
+            'email'    => $user->email,
+            'codist'   => $user->codist,
             'is_staff' => $user->is_staff,
         ];
 
