@@ -186,9 +186,9 @@ class TabTableGateway extends AbstractTableGateway implements UniversalTableGate
     public function save($tab)
     {
         $data = [
-            'name'        => $tab->name,
-            'description' => $tab->description,
-            'staff_access' => $tab->staff_access,
+            'name'           => $tab->name,
+            'description'    => $tab->description,
+            'staff_access'   => $tab->staff_access,
             'student_access' => $tab->student_access,
         ];
 

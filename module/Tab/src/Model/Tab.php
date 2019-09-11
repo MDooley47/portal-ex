@@ -76,10 +76,10 @@ class Tab extends Model implements HasSlugInterface, Bootable
     public function getArrayCopy()
     {
         return [
-            'slug'        => $this->slug,
-            'name'        => $this->name,
-            'description' => $this->description,
-            'staff_access' => $this->staff_access,
+            'slug'           => $this->slug,
+            'name'           => $this->name,
+            'description'    => $this->description,
+            'staff_access'   => $this->staff_access,
             'student_access' => $this->student_access,
         ];
     }
