@@ -236,7 +236,7 @@ class Session
      */
     public static function getGroups()
     {
-        $table = (new Tables())->getTable('userGroups');
+        $table = (new Tables())->getTable('userPrivileges');
 
         return $table->getGroups(self::get('userSlug'));
     }

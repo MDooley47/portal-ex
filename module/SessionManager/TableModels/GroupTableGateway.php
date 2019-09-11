@@ -189,9 +189,9 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
         if ($slug == null) {
             do {
                 $data['slug'] = Group::generateSlug();
-            } while ($this->groupExists($data['slug']));
+            } while ($this->exists($data['slug']));
             $this->insert($data);
-        } elseif ($dbGroup = $this->getGroup($slug)) {
+        } elseif ($dbGroup = $this->get($slug)) {
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(

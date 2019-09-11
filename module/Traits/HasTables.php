@@ -22,8 +22,7 @@ trait HasTables
             ->add('Tab')
             ->add('TabApps')
             ->add('User')
-            ->add('UserPrivileges')
-            ->add('UserGroups');
+            ->add('UserPrivileges');
 
         if (isset($additionalTables) && is_array($additionalTables)) {
             foreach ($additionalTables as $table) {

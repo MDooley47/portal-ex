@@ -44,11 +44,8 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
                 ]);
         });
 
-        $row = $rowset->current();
-
-        while ($row) {
-            $rowArray[] = $row;
-            $row = $rowset->next();
+        foreach ($rowset as $row) {
+            $rowArray[count($rowArray)] = $row;
         }
 
         if (is_array($rowArray)) {
