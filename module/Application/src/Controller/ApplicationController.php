@@ -122,8 +122,9 @@ class ApplicationController extends AbstractActionController
         $attributes = $as->getAttributes();
 
         $tables = new Tables();
+        $usersTable = $this->getTable('user');
 
-        $user = $this->getTable('user')->get($attributes['mail'][0], ['type' => 'email']);
+        $user = $usersTable->get($attributes['mail'][0], ['type' => 'email']);
 
         if (!$user) {
             // add user, privilege, and group
@@ -132,7 +133,6 @@ class ApplicationController extends AbstractActionController
             $user->name = $attributes['givenName'][0].' '.$attributes['sn'][0];
             $user->codist = $attributes['esucc-cdn'][0];
             $user->is_staff = $attributes['esucc-position'][0] == 'staff';
-            $usersTable = $this->getTable('user');
             $userSlug = $usersTable->save($user)->slug;
             $tables->getTable('userPrivileges')->addCorrelation($userSlug, 'auth');
             $tables->getTable('userPrivileges')
@@ -141,7 +141,11 @@ class ApplicationController extends AbstractActionController
               ->addCorrelation($userSlug, 'auth', ['groupSlug' => $user->district()]);
             $tables->getTable('userPrivileges')
               ->addCorrelation($userSlug, 'auth', ['groupSlug' => $user->building()]);
+        } else if (empty($user->is_staff)) {
+            $user->is_staff = $attributes['esucc-position'][0] == 'staff';
+            $usersTable->save($user);
         }
+
         // make session active
         Session::start();
         Session::setUser($user);
