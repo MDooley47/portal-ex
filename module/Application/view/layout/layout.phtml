@@ -113,40 +113,25 @@
                    * this by uncommenting the following line.
                    */
                    note("URI: " . $_SERVER[REQUEST_URI], 'debug');
-
-                  if (count($groups = Session::getGroups()) > 0)
-                  foreach ($groups as $group) :
-                    $tabs = $tables
-                        ->getTable('ownerTabs')
-                        ->getTabs($group->slug, [
-                            'type' => 'group'
-                          ]);
-                    if (count($tabs) > 0)
-                    {
-                      foreach ($tables
-                          ->getTable('ownerTabs')
-                          ->getTabs($group->slug, [
-                              'type' => 'group'
-                              ]) as $tab) :
-                        if ($tab->slug == $this->tabSlug)
-                        {
-                          ?>
-                          <a class="nav-link active" href="<?= $this->url('tab', ['slug' => $tab->slug]) ?>">
-                            <?= $tab->name ?>
-                          </a>
-                      <?
-                        }
-                        else
-                        {
-                          ?>
-                          <a class="nav-link" href="<?= $this->url('tab', ['slug' => $tab->slug]) ?>">
-                            <?= $tab->name ?>
-                          </a>
-                      <?
-                        }
-                      endforeach;
-                    }
-                  endforeach;
+                   foreach (Session::getGroups() as $group) {
+                       if (empty($groupTabs = $group->getTabs())) continue;
+                       foreach ($groupTabs as $tab) {
+                           if (! Session::hasTabAccess($tab)) continue;
+                           if ($tab->slug == $this->tabSlug) {
+                               ?>
+                               <a class="nav-link active" href="<?= $this->url('tab', ['slug' => $tab->slug]) ?>">
+                                   <?= $tab->name ?>
+                               </a>
+                               <?
+                           } else {
+                               ?>
+                               <a class="nav-link" href="<?= $this->url('tab', ['slug' => $tab->slug]) ?>">
+                                   <?= $tab->name ?>
+                               </a>
+                               <?
+                           }
+                       }
+                   }
                   if ($this->sudo)
                   {
                     if ($this->tabSlug == 'dashboard')

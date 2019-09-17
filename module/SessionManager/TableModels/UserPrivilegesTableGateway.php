@@ -24,8 +24,6 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
         $this->initialize();
     }
 
-    // TODO: support multiple parents on a group.
-
     /**
      * Does user have privilege?
      *
@@ -122,6 +120,32 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
         }
 
         return $output;
+    }
+
+    public function getGroups($user)
+    {
+        $user = getSlug($user);
+
+        $rowset = $this->select(function (Select $select) use ($user) {
+            $select->where([
+                'userSlug' => $user,
+            ]);
+        });
+
+        $out = [];
+        $groupTable = (new Tables())->getTable('group');
+
+        try {
+            foreach ($rowset as $row) {
+                if (!empty($slug = $row->groupSlug)) {
+                    $out[count($out)] = $groupTable->get($slug);
+                }
+            }
+        } catch (\Exception $e) {
+            note($e->getMessage(), 'warning');
+        }
+
+        return $out;
     }
 
     /**

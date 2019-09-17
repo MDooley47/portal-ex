@@ -21,10 +21,6 @@ class Tab extends Model implements HasSlugInterface, Bootable
 {
     use Boot, HasCast, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
 
-    public $slug;
-    public $name;
-    public $description;
-
     public static $primaryKey = 'slug';
     protected static $table = 'tabs';
     public static $form = [
@@ -35,6 +31,16 @@ class Tab extends Model implements HasSlugInterface, Bootable
         'description' => [
             'type'     => 'textarea',
             'required' => false,
+        ],
+        'staff_access' => [
+            'type'     => 'boolean',
+            'label'    => 'Do staff members have access?',
+            'required' => true,
+        ],
+        'student_access' => [
+            'type'     => 'boolean',
+            'label'    => 'Do students have access?',
+            'required' => true,
         ],
     ];
 
@@ -52,9 +58,7 @@ class Tab extends Model implements HasSlugInterface, Bootable
 
     public function __construct(array $attributes = [])
     {
-        $this->slug = $attributes['slug'];
-        $this->name = $attributes['name'];
-        $this->description = $attributes['description'];
+        parent::__construct($attributes);
     }
 
     public function getApps()
@@ -72,9 +76,11 @@ class Tab extends Model implements HasSlugInterface, Bootable
     public function getArrayCopy()
     {
         return [
-            'slug'        => $this->slug,
-            'name'        => $this->name,
-            'description' => $this->description,
+            'slug'           => $this->slug,
+            'name'           => $this->name,
+            'description'    => $this->description,
+            'staff_access'   => $this->staff_access,
+            'student_access' => $this->student_access,
         ];
     }
 

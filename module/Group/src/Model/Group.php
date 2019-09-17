@@ -38,15 +38,6 @@ class Group extends Model implements HasSlugInterface
     ];
 
     /**
-     * String for Group's name.
-     */
-    public $name;
-    /**
-     * String for Group's description.
-     */
-    public $description;
-
-    /**
      * String for district's logo file.
      */
     public $logoFilename;

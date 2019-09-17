@@ -37,6 +37,11 @@ class User extends Model implements HasSlugInterface, Bootable
             'label'    => 'County District Number',
             'required' => false,
         ],
+        'is_staff' => [
+            'type'     => 'boolean',
+            'label'    => 'Is a staff member?',
+            'required' => true,
+        ],
     ];
 
     /**
@@ -133,6 +138,7 @@ class User extends Model implements HasSlugInterface, Bootable
             'name'     => $this->name,
             'email'    => $this->email,
             'codist'   => $this->codist,
+            'is_staff' => $this->is_staff,
             'county'   => $this->county(),
             'district' => $this->district(),
             'building' => $this->building(),
