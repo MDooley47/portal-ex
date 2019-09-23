@@ -141,7 +141,7 @@ class ApplicationController extends AbstractActionController
               ->addCorrelation($userSlug, 'auth', ['groupSlug' => $user->district()]);
             $tables->getTable('userPrivileges')
               ->addCorrelation($userSlug, 'auth', ['groupSlug' => $user->building()]);
-        } elseif (empty($user->is_staff)) {
+        } elseif (! isset($user->is_staff)) {
             $user->is_staff = $attributes['esucc-position'][0] == 'staff';
             $usersTable->save($user);
         }
