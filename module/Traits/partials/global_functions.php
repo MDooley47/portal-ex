@@ -406,3 +406,10 @@ function getModelsArray() {
     ];
 }
 
+function pluralize($word) {
+    return getModelsArray()[$word];
+}
+
+function singularize($word) {
+    return array_search($word, getModelsArray());
+}
