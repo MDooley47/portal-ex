@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Concerns\HasAttributes;
+use Model\Concerns\HasCast;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Tables\HasColumns;
@@ -37,10 +38,15 @@ abstract class Model
      *
      * @return array
      */
-    public static function all()
+    public static function all($limit = 50, $offset = 0)
     {
         $query = new Sql(databaseAdapter());
-        $select = $query->select(self::$table);
+        $select = $query->select();
+        $select->from(static::$table);
+        if (isset($limit) && isset($offset)) {
+            $select->limit($limit);
+            $select->offset($offset);
+        }
         $statement = $query->prepareStatementForSqlObject($select);
         $result = $statement->execute();
 
@@ -48,8 +54,8 @@ abstract class Model
 
         $models = [];
 
-        foreach ($resultSet as $row) {
-            $models[] = self::cast($row->getArrayCopy());
+        foreach ($resultSet as $index => $row) {
+            $models[$index] = static::cast($row->getArrayCopy());
         }
 
         return $models;
