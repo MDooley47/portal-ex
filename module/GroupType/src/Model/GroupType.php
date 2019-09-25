@@ -4,6 +4,7 @@ namespace GroupType\Model;
 
 use DomainException;
 use GroupType\InputFilter\NameFilter;
+use Model\Concerns\HasCast;
 use Model\Concerns\QueryBuilder;
 use Model\Concerns\QuickModelBoot as Boot;
 use Model\Contracts\Bootable;
@@ -17,7 +18,7 @@ use Zend\InputFilter\InputFilterInterface;
 
 class GroupType extends Model implements HasSlugInterface, Bootable
 {
-    use Boot, HasSlug, HasGuarded, ExchangeArray, QueryBuilder;
+    use Boot, HasSlug, HasCast, HasGuarded, ExchangeArray, QueryBuilder;
 
     public static $primaryKey = 'slug';
     protected static $table = 'groupTypes';

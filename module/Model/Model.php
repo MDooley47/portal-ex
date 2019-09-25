@@ -123,6 +123,8 @@ abstract class Model
 
     abstract public function getArrayCopy();
 
+    abstract static function cast(array $attributes);
+
     public static function buildMultiPKWhere($identifiers)
     {
         $where = '';
