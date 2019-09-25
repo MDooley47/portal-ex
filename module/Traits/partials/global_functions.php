@@ -307,7 +307,7 @@ function StrContains($haystack, $needles)
 function databaseAdapter()
 {
     return new Zend\Db\Adapter\Adapter([
-        'driver'   => env('db_driver') ?? 'pgsql',
+        'driver'   => env('db_driver') ?? 'Pdo_Pgsql',
         'database' => env('db_name'),
         'hostname' => env('db_host'),
         'port'     => env('db_port') ?? 5432,
