@@ -69,6 +69,17 @@ return [
                     ],
                 ],
             ],
+            'api2' => [
+                'type'    => Segment::class,
+                'may_terminate' => true,
+                'options' => [
+                    'route'       => '/api/v2[/:segment0[/:segment1[/:segment2[/:segment3[/:segment4[/:segment5[/:segment6[/:segment7[/:segment8[/:segment9]]]]]]]]]][/]',
+                    'defaults' => [
+                        'controller' => Controller\API2Controller::class,
+                        'action'     => 'api',
+                    ],
+                ],
+            ],
             'app' => [
                 'type'    => Segment::class,
                 'options' => [
@@ -227,6 +238,7 @@ return [
     'controllers' => [
         'factories' => [
             Controller\APIController::class           => Controller\APIControllerFactory::class,
+            Controller\API2Controller::class           => Controller\API2ControllerFactory::class,
             Controller\ApplicationController::class   => Controller\ApplicationControllerFactory::class,
             Controller\AppController::class           => Controller\AppControllerFactory::class,
             Controller\AttributeController::class     => Controller\AttributeControllerFactory::class,
