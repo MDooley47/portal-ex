@@ -3,7 +3,6 @@
 namespace Model;
 
 use Model\Concerns\HasAttributes;
-use Model\Concerns\HasCast;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Tables\HasColumns;
@@ -129,7 +128,7 @@ abstract class Model
 
     abstract public function getArrayCopy();
 
-    abstract static function cast(array $attributes);
+    abstract public static function cast(array $attributes);
 
     public static function buildMultiPKWhere($identifiers)
     {

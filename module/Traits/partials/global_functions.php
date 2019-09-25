@@ -392,24 +392,27 @@ function guaranteeUniversalTableGateway(\Zend\Db\TableGateway\AbstractTableGatew
     return $gateway;
 }
 
-function getModelsArray() {
+function getModelsArray()
+{
     return [
         'attribute' => 'attributes',
-        'app' => 'apps',
-        'group' => 'groups',
+        'app'       => 'apps',
+        'group'     => 'groups',
         'grouptype' => 'grouptype',
         'ipaddress' => 'ipaddresses',
         'ownertype' => 'ownertypes',
         'privilege' => 'privileges',
-        'tab' => 'tabs',
-        'user' => 'users',
+        'tab'       => 'tabs',
+        'user'      => 'users',
     ];
 }
 
-function pluralize($word) {
+function pluralize($word)
+{
     return getModelsArray()[$word];
 }
 
-function singularize($word) {
+function singularize($word)
+{
     return array_search($word, getModelsArray());
 }
