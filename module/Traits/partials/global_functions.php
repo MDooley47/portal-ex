@@ -391,3 +391,18 @@ function guaranteeUniversalTableGateway(\Zend\Db\TableGateway\AbstractTableGatew
 
     return $gateway;
 }
+
+function getModelsArray() {
+    return [
+        'attribute' => 'attributes',
+        'app' => 'apps',
+        'group' => 'groups',
+        'grouptype' => 'grouptype',
+        'ipaddress' => 'ipaddresses',
+        'ownertype' => 'ownertypes',
+        'privilege' => 'privileges',
+        'tab' => 'tabs',
+        'user' => 'users',
+    ];
+}
+
