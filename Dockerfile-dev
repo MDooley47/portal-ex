@@ -1,6 +1,7 @@
 FROM php:7.1-apache
 
 # Install dependencies from apt
+RUN mkdir -p /usr/share/man/man1 /usr/share/man/man7
 RUN apt-get update
 RUN apt-get install -y \
     git \
@@ -26,10 +27,18 @@ RUN wget -O /tmp/mod_xsendfile.tar.gz https://tn123.org/mod_xsendfile/mod_xsendf
     && apxs2 -cia mod_xsendfile.c \
     && rm -r /tmp/*
 
+# Apache config and certificates
+COPY docker-scripts/apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY docker-scripts/apache/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+COPY docker-scripts/apache/nebraskacloud-org.crt /etc/ssl/certs/nebraskacloud-org.crt
+COPY docker-scripts/apache/nebraskacloud-org.key /etc/ssl/private/nebraskacloud-org.key
+COPY docker-scripts/apache/godaddy.crt /etc/ssl/certs/godaddy.crt
+
 # Changes apache public directory to /var/www/public and removes /var/www/html
 RUN a2enmod rewrite \
-    && sed -i 's!/var/www/html!/var/www/public!g' /etc/apache2/sites-available/000-default.conf \
-    && rm -rf /var/www/html
+    && a2enmod ssl \
+    && rm -rf /var/www/html \
+    && ln -s /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-enabled/default-ssl.conf
 
 # Change working directory to /var/www
 WORKDIR /var/www/
@@ -46,6 +55,11 @@ ARG db_password
 ARG setup_database
 ARG setup_permissions
 ARG storage_path
+
+RUN yes | pecl install xdebug \
+    && echo "zend_extension=$(find /usr/local/lib/php/extensions/ -name xdebug.so)" > /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_enable=on" >> /usr/local/etc/php/conf.d/xdebug.ini \
+    && echo "xdebug.remote_autostart=off" >> /usr/local/etc/php/conf.d/xdebug.ini
 
 # Run docker-scripts
     # make them executable
