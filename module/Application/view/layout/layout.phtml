@@ -112,7 +112,7 @@
                    * the layout's PHP to be processed. You can observe
                    * this by uncommenting the following line.
                    */
-                   note("URI: " . $_SERVER[REQUEST_URI], 'debug');
+                   note("URI: " . $_SERVER['REQUEST_URI'], 'debug');
                    foreach (Session::getGroups() as $group) {
                        if (empty($groupTabs = $group->getTabs())) continue;
                        foreach ($groupTabs as $tab) {
