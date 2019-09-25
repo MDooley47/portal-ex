@@ -8,11 +8,7 @@
 
 namespace Application\Controller;
 
-use App\Model\App;
-use SessionManager\Session;
 use Traits\HasTables;
-use Zend\Http\Headers;
-use Zend\Http\Response;
 use Zend\Mvc\Controller\AbstractActionController;
 
 class API2Controller extends AbstractActionController
@@ -24,12 +20,14 @@ class API2Controller extends AbstractActionController
         $this->addTableArray($tables);
     }
 
-    public function init() {
+    public function init()
+    {
         $this->makeParams();
         $this->verb = $this->getRequest()->getMethod();
     }
 
-    public function makeParams() {
+    public function makeParams()
+    {
         $this->parameters = [];
         $i = 0;
         $last = null;
@@ -54,8 +52,9 @@ class API2Controller extends AbstractActionController
         die();
     }
 
-    public function handleVerb() {
-        switch($this->verb) {
+    public function handleVerb()
+    {
+        switch ($this->verb) {
             case 'DELETE':
                 $this->deleteVerb();
                 break;
@@ -76,30 +75,32 @@ class API2Controller extends AbstractActionController
         }
     }
 
-    public function deleteVerb() {
-
+    public function deleteVerb()
+    {
     }
 
-    public function getVerb() {
+    public function getVerb()
+    {
         foreach ($this->parameters as $key => $param) {
             $this->getHelper($key, $param);
         }
     }
 
-    public function getHelper($model, $slug) {
+    public function getHelper($model, $slug)
+    {
         $model = resolveModel(singularize($model));
         dd($model::all());
     }
 
-    public function patchVerb() {
-
+    public function patchVerb()
+    {
     }
 
-    public function postVerb() {
-
+    public function postVerb()
+    {
     }
 
-    public function putVerb() {
-
+    public function putVerb()
+    {
     }
 }
