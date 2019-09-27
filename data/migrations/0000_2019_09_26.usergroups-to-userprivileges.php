@@ -1,7 +1,7 @@
 <?php
 
 /**
- *  Class Migration0000
+ *  Class Migration0000.
  *
  * HOW TO USE MIGRATION
  *
@@ -12,8 +12,8 @@
  * Finally, run the migrate method on a new instance of Migration0000.
  *      (new Migration0000())->migrate();
  */
-
-class Migration0000 {
+class Migration0000
+{
     private $pdo;
     private $pdo_dns;
     private $pdo_options;
@@ -23,12 +23,12 @@ class Migration0000 {
 
     public function __construct()
     {
-        $this->pdo_dns = "pgsql:"
-            . "dbname=" . env('db_name') . ";"
-            . "host=" . env('db_host') . ";";
+        $this->pdo_dns = 'pgsql:'
+            .'dbname='.env('db_name').';'
+            .'host='.env('db_host').';';
         $this->pdo_options = [
             PDO::ATTR_EMULATE_PREPARES => false,
-            PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY,
+            PDO::ATTR_CURSOR           => PDO::CURSOR_FWDONLY,
         ];
         $this->pdo = new PDO($this->pdo_dns, env('db_username'), env('db_password'), $this->pdo_options);
     }
@@ -43,22 +43,31 @@ class Migration0000 {
             $this->pdo->commit();
         } catch (\Exception $e) {
             $this->pdo->rollBack();
-            if (isset($catch))
+            if (isset($catch)) {
                 $output['catch'] = $catch();
-            else return true;
+            } else {
+                return true;
+            }
         } finally {
-            if (isset($finally))
+            if (isset($finally)) {
                 $output['finally'] = $finally();
+            }
         }
+
         return $output;
     }
 
     public function migrate()
     {
-        if (! $this->fetchCurrentDB()) return false;
-        else if (! $this->addSystemAccess()) return false;
-        else if (! $this->addGroupAccess()) return false;
-        else return true;
+        if (!$this->fetchCurrentDB()) {
+            return false;
+        } elseif (!$this->addSystemAccess()) {
+            return false;
+        } elseif (!$this->addGroupAccess()) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
     protected function fetchCurrentDB()
@@ -73,6 +82,7 @@ class Migration0000 {
         $result = $this->safeQuery(function () use ($sql) {
             $query = $this->pdo->prepare($sql[0]);
             $query->execute();
+
             return $query->fetchAll(PDO::FETCH_COLUMN);
         });
         // return false if rolled back
@@ -86,6 +96,7 @@ class Migration0000 {
         $result = $this->safeQuery(function () use ($sql) {
             $query = $this->pdo->prepare($sql[1]);
             $query->execute();
+
             return $query->fetchAll(PDO::FETCH_ASSOC);
         });
         // return false if rolled back
@@ -99,6 +110,7 @@ class Migration0000 {
         $result = $this->safeQuery(function () use ($sql) {
             $query = $this->pdo->prepare($sql[2]);
             $query->execute();
+
             return $query->fetchAll(PDO::FETCH_ASSOC);
         });
         // return false if rolled back
@@ -133,6 +145,7 @@ class Migration0000 {
             foreach ($users as $user) {
                 array_push($output, $query->execute(['user' => $user]));
             }
+
             return $output;
         });
         // return false if rolled back
@@ -143,7 +156,8 @@ class Migration0000 {
         return true;
     }
 
-    protected function addGroupAccess() {
+    protected function addGroupAccess()
+    {
         $privileges = $this->privileges;
         $groups = $this->groups;
         $sql = [
@@ -158,12 +172,15 @@ class Migration0000 {
             $query = $this->pdo->prepare($sql[0]);
             $output = [];
             foreach ($groups as $group) {
-                if (empty($group['groupSlug'])) continue;
+                if (empty($group['groupSlug'])) {
+                    continue;
+                }
                 array_push($output, $query->execute([
-                    'user' => $group['userSlug'],
+                    'user'  => $group['userSlug'],
                     'group' => $group['groupSlug'],
                 ]));
             }
+
             return $output;
         });
         // return false if rolled back
@@ -175,14 +192,17 @@ class Migration0000 {
     }
 
     // https://stackoverflow.com/questions/3876435/recursive-array-diff
-    private static function arrayRecursiveDiff($aArray1, $aArray2) {
-        $aReturn = array();
+    private static function arrayRecursiveDiff($aArray1, $aArray2)
+    {
+        $aReturn = [];
 
         foreach ($aArray1 as $mKey => $mValue) {
             if (array_key_exists($mKey, $aArray2)) {
                 if (is_array($mValue)) {
                     $aRecursiveDiff = self::arrayRecursiveDiff($mValue, $aArray2[$mKey]);
-                    if (count($aRecursiveDiff)) { $aReturn[$mKey] = $aRecursiveDiff; }
+                    if (count($aRecursiveDiff)) {
+                        $aReturn[$mKey] = $aRecursiveDiff;
+                    }
                 } else {
                     if ($mValue != $aArray2[$mKey]) {
                         $aReturn[$mKey] = $mValue;
@@ -192,6 +212,7 @@ class Migration0000 {
                 $aReturn[$mKey] = $mValue;
             }
         }
+
         return $aReturn;
     }
 }
