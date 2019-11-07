@@ -8,6 +8,7 @@ use Model\Concerns\HasCast;
 use Model\Concerns\QueryBuilder;
 use Model\Concerns\QuickModelBoot as Boot;
 use Model\Model;
+use SessionManager\Session;
 use SessionManager\Tables;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
@@ -147,5 +148,12 @@ class Group extends Model implements HasSlugInterface
             '%s does not allow injection of an alternate input filter',
             __CLASS__
         ));
+    }
+
+    public function privilegeCheck($user = null) {
+        $user = getSlug($user ?? Session::getUser());
+
+        return (new Tables())->getTable('userPrivileges')
+            ->hasPrivilege($user, 'auth', $this->slug);
     }
 }

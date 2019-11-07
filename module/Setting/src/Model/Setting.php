@@ -8,6 +8,8 @@ use Model\Concerns\QueryBuilder;
 use Model\Concerns\QuickModelBoot as Boot;
 use Model\Contracts\Bootable;
 use Model\Model;
+use SessionManager\Session;
+use SessionManager\Tables;
 use Setting\InputFilter\DataFilter;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
@@ -91,5 +93,13 @@ class Setting extends Model implements HasSlugInterface, Bootable
             '%s does not allow injection of an alternate input filter',
             __CLASS__
         ));
+    }
+
+    public function privilegeCheck($user = null)
+    {
+        $user = getSlug($user ?? Session::getUser());
+
+        return (new Tables())->getTable('userPrivileges')->hasPrivilege($user, 'sudo');
+
     }
 }

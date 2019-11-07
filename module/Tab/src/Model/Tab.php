@@ -8,6 +8,7 @@ use Model\Concerns\QueryBuilder;
 use Model\Concerns\QuickModelBoot as Boot;
 use Model\Contracts\Bootable;
 use Model\Model;
+use SessionManager\Session;
 use SessionManager\Tables;
 use Tab\InputFilter\NameFilter;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
@@ -87,8 +88,8 @@ class Tab extends Model implements HasSlugInterface, Bootable
     public function getGroup()
     {
         return (new Tables())
-            ->getTable('owerTabs')
-            ->getGroup($this->slug);
+            ->getTable('ownerTabs')
+            ->getOwner($this->slug);
     }
 
     /**
@@ -128,4 +129,27 @@ class Tab extends Model implements HasSlugInterface, Bootable
             __CLASS__
         ));
     }
+
+    public function getOwners()
+    {
+        return (new Tables())->getTable('ownerTabs')->getOwnersByTabCorrelation($this->slug);
+    }
+
+    public function privilegeCheck($user = null)
+    {
+        // A user needs auth privilege to at least one entity that has owner ship of this tab
+        $user = getSlug($user ?? Session::getUser());
+
+        $privilege = false;
+
+        foreach($this->getOwners() as $owner) {
+            if ($owner->privilegeCheck($user)) {
+                $privilege = true;
+                break;
+            }
+        }
+
+        return $privilege;
+    }
+
 }

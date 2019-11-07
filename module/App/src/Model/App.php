@@ -13,6 +13,7 @@ use Model\Concerns\QueryBuilder;
 use Model\Concerns\QuickModelBoot as Boot;
 use Model\Contracts\Bootable;
 use Model\Model;
+use SessionManager\Session;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasSlug;
@@ -152,5 +153,28 @@ class App extends Model implements HasSlugInterface, Bootable
             '%s does not allow injection of an alternate input filter',
             __CLASS__
         ));
+    }
+
+    public function getTabs()
+    {
+        return (new Tables())->getTable('tabs')->getTabsByAppCorrelation($this->slug);
+    }
+
+    public function privilegeCheck($user = null)
+    {
+        // A user needs auth privilege to at least one group that has
+        // ownership of a tab that has ownership of the app.
+        $user = getSlug($user ?? Session::getUser());
+
+        $privilege = false;
+
+        foreach($this->getTabs() as $tab) {
+            if ($tab->privilegeCheck($user)) {
+                $privilege = true;
+                break;
+            }
+        }
+
+        return $privilege;
     }
 }
