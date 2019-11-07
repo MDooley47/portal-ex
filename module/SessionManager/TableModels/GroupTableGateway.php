@@ -195,7 +195,7 @@ class GroupTableGateway extends AbstractTableGateway implements UniversalTableGa
             $this->update($data, ['slug' => $slug]);
         } else {
             throw new RuntimeException(sprintf(
-                'Cannot update group with identifier %d; does not exist',
+                'Cannot update group with identifier %s; does not exist',
                 $slug
             ));
         }
