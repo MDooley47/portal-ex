@@ -63,10 +63,7 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
     {
         $tables = new Tables();
         $group = null;
-
-        if ($childGroup instanceof Group) {
-            $childGroup = $childGroup->slug;
-        }
+        $childGroup = getSlug($childGroup);
 
         $rowset = $this->select(function (Select $select) use ($childGroup) {
             $select->where("\"childGroup\" = '".$childGroup."'");
@@ -75,7 +72,7 @@ class GroupGroupsTableGateway extends AbstractTableGateway implements Correlatio
         if (!empty($rowset)) {
             $groupTable = $tables->getTable('group');
             if (count($rowset) == 1) {
-                $group = $groupTable->get($rowset[0]->parentGroup);
+                $group = $groupTable->get($rowset[0]['parentGroup']);
             } else {
                 foreach ($rowset as $i=>$row) {
                     $group[$i] = $groupTable->get($row['parentGroup']);
