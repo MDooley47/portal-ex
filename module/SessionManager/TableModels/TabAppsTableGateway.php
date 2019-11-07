@@ -112,4 +112,25 @@ class TabAppsTableGateway extends AbstractTableGateway implements CorrelationInt
 
         return $this->selectWith($select);
     }
+
+    public function getTabsByAppCorrelation($app)
+    {
+        $app = getSlug($app);
+
+        $select = new Select();
+        $select->from('tabApps');
+        $select->where(['appSlug' => $app]);
+        $select->columns(['slug' => 'tabSlug']);
+        $select->join('tabs','tabApps.tabSlug = tabs.slug',
+            ['name', 'description', 'staff_access', 'student_access'], Select::JOIN_LEFT);
+
+        $results = $this->selectWith($select);
+        $outputs = [];
+
+        foreach ($results as $tab) {
+            array_push($outputs, castModel('tabs', $tab->getArrayCopy()));
+        }
+
+        return $outputs;
+    }
 }
