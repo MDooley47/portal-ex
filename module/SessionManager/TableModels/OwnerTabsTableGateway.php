@@ -67,13 +67,6 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
         $owner = $rowset->current();
 
-        // if (!$owner) {
-        //     throw new RuntimeException(sprintf(
-        //         'OwnerTabs could not Find Row with identifier %d of type Tab',
-        //         $slug
-        //     ));
-        // }
-
         if ($owner->ownerType === $tables->getTable('ownerType')
                 ->get('group', ['type' => 'name'])->slug) {
             $owner = $tables->getTable('group')->get($owner->ownerSlug);
@@ -134,4 +127,48 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
         return $this->insert($data);
     }
+
+    public function getOwnersByTabCorrelation($tab)
+    {
+        $tab = getSlug($tab);
+
+        $select = new Select();
+        $select->from('ownerTabs');
+        $select->where(['tabSlug' => $tab]);
+        $select->columns(['slug' => 'ownerSlug']);
+        $select->join('ownerTypes','ownerTypes.slug = ownerTabs.ownerType',
+            ['name'], Select::JOIN_LEFT);
+        $results = $this->selectWith($select)->toArray();
+
+        $ownersByType = [];
+
+        foreach($results as $owner) {
+            $ownersByType[$owner['name']] = $ownersByType[$owner['name']] ?? [];
+            array_push($ownersByType[$owner['name']], $owner['slug']);
+        }
+
+        $outputs = [];
+
+        foreach($ownersByType as $key => $owners) {
+            $select = new Select();
+            $select->from(pluralize($key));
+
+            foreach($owners as $index => $owner) {
+                if ($index === 0) {
+                    $select->where(['slug' => $owner]);
+                } else {
+                    $select->where->or->equalTo('slug', $owner);
+                }
+            }
+
+            $results = $this->selectWith($select);
+
+            foreach($results as $result) {
+                array_push($outputs, castModel(pluralize($key), $result->getArrayCopy()));
+            }
+        }
+
+        return $outputs;
+    }
+
 }
