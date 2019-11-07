@@ -15,6 +15,8 @@ class Session
      *      The slug of the active user
      */
 
+    public static $privileges = [];
+
     /**
      * @param array $options
      *
@@ -193,9 +195,16 @@ class Session
      */
     public static function hasPrivilege($privilege, $group = null)
     {
-        $table = (new Tables())->getTable('userPrivileges');
+        $groupSlug = getSlug($group) ?? 'null';
+        if (array_key_exists($groupSlug ?? 'null', static::$privileges)
+            && array_key_exists($privilege, static::$privileges[$groupSlug ?? 'null'])) {
+            return static::$privileges[$groupSlug ?? 'null'][$privilege];
+        } else {
+            $table = (new Tables())->getTable('userPrivileges');
 
-        return $table->hasPrivilege(self::get('userSlug'), $privilege, $group);
+            return static::$privileges[$groupSlug][$privilege] =
+                $table->hasPrivilege(self::get('userSlug'), $privilege, $group);
+        }
     }
 
     public static function hasTabAccess($tab)
