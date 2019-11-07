@@ -70,11 +70,11 @@ abstract class Model
      */
     public static function find($ids, $primaryKey = null)
     {
-        $primaryKey = $primaryKey ?? self::$primaryKey;
+        $primaryKey = $primaryKey ?? static::$primaryKey;
 
         $query = new Sql(databaseAdapter());
 
-        $select = $query->select(self::$table);
+        $select = $query->select(static::$table);
         $select->where(self::buildMultiPKWhere($ids));
         $statement = $query->prepareStatementForSqlObject($select);
         $result = $statement->execute();
@@ -84,7 +84,7 @@ abstract class Model
         $models = [];
 
         foreach ($resultSet as $row) {
-            $models[] = self::cast($row->getArrayCopy());
+            $models[] = static::cast($row->getArrayCopy());
         }
 
         if (count($models) == 1) {
@@ -102,12 +102,11 @@ abstract class Model
     public function save()
     {
         $data = $this->getArrayCopy();
-        unset($data[self::$primaryKey]);
-
+        unset($data[static::$primaryKey]);
         $query = new Sql(databaseAdapter());
-        $update = $query->update(self::$table);
+        $update = $query->update(static::$table);
         $update->set($data);
-        $update->where(self::buildPKWhere($this->{self::$primaryKey}));
+        $update->where(self::buildPKWhere($this->{static::$primaryKey}));
         $statement = $query->prepareStatementForSqlObject($update);
         $statement->execute();
 
@@ -149,6 +148,6 @@ abstract class Model
 
     public static function buildPKWhere($pk)
     {
-        return self::$primaryKey."='".$pk."'";
+        return static::$primaryKey."='".$pk."'";
     }
 }
