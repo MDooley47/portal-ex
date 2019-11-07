@@ -28,7 +28,7 @@ class UserPrivilegesTableGateway extends AbstractTableGateway implements Correla
      * Does user have privilege?
      *
      * @param \User\Model\User|string        $user
-     * @param \Privilege\Model\Privilege|int $privilege
+     * @param \Privilege\Model\Privilege|int|string $privilege
      * @param \Group\Model\Group|string|null $group
      *
      * @return bool
