@@ -102,7 +102,15 @@ class API2Controller extends AbstractActionController
 
     public function deleteVerb()
     {
+        $model = array_key_first($this->parameters);
+        $slug = $this->parameters[$model];
 
+        if (!Session::hasPrivilege('sudo')
+            && isset($model)
+            && isset($slug)
+        ) return False;
+
+        return castModel($model, $this->resolveModelSlug($model, $slug))->delete();
     }
 
     public function getVerb()
