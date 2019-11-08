@@ -18,6 +18,9 @@ class API2Controller extends AbstractActionController
 {
     use HasTables;
 
+    public $parameters = [];
+    public $urlParameters = [];
+
     public function __construct($tables)
     {
         $this->addTableArray($tables);
@@ -26,6 +29,7 @@ class API2Controller extends AbstractActionController
     public function init()
     {
         $this->makeParams();
+        $this->urlParameters = $this->params()->fromQuery();
         $this->verb = $this->getRequest()->getMethod();
 
         Session::start();
@@ -38,7 +42,6 @@ class API2Controller extends AbstractActionController
 
     public function makeParams()
     {
-        $this->parameters = [];
         $i = 0;
         $last = null;
         foreach ($this->params()->fromRoute() as $key => $segment) {
@@ -106,19 +109,20 @@ class API2Controller extends AbstractActionController
     {
         $outputs = [];
         foreach ($this->parameters as $key => $param) {
-            if (   (($key == 'users')      &&
+            if (   (($key == 'users') && isset($param) &&
                         (!(Session::hasPrivilege('sudo') || $param === Session::get('userSlug')))
                    )
-                || (($key == 'groups')     && !Session::hasPrivilege('auth', $param))
-                || (($key == 'privileges') && !Session::hasPrivilege('sudo', $key))
+                || (($key == 'groups')     && isset($param) && !Session::hasPrivilege('auth', $param))
             ) continue;
             else if (empty($param)) {
-                # TODO: all must support a method to check Privilege
-                # && Session::hasPrivilege('sudo')
                 $resolvedModel = resolveModel(singularize($key));
                 $outputs[$key] = [];
-                foreach ($resolvedModel::all() as $model) {
-                    array_push($outputs[$key], $model->getArrayCopy());
+                $limit = $this->urlParameters['limit'] ?? 50;
+                $offset = $this->urlParameters['offset'] ?? 0;
+                foreach ($resolvedModel::all($limit, $offset) as $model) {
+                    if ($model->privilegeCheck()) {
+                        array_push($outputs[$key], $model->getArrayCopy());
+                    }
                 }
             } else {
                 $requestedModel = $this->resolveModelSlug($key, $param);
