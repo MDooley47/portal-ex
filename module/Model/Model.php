@@ -113,6 +113,16 @@ abstract class Model
         return $this;
     }
 
+    public function delete()
+    {
+        $query = new Sql(databaseAdapter());
+        $delete = $query->delete(static::$table)
+            ->where([static::$primaryKey => $this->{static::$primaryKey}]);
+        $statement = $query->prepareStatementForSqlObject($delete);
+
+        return $statement->execute()->valid();
+    }
+
     public function update($data)
     {
         $this->exchangeArray($data);
