@@ -135,21 +135,21 @@ class Tab extends Model implements HasSlugInterface, Bootable
         return (new Tables())->getTable('ownerTabs')->getOwnersByTabCorrelation($this->slug);
     }
 
-    public function privilegeCheck($user = null)
+    public function privilegeCheck($user = null, $privilege = 'auth')
     {
         // A user needs auth privilege to at least one entity that has owner ship of this tab
         $user = getSlug($user ?? Session::getUser());
 
-        $privilege = false;
+        $hasPriv = false;
 
         foreach($this->getOwners() as $owner) {
-            if ($owner->privilegeCheck($user)) {
-                $privilege = true;
+            if ($owner->privilegeCheck($user, $privilege)) {
+                $hasPriv = true;
                 break;
             }
         }
 
-        return $privilege;
+        return $hasPriv;
     }
 
 }

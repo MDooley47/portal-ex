@@ -221,9 +221,14 @@ class User extends Model implements HasSlugInterface, Bootable
         ));
     }
 
-    public function privilegeCheck($user = null) {
-        $user = getSlug($user ?? Session::getUser());
+    public function privilegeCheck($user = null, $privilege = 'sudo') {
+        $user = $user ?? Session::getUser();
+        $tables = new Tables();
 
-        return $user === $this->slug;
+        if (!$user instanceof User) {
+            $user = $tables->getTable('user')->get($user);
+        }
+
+        return $user === $this->slug || $tables->getTable('userPrivileges')->hasPrivilege($user, $privilege);
     }
 }

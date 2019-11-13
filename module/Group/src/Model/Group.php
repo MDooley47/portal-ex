@@ -150,10 +150,10 @@ class Group extends Model implements HasSlugInterface
         ));
     }
 
-    public function privilegeCheck($user = null) {
+    public function privilegeCheck($user = null, $privilege = 'auth') {
         $user = getSlug($user ?? Session::getUser());
-
-        return (new Tables())->getTable('userPrivileges')
-            ->hasPrivilege($user, 'auth', $this->slug);
+        $table = (new Tables())->getTable('userPrivileges');
+        return $table->hasPrivilege($user, $privilege, $this->slug)
+            || $table->hasPrivilege($user, 'sudo');
     }
 }

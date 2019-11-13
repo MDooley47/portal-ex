@@ -95,11 +95,11 @@ class Setting extends Model implements HasSlugInterface, Bootable
         ));
     }
 
-    public function privilegeCheck($user = null)
+    public function privilegeCheck($user = null, $privilege = 'sudo')
     {
         $user = getSlug($user ?? Session::getUser());
 
-        return (new Tables())->getTable('userPrivileges')->hasPrivilege($user, 'sudo');
+        return (new Tables())->getTable('userPrivileges')->hasPrivilege($user, $privilege);
 
     }
 }

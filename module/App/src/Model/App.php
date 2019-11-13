@@ -161,21 +161,21 @@ class App extends Model implements HasSlugInterface, Bootable
         return (new Tables())->getTable('tabApps')->getTabsByAppCorrelation($this->slug);
     }
 
-    public function privilegeCheck($user = null)
+    public function privilegeCheck($user = null, $privilege = 'auth')
     {
         // A user needs auth privilege to at least one group that has
         // ownership of a tab that has ownership of the app.
         $user = getSlug($user ?? Session::getUser());
 
-        $privilege = false;
+        $hasPriv = false;
 
         foreach($this->getTabs() as $tab) {
-            if ($tab->privilegeCheck($user)) {
-                $privilege = true;
+            if ($tab->privilegeCheck($user, $privilege)) {
+                $hasPriv = true;
                 break;
             }
         }
 
-        return $privilege;
+        return $hasPriv;
     }
 }
