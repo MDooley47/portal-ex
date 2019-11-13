@@ -73,6 +73,10 @@ class API2Controller extends AbstractActionController
 
     public function handleVerb()
     {
+        if (empty($this->parameters)) {
+            return json_encode(False);
+        }
+
         $content = null;
 
         switch ($this->verb) {
