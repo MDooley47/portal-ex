@@ -360,25 +360,25 @@ function castModel($table, array $attributes)
 function resolveModel($model_name)
 {
     switch (strtolower($model_name)) {
-        case 'app':
+        case 'app':case 'apps':
             return \App\Model\App::class;
-        case 'user':
+        case 'user':case 'users':
             return \User\Model\User::class;
-        case 'attribute':
+        case 'attribute':case 'attributes':
             return \Attribute\Model\Attribute::class;
-        case 'group':
+        case 'group':case 'groups':
             return \Group\Model\Group::class;
-        case 'grouptype':
+        case 'grouptype':case 'grouptypes':
             return \GroupType\Model\GroupType::class;
-        case 'ipaddress':
+        case 'ipaddress':case 'ipaddresses':
             return \IpAddress\Model\IpAddress::class;
-        case 'ownertype':
+        case 'ownertype':case 'ownertypes':
             return \OwnerType\Model\OwnerType::class;
-        case 'privilege':
+        case 'privilege':case 'privileges':
             return \Privilege\Model\Privilege::class;
-        case 'setting':
+        case 'setting':case 'settings':
             return \Setting\Model\Setting::class;
-        case 'tab':
+        case 'tab':case 'tabs':
             return \Tab\Model\Tab::class;
     }
 }
