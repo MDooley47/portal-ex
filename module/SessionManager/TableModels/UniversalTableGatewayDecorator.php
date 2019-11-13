@@ -47,11 +47,7 @@ class UniversalTableGatewayDecorator implements UniversalTableGatewayInterface
 
     public function save($model)
     {
-        if (method_exists($this->instance, 'save')) {
-            return $this->instance->save();
-        } else {
-            return $this->{'save'.$this->model_name}($model);
-        }
+         return $this->{'save'.$this->model_name}($model);
     }
 
     public function delete($id)
