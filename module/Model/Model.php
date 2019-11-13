@@ -91,8 +91,8 @@ abstract class Model
             $models[] = static::cast($row->getArrayCopy());
         }
 
-        if (count($models) == 1) {
-            $models = $models[0];
+        if (count($models) <= 1) {
+            $models = $models[0] ?? false;
         }
 
         return $models;
