@@ -14,6 +14,7 @@ use Model\Concerns\QuickModelBoot as Boot;
 use Model\Contracts\Bootable;
 use Model\Model;
 use SessionManager\Session;
+use SessionManager\Tables;
 use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasSlug;
@@ -157,7 +158,7 @@ class App extends Model implements HasSlugInterface, Bootable
 
     public function getTabs()
     {
-        return (new Tables())->getTable('tabs')->getTabsByAppCorrelation($this->slug);
+        return (new Tables())->getTable('tabApps')->getTabsByAppCorrelation($this->slug);
     }
 
     public function privilegeCheck($user = null)
