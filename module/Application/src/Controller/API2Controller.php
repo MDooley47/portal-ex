@@ -102,12 +102,6 @@ class API2Controller extends AbstractActionController
         return json_encode($content);
     }
 
-    public function resolveModelSlug($model, $slug)
-    {
-        $model = resolveModel(singularize($model));
-        return is_array($output = $model::find($slug)) ? $output : $output->getArrayCopy();
-    }
-
     public function deleteVerb()
     {
         $model = array_key_first($this->parameters);
