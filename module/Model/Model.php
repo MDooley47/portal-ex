@@ -3,6 +3,7 @@
 namespace Model;
 
 use Model\Concerns\HasAttributes;
+use SessionManager\Tables;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Tables\HasColumns;
@@ -105,16 +106,7 @@ abstract class Model
      */
     public function save()
     {
-        $data = $this->getArrayCopy();
-        unset($data[static::$primaryKey]);
-        $query = new Sql(databaseAdapter());
-        $update = $query->update(static::$table);
-        $update->set($data);
-        $update->where(self::buildPKWhere($this->{static::$primaryKey}));
-        $statement = $query->prepareStatementForSqlObject($update);
-        $statement->execute();
-
-        return $this;
+        return (new Tables())->getTable(singularize(static::$table))->save($this);
     }
 
     public function delete()
