@@ -20,6 +20,7 @@ class API2Controller extends AbstractActionController
 
     public $parameters = [];
     public $urlParameters = [];
+    public $postParameters = [];
 
     public function __construct($tables)
     {
@@ -29,7 +30,7 @@ class API2Controller extends AbstractActionController
     public function init()
     {
         $this->makeParams();
-        $this->urlParameters = $this->params()->fromQuery();
+
         $this->verb = $this->getRequest()->getMethod();
 
         Session::start();
@@ -42,6 +43,9 @@ class API2Controller extends AbstractActionController
 
     public function makeParams()
     {
+        $this->urlParameters = $this->params()->fromQuery();
+        $this->postParameters = $this->params()->fromPost();
+
         $i = 0;
         $last = null;
         foreach ($this->params()->fromRoute() as $key => $segment) {
