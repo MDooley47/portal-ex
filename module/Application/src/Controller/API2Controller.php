@@ -149,13 +149,58 @@ class API2Controller extends AbstractActionController
 
     public function patchVerb()
     {
+        $model = array_key_first($this->parameters);
+        $slug = $this->parameters[$model];
+
+        if (!isset($model) || !isset($slug)) {
+            return False;
+        }
+
+        $data = json_decode($this->getRequest()->getContent(), true);
+        $requestedModel = resolveModel($model)::find($slug);
+        $requestedModel->update($data);
+        return $requestedModel->save()->getArrayCopy();
     }
 
     public function postVerb()
     {
+        $model = array_key_first($this->parameters);
+        if (!isset($model)) {
+            return False;
+        }
+
+        $resolvedModel = resolveModel($model);
+
+        try {
+            $model = $resolvedModel::create($this->postParameters);
+        } catch (\Exception $e) {
+            $model = False;
+        }
+
+        return ($model instanceof Model) ? $model->getArrayCopy() : $model;
     }
 
     public function putVerb()
     {
+        $model = array_key_first($this->parameters);
+        $slug = $this->parameters[$model];
+
+        if (!isset($model) || !isset($slug)) {
+            return False;
+        }
+
+        $data = json_decode($this->getRequest()->getContent(), true);
+        $resolvedModel = resolveModel($model);
+        $requestedModel = $resolvedModel::find($slug);
+        $newModel = new $resolvedModel($data);
+        $newModel->slug = $requestedModel->slug;
+
+        try {
+            $newModel = $newModel->save();
+        } catch (\Exception $e) {
+            $newModel = False;
+        }
+
+        return ($newModel instanceof Model) ? $newModel->getArrayCopy() : $newModel;
     }
 }
