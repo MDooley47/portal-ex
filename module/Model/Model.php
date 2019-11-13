@@ -60,6 +60,10 @@ abstract class Model
         return $models;
     }
 
+    public static function create($attributes) {
+        return (new static($attributes))->save();
+    }
+
     /**
      * Finds a model.
      *
