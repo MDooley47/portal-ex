@@ -23,7 +23,8 @@
         "zendframework/zend-escaper": "^2.5",
         "vlucas/phpdotenv" : "^2.4",
         "simplesamlphp/simplesamlphp": "^1.15",
-        "psy/psysh": "@stable"
+        "psy/psysh": "@stable",
+      "ext-json": "*"
     },
     "autoload" : {
         "psr-4" : {
