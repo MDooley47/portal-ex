@@ -8,6 +8,7 @@
 
 namespace Application\Controller;
 
+use Model\Model;
 use SessionManager\Session;
 use Traits\HasTables;
 use Zend\Http\Headers;
