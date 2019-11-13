@@ -108,12 +108,17 @@ class API2Controller extends AbstractActionController
         $model = array_key_first($this->parameters);
         $slug = $this->parameters[$model];
 
-        if (!Session::hasPrivilege('sudo')
-            && isset($model)
-            && isset($slug)
-        ) return False;
+        if (!isset($model) || !isset($slug)) {
+            return False;
+        } else {
+            $resolvedModel = resolveModel(singularize($model))::find($slug);
+        }
 
-        return castModel($model, $this->resolveModelSlug($model, $slug))->delete();
+        if ($resolvedModel instanceof Model && $resolvedModel->privilegeCheck(Session::getUser(), 'admin')) {
+            return $resolvedModel->delete();
+        } else {
+            return False;
+        }
     }
 
     public function getVerb()
