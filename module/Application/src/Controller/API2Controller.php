@@ -124,14 +124,15 @@ class API2Controller extends AbstractActionController
     public function getVerb()
     {
         $outputs = [];
+
         foreach ($this->parameters as $key => $param) {
-            if (   (($key == 'users') && isset($param) &&
-                        (!(Session::hasPrivilege('sudo') || $param === Session::get('userSlug')))
-                   )
-                || (($key == 'groups')     && isset($param) && !Session::hasPrivilege('auth', $param))
-            ) continue;
-            else if (empty($param)) {
-                $resolvedModel = resolveModel(singularize($key));
+            $resolvedModel = resolveModel(singularize($key));
+            if (isset($param)) {
+                $requestedModel = $resolvedModel::find($param);
+                if ($requestedModel instanceof Model && $requestedModel->privilegeCheck()) {
+                    $outputs[$key] = $requestedModel->getArrayCopy();
+                }
+            } else {
                 $outputs[$key] = [];
                 $limit = $this->urlParameters['limit'] ?? 50;
                 $offset = $this->urlParameters['offset'] ?? 0;
@@ -140,11 +141,9 @@ class API2Controller extends AbstractActionController
                         array_push($outputs[$key], $model->getArrayCopy());
                     }
                 }
-            } else {
-                $requestedModel = $this->resolveModelSlug($key, $param);
-                $outputs[$key] = $requestedModel;
             }
         }
+
         return $outputs;
     }
 
