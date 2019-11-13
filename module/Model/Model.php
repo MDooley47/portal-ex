@@ -143,7 +143,7 @@ abstract class Model
 
     abstract public static function cast(array $attributes);
 
-    abstract public function privilegeCheck($user = null);
+    abstract public function privilegeCheck($user = null, $privilege = 'auth');
 
     public static function buildMultiPKWhere($identifiers)
     {
