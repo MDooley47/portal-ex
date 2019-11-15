@@ -158,14 +158,19 @@ class API2Controller extends AbstractActionController
 
         $data = json_decode($this->getRequest()->getContent(), true);
         $requestedModel = resolveModel($model)::find($slug);
-        $requestedModel->update($data);
-        return $requestedModel->save()->getArrayCopy();
+
+        if ($requestedModel->privilegeCheck(Session::getUser(), 'admin')) {
+            $requestedModel->update($data);
+            return $requestedModel->save()->getArrayCopy();
+        } else {
+            return False;
+        }
     }
 
     public function postVerb()
     {
         $model = array_key_first($this->parameters);
-        if (!isset($model)) {
+        if (!isset($model) || !Session::hasPrivilege('admin')) {
             return False;
         }
 
@@ -192,6 +197,11 @@ class API2Controller extends AbstractActionController
         $data = json_decode($this->getRequest()->getContent(), true);
         $resolvedModel = resolveModel($model);
         $requestedModel = $resolvedModel::find($slug);
+
+        if (!$requestedModel->privilegeCheck(Session::getUser(), 'admin')) {
+            return False;
+        }
+
         $newModel = new $resolvedModel($data);
         $newModel->slug = $requestedModel->slug;
 
