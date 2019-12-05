@@ -47,7 +47,7 @@ class UniversalTableGatewayDecorator implements UniversalTableGatewayInterface
 
     public function save($model)
     {
-         return $this->{'save'.$this->model_name}($model);
+        return $this->{'save'.$this->model_name}($model);
     }
 
     public function delete($id)

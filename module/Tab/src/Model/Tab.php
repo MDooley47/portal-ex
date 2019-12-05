@@ -142,7 +142,7 @@ class Tab extends Model implements HasSlugInterface, Bootable
 
         $hasPriv = false;
 
-        foreach($this->getOwners() as $owner) {
+        foreach ($this->getOwners() as $owner) {
             if ($owner->privilegeCheck($user, $privilege)) {
                 $hasPriv = true;
                 break;
@@ -151,5 +151,4 @@ class Tab extends Model implements HasSlugInterface, Bootable
 
         return $hasPriv;
     }
-
 }

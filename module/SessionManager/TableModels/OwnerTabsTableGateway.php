@@ -4,7 +4,6 @@ namespace SessionManager\TableModels;
 
 use OwnerType\Model\OwnerType;
 use SessionManager\Tables;
-use Tab\Model\Tab;
 use Traits\Interfaces\CorrelationInterface;
 use Traits\Tables\HasColumns;
 use Zend\Db\Sql\Select;
@@ -142,18 +141,18 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
         $ownersByType = [];
 
-        foreach($results as $owner) {
+        foreach ($results as $owner) {
             $ownersByType[$owner['name']] = $ownersByType[$owner['name']] ?? [];
             array_push($ownersByType[$owner['name']], $owner['slug']);
         }
 
         $outputs = [];
 
-        foreach($ownersByType as $key => $owners) {
+        foreach ($ownersByType as $key => $owners) {
             $select = new Select();
             $select->from(pluralize($key));
 
-            foreach($owners as $index => $owner) {
+            foreach ($owners as $index => $owner) {
                 if ($index === 0) {
                     $select->where(['slug' => $owner]);
                 } else {
@@ -163,12 +162,11 @@ class OwnerTabsTableGateway extends AbstractTableGateway implements CorrelationI
 
             $results = $this->selectWith($select);
 
-            foreach($results as $result) {
+            foreach ($results as $result) {
                 array_push($outputs, castModel(pluralize($key), $result->getArrayCopy()));
             }
         }
 
         return $outputs;
     }
-
 }

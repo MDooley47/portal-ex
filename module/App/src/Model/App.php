@@ -169,7 +169,7 @@ class App extends Model implements HasSlugInterface, Bootable
 
         $hasPriv = false;
 
-        foreach($this->getTabs() as $tab) {
+        foreach ($this->getTabs() as $tab) {
             if ($tab->privilegeCheck($user, $privilege)) {
                 $hasPriv = true;
                 break;
