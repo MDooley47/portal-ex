@@ -31,6 +31,7 @@ abstract class Model
      * __toString
      * Two string walks through the array copy of the model change booleans to t's and f's.
      * It then implodes the new array separating value-key pairs with a vertical bar.
+     *
      * @return string
      */
     public function __toString()
@@ -41,9 +42,10 @@ abstract class Model
                 $value = ($value) ? 't' : 'f';
             }
         });
-        return '[' . implode(' | ', array_map(function ($value, $key) {
-            return $key . ': ' . $value;
-        }, $attributes, array_keys($attributes))) . ']';
+
+        return '['.implode(' | ', array_map(function ($value, $key) {
+            return $key.': '.$value;
+        }, $attributes, array_keys($attributes))).']';
     }
 
     /**

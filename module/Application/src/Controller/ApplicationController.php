@@ -145,8 +145,8 @@ class ApplicationController extends AbstractActionController
             $user->is_staff = $attributes['esucc-position'][0] == 'staff';
             $usersTable->save($user);
         } elseif ($user->is_staff != ($attributes['esucc-position'][0] == 'staff')) {
-            note('ESUCC-POSITION MISMATCH: ' . strval($user) . ' has the position of '
-                . $attributes['esucc-position'][0] . ' in the IDP.', 'WARNING');
+            note('ESUCC-POSITION MISMATCH: '.strval($user).' has the position of '
+                .$attributes['esucc-position'][0].' in the IDP.', 'WARNING');
         }
 
         // make session active
