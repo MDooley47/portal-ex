@@ -44,6 +44,17 @@ return [
                     ],
                 ],
             ],
+            'logged-out' => [
+                'type'    => Segment::class,
+                'may_terminate' => true,
+                'options' => [
+                    'route'    => '/logged-out[/]',
+                    'defaults' => [
+                        'controller' => Controller\ApplicationController::class,
+                        'action'     => 'loggedOut',
+                    ],
+                ],
+            ],
             'dashboard' => [
                 'type'    => Segment::class,
                 'options' => [

@@ -15,6 +15,7 @@ use Traits\HasTables;
 use User\Model\User;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
+use Zend\View\View;
 
 class ApplicationController extends AbstractActionController
 {
@@ -187,14 +188,29 @@ class ApplicationController extends AbstractActionController
 
     public function logoutAction()
     {
-        if ($this->getRequest()->isPost()) {
-            if (Session::isActive()) {
-                Session::end();
-            }
+        $as = new \SimpleSAML\Auth\Simple('default-sp');
+
+        if (Session::isActive()) {
+            $as->logout('/logged-out/');
+            \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+            return true;
         } else {
             return $this->redirect()->toRoute('home');
         }
     }
+
+    public function loggedOutAction()
+    {
+        $as = new \SimpleSAML\Auth\Simple('default-sp');
+
+        if (Session::isActive() && !$as->isAuthenticated()) {
+            Session::end();
+            return new ViewModel();
+        } else {
+            return $this->redirect()->toRoute('home');
+        }
+    }
+
 
     public function portalError($message, $isError = true, $email = null)
     {
