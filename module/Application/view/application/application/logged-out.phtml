@@ -1,0 +1,7 @@
+<?php
+    $this->headTitle('Signed Out');
+    $this->headMeta()->setHttpEquiv('refresh', '5;url=' . $this->url('home', [], ['force_canonical' => true]))
+?>
+
+<h1>Signed Out</h1>
+<p>Redirecting you to the <a href="<?= $this->url('home') ?>">sign in page</a> within 5 seconds.</p>
