@@ -141,9 +141,12 @@ class ApplicationController extends AbstractActionController
               ->addCorrelation($userSlug, 'auth', ['groupSlug' => $user->district()]);
             $tables->getTable('userPrivileges')
               ->addCorrelation($userSlug, 'auth', ['groupSlug' => $user->building()]);
-        } elseif (!isset($user->is_staff)) {
+        } elseif (is_null($user->is_staff)) {
             $user->is_staff = $attributes['esucc-position'][0] == 'staff';
             $usersTable->save($user);
+        } elseif ($user->is_staff != ($attributes['esucc-position'][0] == 'staff')) {
+            note('ESUCC-POSITION MISMATCH: '.strval($user).' has the position of '
+                .$attributes['esucc-position'][0].' in the IDP.', 'WARNING');
         }
 
         // make session active
