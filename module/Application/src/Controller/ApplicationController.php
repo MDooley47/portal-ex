@@ -187,10 +187,26 @@ class ApplicationController extends AbstractActionController
 
     public function logoutAction()
     {
-        if ($this->getRequest()->isPost()) {
-            if (Session::isActive()) {
-                Session::end();
-            }
+        $as = new \SimpleSAML\Auth\Simple('default-sp');
+
+        if (Session::isActive()) {
+            $as->logout('/logged-out/');
+            \SimpleSAML\Session::getSessionFromRequest()->cleanup();
+
+            return true;
+        } else {
+            return $this->redirect()->toRoute('home');
+        }
+    }
+
+    public function loggedOutAction()
+    {
+        $as = new \SimpleSAML\Auth\Simple('default-sp');
+
+        if (Session::isActive() && !$as->isAuthenticated()) {
+            Session::end();
+
+            return new ViewModel();
         } else {
             return $this->redirect()->toRoute('home');
         }
