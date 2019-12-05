@@ -6,6 +6,5 @@ trait QuickModelBoot
 {
     public static function boot()
     {
-
     }
 }

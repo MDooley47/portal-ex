@@ -75,7 +75,7 @@ class API2Controller extends AbstractActionController
     public function handleVerb()
     {
         if (empty($this->parameters)) {
-            return json_encode(False);
+            return json_encode(false);
         }
 
         $content = null;
@@ -109,7 +109,7 @@ class API2Controller extends AbstractActionController
         $slug = $this->parameters[$model];
 
         if (!isset($model) || !isset($slug)) {
-            return False;
+            return false;
         } else {
             $resolvedModel = resolveModel(singularize($model))::find($slug);
         }
@@ -117,7 +117,7 @@ class API2Controller extends AbstractActionController
         if ($resolvedModel instanceof Model && $resolvedModel->privilegeCheck(Session::getUser(), 'admin')) {
             return $resolvedModel->delete();
         } else {
-            return False;
+            return false;
         }
     }
 
@@ -153,7 +153,7 @@ class API2Controller extends AbstractActionController
         $slug = $this->parameters[$model];
 
         if (!isset($model) || !isset($slug)) {
-            return False;
+            return false;
         }
 
         $data = json_decode($this->getRequest()->getContent(), true);
@@ -161,9 +161,10 @@ class API2Controller extends AbstractActionController
 
         if ($requestedModel->privilegeCheck(Session::getUser(), 'admin')) {
             $requestedModel->update($data);
+
             return $requestedModel->save()->getArrayCopy();
         } else {
-            return False;
+            return false;
         }
     }
 
@@ -171,7 +172,7 @@ class API2Controller extends AbstractActionController
     {
         $model = array_key_first($this->parameters);
         if (!isset($model) || !Session::hasPrivilege('admin')) {
-            return False;
+            return false;
         }
 
         $resolvedModel = resolveModel($model);
@@ -179,7 +180,7 @@ class API2Controller extends AbstractActionController
         try {
             $model = $resolvedModel::create($this->postParameters);
         } catch (\Exception $e) {
-            $model = False;
+            $model = false;
         }
 
         return ($model instanceof Model) ? $model->getArrayCopy() : $model;
@@ -191,7 +192,7 @@ class API2Controller extends AbstractActionController
         $slug = $this->parameters[$model];
 
         if (!isset($model) || !isset($slug)) {
-            return False;
+            return false;
         }
 
         $data = json_decode($this->getRequest()->getContent(), true);
@@ -199,7 +200,7 @@ class API2Controller extends AbstractActionController
         $requestedModel = $resolvedModel::find($slug);
 
         if (!$requestedModel->privilegeCheck(Session::getUser(), 'admin')) {
-            return False;
+            return false;
         }
 
         $newModel = new $resolvedModel($data);
@@ -208,7 +209,7 @@ class API2Controller extends AbstractActionController
         try {
             $newModel = $newModel->save();
         } catch (\Exception $e) {
-            $newModel = False;
+            $newModel = false;
         }
 
         return ($newModel instanceof Model) ? $newModel->getArrayCopy() : $newModel;

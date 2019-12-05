@@ -15,7 +15,6 @@ use Traits\Interfaces\HasSlug as HasSlugInterface;
 use Traits\Models\ExchangeArray;
 use Traits\Models\HasGuarded;
 use Traits\Models\HasSlug;
-use User\Model\User;
 use Zend\InputFilter\InputFilter;
 use Zend\InputFilter\InputFilterInterface;
 
@@ -111,6 +110,5 @@ class Attribute extends Model implements HasSlugInterface, Bootable
         $user = getSlug($user ?? Session::getUser());
 
         return (new Tables())->getTable('userPrivileges')->hasPrivilege($user, $privilege);
-
     }
 }

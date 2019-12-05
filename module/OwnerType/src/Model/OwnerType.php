@@ -116,6 +116,5 @@ class OwnerType extends Model implements HasSlugInterface, Bootable
         $user = getSlug($user ?? Session::getUser());
 
         return (new Tables())->getTable('userPrivileges')->hasPrivilege($user, $privilege);
-
     }
 }
